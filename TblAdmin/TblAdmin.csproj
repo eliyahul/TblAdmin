@@ -158,17 +158,18 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Books\BooksAreaRegistration.cs" />
+    <Compile Include="Areas\Books\Controllers\BooksController.cs" />
+    <Compile Include="Areas\Books\Controllers\PublishersController.cs" />
+    <Compile Include="Areas\Books\Models\Book.cs" />
+    <Compile Include="Areas\Books\Models\Publisher.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PublishersController.cs" />
     <Compile Include="DAL\TblAdminContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Book.cs" />
-    <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -182,6 +183,19 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Books\Views\web.config" />
+    <Content Include="Areas\Books\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Books\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Books\Views\Books\Create.cshtml" />
+    <Content Include="Areas\Books\Views\Books\Delete.cshtml" />
+    <Content Include="Areas\Books\Views\Books\Details.cshtml" />
+    <Content Include="Areas\Books\Views\Books\Edit.cshtml" />
+    <Content Include="Areas\Books\Views\Books\Index.cshtml" />
+    <Content Include="Areas\Books\Views\Publishers\Create.cshtml" />
+    <Content Include="Areas\Books\Views\Publishers\Delete.cshtml" />
+    <Content Include="Areas\Books\Views\Publishers\Details.cshtml" />
+    <Content Include="Areas\Books\Views\Publishers\Edit.cshtml" />
+    <Content Include="Areas\Books\Views\Publishers\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -221,16 +235,6 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Publishers\Create.cshtml" />
-    <Content Include="Views\Publishers\Delete.cshtml" />
-    <Content Include="Views\Publishers\Details.cshtml" />
-    <Content Include="Views\Publishers\Edit.cshtml" />
-    <Content Include="Views\Publishers\Index.cshtml" />
-    <Content Include="Views\Books\Create.cshtml" />
-    <Content Include="Views\Books\Delete.cshtml" />
-    <Content Include="Views\Books\Details.cshtml" />
-    <Content Include="Views\Books\Edit.cshtml" />
-    <Content Include="Views\Books\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

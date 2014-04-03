@@ -1,4 +1,5 @@
 ﻿using TblAdmin.Models;
+using TblAdmin.Areas.Books.Models;
 using System.Data.Entity;
 
 namespace TblAdmin.DAL
