@@ -159,7 +159,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PublishersController.cs" />
     <Compile Include="DAL\TblAdminContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -219,6 +221,16 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Publishers\Create.cshtml" />
+    <Content Include="Views\Publishers\Delete.cshtml" />
+    <Content Include="Views\Publishers\Details.cshtml" />
+    <Content Include="Views\Publishers\Edit.cshtml" />
+    <Content Include="Views\Publishers\Index.cshtml" />
+    <Content Include="Views\Books\Create.cshtml" />
+    <Content Include="Views\Books\Delete.cshtml" />
+    <Content Include="Views\Books\Details.cshtml" />
+    <Content Include="Views\Books\Edit.cshtml" />
+    <Content Include="Views\Books\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -69,6 +69,8 @@ rcf/
 ######################
 *.log
 *.sqlite
+*.mdf
+*.ldf
 
 # OS generated files #
 ######################
