@@ -15,7 +15,7 @@ namespace TblAdmin.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "This page will contain help information about using the admin.";
 
             return View();
         }

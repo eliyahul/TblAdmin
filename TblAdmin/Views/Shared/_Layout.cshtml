@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - TumbleBooks Admin</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -17,13 +17,106 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { Area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("TumbleBooks", "Index", "Home", new { Area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { Area = "" }, null)</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { Area = "" }, null)</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { Area = "" }, null)</li>
+                <ul class="nav navbar-nav">                    
+                    
+                    <!-- Configure Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configure <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Sites</a></li>
+                            <li><a href="#">Languages</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Subscriber Types</a></li>
+                                <li><a href="#">Subscription Types</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Districts</a></li>
+                                <li><a href="#">Consortia</a></li>
+                                <li><a href="#">Distributors</a></li>
+                                <li><a href="#">Affiliates</a></li>
+                        </ul>
+                    </li>
+                                     
+                    <!-- Books Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Books <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Categories</a></li>
+                            <li><a href="#">Collections</a></li>
+                            <li><a href="#">Keywords</a></li>
+                            <li><a href="#">Subjects</a></li>
+                            <li class="divider"></li>
+                                <li>@Html.ActionLink("Books", "Index", "Books", new { Area = "Books" }, null)</li>
+                            <li class="divider"></li>
+                                <li><a href="#">Authors</a></li>
+                                <li><a href="#">Illustrators</a></li>
+                                <li>@Html.ActionLink("Publishers", "Index", "Publishers", new { Area = "Books" }, null)</li>
+                            <li class="divider"></li>
+                                <li><a href="#">Lesson Plans</a></li>
+                                <li><a href="#">Quizzes</a></li>
+                                <li><a href="#">Games</a></li>
+                                <li><a href="#">Reviews</a></li>
+                                <li><a href="#">Videos</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Marketing Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Marketing <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Campaigns</a></li>
+                            <li><a href="#">Target Lists</a></li>
+                            <li><a href="#">Email Templates</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Ecommerce Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Financials <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Subscriptions</a></li>
+                            <li><a href="#">Prices</a></li>
+                            <li><a href="#">Coupons</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Reports Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">TOI</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Expired Trials</a></li>
+                                <li><a href="#">Current Trials</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Expired Subscribers</a></li>
+                                <li><a href="#">Current Subscribers</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Revenues</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Other Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">News</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">FaceBook App</a></li>
+                        </ul>
+                    </li>
+                    <!-- Help Menu -->
+
+                    <li>@Html.ActionLink("Help", "About", "Home", new { Area = "" }, null)</li>
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -33,7 +126,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - TumbleBooks Inc.</p>
         </footer>
     </div>
 
