@@ -15,14 +15,14 @@ namespace TblAdmin.Areas.Books.Controllers
     {
         private TblAdminContext db = new TblAdminContext();
 
-        // GET: /Books/Books/
+        // GET: Books/Books
         public ActionResult Index()
         {
             var books = db.Books.Include(b => b.Publisher);
             return View(books.ToList());
         }
 
-        // GET: /Books/Books/Details/5
+        // GET: Books/Books/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,19 +37,19 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(book);
         }
 
-        // GET: /Books/Books/Create
+        // GET: Books/Books/Create
         public ActionResult Create()
         {
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name");
             return View();
         }
 
-        // POST: /Books/Books/Create
+        // POST: Books/Books/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="ID,Name,Created,Modified,PublisherID")] Book book)
+        public ActionResult Create([Bind(Include = "ID,Name,Created,Modified,PublisherID")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +62,7 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(book);
         }
 
-        // GET: /Books/Books/Edit/5
+        // GET: Books/Books/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,12 +78,12 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(book);
         }
 
-        // POST: /Books/Books/Edit/5
+        // POST: Books/Books/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="ID,Name,Created,Modified,PublisherID")] Book book)
+        public ActionResult Edit([Bind(Include = "ID,Name,Created,Modified,PublisherID")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(book);
         }
 
-        // GET: /Books/Books/Delete/5
+        // GET: Books/Books/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,7 +110,7 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(book);
         }
 
-        // POST: /Books/Books/Delete/5
+        // POST: Books/Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
