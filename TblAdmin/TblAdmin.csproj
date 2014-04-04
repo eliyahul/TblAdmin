@@ -201,8 +201,6 @@
     <Content Include="Areas\Books\Views\Publishers\Details.cshtml" />
     <Content Include="Areas\Books\Views\Publishers\Edit.cshtml" />
     <Content Include="Areas\Books\Views\Publishers\Index.cshtml" />
-    <Content Include="Areas\Books\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Books\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Books\Views\Books\Create.cshtml" />
     <Content Include="Areas\Books\Views\Books\Delete.cshtml" />
     <Content Include="Areas\Books\Views\Books\Details.cshtml" />
@@ -250,6 +248,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Books\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
