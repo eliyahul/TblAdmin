@@ -22,67 +22,52 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">                    
                     
-                    <!-- Configure Menu -->
+                    <!-- Site Menu -->
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configure <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sites <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Sites</a></li>
                             <li><a href="#">Languages</a></li>
                             <li class="divider"></li>
-                                <li><a href="#">Subscriber Types</a></li>
-                                <li><a href="#">Subscription Types</a></li>
-                            <li class="divider"></li>
-                                <li><a href="#">Districts</a></li>
-                                <li><a href="#">Consortia</a></li>
-                                <li><a href="#">Distributors</a></li>
-                                <li><a href="#">Affiliates</a></li>
-                        </ul>
-                    </li>
-                                     
-                    <!-- Books Menu -->
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Books <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Categories</a></li>
-                            <li><a href="#">Collections</a></li>
-                            <li><a href="#">Keywords</a></li>
-                            <li><a href="#">Subjects</a></li>
+                                <li><a href="#">Categories</a></li>
+                                <li><a href="#">Collections</a></li>
+                                <li><a href="#">Keywords</a></li>
+                                <li><a href="#">Subjects</a></li>
                             <li class="divider"></li>
                                 <li>@Html.ActionLink("Books", "Index", "Books", new { Area = "Books" }, null)</li>
-                            <li class="divider"></li>
-                                <li><a href="#">Authors</a></li>
-                                <li><a href="#">Illustrators</a></li>
-                                <li>@Html.ActionLink("Publishers", "Index", "Publishers", new { Area = "Books" }, null)</li>
                             <li class="divider"></li>
                                 <li><a href="#">Lesson Plans</a></li>
                                 <li><a href="#">Quizzes</a></li>
                                 <li><a href="#">Games</a></li>
                                 <li><a href="#">Reviews</a></li>
                                 <li><a href="#">Videos</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Authors</a></li>
+                                <li><a href="#">Illustrators</a></li>
+                                <li>@Html.ActionLink("Publishers", "Index", "Publishers", new { Area = "Books" }, null)</li>
+                            
                         </ul>
                     </li>
 
-                    <!-- Marketing Menu -->
+                    <!-- Business Menu -->
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Marketing <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Business <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Campaigns</a></li>
-                            <li><a href="#">Target Lists</a></li>
-                            <li><a href="#">Email Templates</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- Ecommerce Menu -->
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Financials <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Subscriptions</a></li>
-                            <li><a href="#">Prices</a></li>
-                            <li><a href="#">Coupons</a></li>
+                            <li><a href="#">Subscribers</a></li>
+                            <li><a href="#">Subscriber Types</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Subscriptions</a></li>
+                                <li><a href="#">Subscription Plans</a></li>
+                                <li><a href="#">Custom Pricing</a></li>
+                                <li><a href="#">Coupons</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Distributors</a></li>
+                                <li><a href="#">Affiliates</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">Districts</a></li>
+                                <li><a href="#">Consortia</a></li>
                         </ul>
                     </li>
 
@@ -103,19 +88,22 @@
                         </ul>
                     </li>
 
-                    <!-- Other Menu -->
+                    <!-- Marketing Menu -->
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Marketing <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">News</a></li>
+                            <li><a href="#">Campaigns</a></li>
+                            <li><a href="#">Target Lists</a></li>
+                            <li><a href="#">Email Templates</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">FaceBook App</a></li>
+                                <li><a href="#">News</a></li>
+                            <li class="divider"></li>
+                                <li><a href="#">FaceBook App</a></li>
+                            <li class="divider"></li>
+                                <li>@Html.ActionLink("Help", "About", "Home", new { Area = "" }, null)</li>
                         </ul>
                     </li>
-                    <!-- Help Menu -->
-
-                    <li>@Html.ActionLink("Help", "About", "Home", new { Area = "" }, null)</li>
 
                 </ul>
                 @Html.Partial("_LoginPartial")
