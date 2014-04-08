@@ -29,27 +29,33 @@
                         <ul class="dropdown-menu">
                             <li><a href="#">Sites</a></li>
                             <li><a href="#">Languages</a></li>
-                            <li class="divider"></li>
-                                <li><a href="#">Categories</a></li>
-                                <li><a href="#">Collections</a></li>
-                                <li><a href="#">Keywords</a></li>
-                                <li><a href="#">Subjects</a></li>
-                            <li class="divider"></li>
-                                <li>@Html.ActionLink("Books", "Index", "Books", new { Area = "Books" }, null)</li>
-                            <li class="divider"></li>
-                                <li><a href="#">Lesson Plans</a></li>
-                                <li><a href="#">Quizzes</a></li>
-                                <li><a href="#">Games</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Videos</a></li>
-                            <li class="divider"></li>
-                                <li><a href="#">Authors</a></li>
-                                <li><a href="#">Illustrators</a></li>
-                                <li>@Html.ActionLink("Publishers", "Index", "Publishers", new { Area = "Books" }, null)</li>
-                            
                         </ul>
                     </li>
 
+                    <!-- Books Menu -->
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Books <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Categories</a></li>
+                            <li><a href="#">Collections</a></li>
+                            <li><a href="#">Keywords</a></li>
+                            <li><a href="#">Subjects</a></li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Books", "Index", "Books", new { Area = "Books" }, null)</li>
+                            <li class="divider"></li>
+                            <li><a href="#">Lesson Plans</a></li>
+                            <li><a href="#">Quizzes</a></li>
+                            <li><a href="#">Games</a></li>
+                            <li><a href="#">Reviews</a></li>
+                            <li><a href="#">Videos</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Authors</a></li>
+                            <li><a href="#">Illustrators</a></li>
+                            <li>@Html.ActionLink("Publishers", "Index", "Publishers", new { Area = "Books" }, null)</li>
+
+                        </ul>
+                    </li>
                     <!-- Business Menu -->
 
                     <li class="dropdown">
