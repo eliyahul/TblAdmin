@@ -47,7 +47,7 @@ namespace TblAdmin.Areas.Books.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Created,Modified")] Publisher publisher)
+        public ActionResult Create([Bind(Include = "ID,Name,CreatedDate,ModifiedDate")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace TblAdmin.Areas.Books.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Created,Modified")] Publisher publisher)
+        public ActionResult Edit([Bind(Include = "ID,Name,CreatedDate,ModifiedDate")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<TblAdmin.Areas.Books.Models.Publisher>
 
 @{
-    ViewBag.Title = "Publishers";
+    ViewBag.Title = "Index";
 }
 
-<h2>Publishers</h2>
+<h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create Publisher", "Create")
+    @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
@@ -15,10 +15,10 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Modified)
+            @Html.DisplayNameFor(model => model.ModifiedDate)
         </th>
         <th></th>
     </tr>
@@ -29,10 +29,10 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Created)
+            @Html.DisplayFor(modelItem => item.CreatedDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Modified)
+            @Html.DisplayFor(modelItem => item.ModifiedDate)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

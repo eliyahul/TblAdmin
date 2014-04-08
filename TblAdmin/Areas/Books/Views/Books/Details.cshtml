@@ -1,10 +1,10 @@
 ﻿@model TblAdmin.Areas.Books.Models.Book
 
 @{
-    ViewBag.Title = "Book Details";
+    ViewBag.Title = "Details";
 }
 
-<h2>Book Details</h2>
+<h2>Details</h2>
 
 <div>
     <h4>Book</h4>
@@ -27,24 +27,24 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Created)
+            @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Modified)
+            @Html.DisplayNameFor(model => model.ModifiedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Modified)
+            @Html.DisplayFor(model => model.ModifiedDate)
         </dd>
 
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to Books", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </p>
