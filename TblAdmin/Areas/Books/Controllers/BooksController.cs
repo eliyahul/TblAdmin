@@ -16,9 +16,15 @@ namespace TblAdmin.Areas.Books.Controllers
         private TblAdminContext db = new TblAdminContext();
 
         // GET: Books/Books
-        public ActionResult Index(string sort)
+        public ActionResult Index(string sort, string searchString)
         {
             var books = db.Books.Include(b => b.Publisher);
+
+            // Filter according to searchString
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()));
+            }
 
             // retrieve the books according to the specified sort order
             switch (sort)
@@ -54,6 +60,7 @@ namespace TblAdmin.Areas.Books.Controllers
             ViewBag.NextCreatedDateSort = (sort == "createdDate_asc") ? "createdDate_desc" : "createdDate_asc";
             ViewBag.NextModifiedDateSort = (sort == "modifiedDate_asc") ? "modifiedDate_desc" : "modifiedDate_asc";
             ViewBag.NextPublisherSort = (sort == "publisher_asc") ? "publisher_desc" : "publisher_asc";
+            ViewBag.SearchString = searchString;
 
             return View(books.ToList());
         }

@@ -1,27 +1,40 @@
 ﻿@model IEnumerable<TblAdmin.Areas.Books.Models.Book>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Books";
 }
 
-<h2>Index</h2>
-
+<h2>Books</h2>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="input-group">
+                @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">Search</button>
+                </span>
+            </div>
+        </div>
+    </div>
+}
+<p></p>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Publisher", "Index", new { sort = ViewBag.NextPublisherSort})
+            @Html.ActionLink("Publisher", "Index", new { sort = ViewBag.NextPublisherSort, searchString = ViewBag.SearchString })
         </th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort })
+            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString })
         </th>
         <th>
-            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort })
+            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString })
         </th>
         <th>
-            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort })
+            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString })
         </th>
         <th></th>
     </tr>
