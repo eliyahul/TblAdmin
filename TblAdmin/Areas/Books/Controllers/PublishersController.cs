@@ -15,10 +15,41 @@ namespace TblAdmin.Areas.Books.Controllers
     {
         private TblAdminContext db = new TblAdminContext();
 
-        // GET: Books/Publishers
-        public ActionResult Index()
+        // GET: Books/Publishers/sort
+        public ActionResult Index(string sort)
         {
-            return View(db.Publishers.ToList());
+            var publishers = from p in db.Publishers
+                           select p;
+
+            // retrieve the publishers according to the specified sort order
+            switch (sort)
+            {
+                case "name_desc":
+                    publishers = publishers.OrderByDescending(p => p.Name);
+                    break;
+                case "createdDate_asc":
+                    publishers = publishers.OrderBy(p => p.CreatedDate);
+                    break;
+                case "createdDate_desc":
+                    publishers = publishers.OrderByDescending(p => p.CreatedDate);
+                    break;
+                case "modifiedDate_asc":
+                    publishers = publishers.OrderBy(p => p.ModifiedDate);
+                    break;
+                case "modifiedDate_desc":
+                    publishers = publishers.OrderByDescending(p => p.ModifiedDate);
+                    break;
+                default:
+                    publishers = publishers.OrderBy(p => p.Name);
+                    break;
+            }
+
+            // Toggle the next sort
+            ViewBag.NextNameSort = (string.IsNullOrEmpty(sort)) ? "name_desc" : "";
+            ViewBag.NextCreatedDateSort = (sort == "createdDate_asc") ? "createdDate_desc" : "createdDate_asc";
+            ViewBag.NextModifiedDateSort = (sort == "modifiedDate_asc") ? "modifiedDate_desc" : "modifiedDate_asc";
+
+            return View(publishers.ToList());
         }
 
         // GET: Books/Publishers/Details/5
