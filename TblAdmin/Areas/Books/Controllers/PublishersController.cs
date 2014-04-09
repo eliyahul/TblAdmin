@@ -15,7 +15,7 @@ namespace TblAdmin.Areas.Books.Controllers
     {
         private TblAdminContext db = new TblAdminContext();
 
-        // GET: Books/Publishers/sort
+        // GET: Books/Publishers
         public ActionResult Index(string sort)
         {
             var publishers = from p in db.Publishers

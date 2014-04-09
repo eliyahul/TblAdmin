@@ -16,9 +16,45 @@ namespace TblAdmin.Areas.Books.Controllers
         private TblAdminContext db = new TblAdminContext();
 
         // GET: Books/Books
-        public ActionResult Index()
+        public ActionResult Index(string sort)
         {
             var books = db.Books.Include(b => b.Publisher);
+
+            // retrieve the books according to the specified sort order
+            switch (sort)
+            {
+                case "name_desc":
+                    books = books.OrderByDescending(b => b.Name);
+                    break;
+                case "createdDate_asc":
+                    books = books.OrderBy(b => b.CreatedDate);
+                    break;
+                case "createdDate_desc":
+                    books = books.OrderByDescending(b => b.CreatedDate);
+                    break;
+                case "modifiedDate_asc":
+                    books = books.OrderBy(b => b.ModifiedDate);
+                    break;
+                case "modifiedDate_desc":
+                    books = books.OrderByDescending(b => b.ModifiedDate);
+                    break;
+                case "publisher_asc":
+                    books = books.OrderBy(b => b.Publisher.Name);
+                    break;
+                case "publisher_desc":
+                    books = books.OrderByDescending(b => b.Publisher.Name);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Name);
+                    break;
+            }
+
+            // Toggle the next sort
+            ViewBag.NextNameSort = (string.IsNullOrEmpty(sort)) ? "name_desc" : "";
+            ViewBag.NextCreatedDateSort = (sort == "createdDate_asc") ? "createdDate_desc" : "createdDate_asc";
+            ViewBag.NextModifiedDateSort = (sort == "modifiedDate_asc") ? "modifiedDate_desc" : "modifiedDate_asc";
+            ViewBag.NextPublisherSort = (sort == "publisher_asc") ? "publisher_desc" : "publisher_asc";
+
             return View(books.ToList());
         }
 
