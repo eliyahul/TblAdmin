@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using TblAdmin.Areas.Books.Models;
 using TblAdmin.DAL;
+using PagedList;
 
 namespace TblAdmin.Areas.Books.Controllers
 {
@@ -16,7 +17,7 @@ namespace TblAdmin.Areas.Books.Controllers
         private TblAdminContext db = new TblAdminContext();
 
         // GET: Books/Publishers
-        public ActionResult Index(string sort, string searchString)
+        public ActionResult Index(string sort, string searchString, int? page)
         {
             var publishers = from p in db.Publishers
                            select p;
@@ -50,13 +51,22 @@ namespace TblAdmin.Areas.Books.Controllers
                     break;
             }
 
-            // Toggle the next sort
+            // Pass current filter for column headers to sort through, paging links to page through, and searchbox to display.
+            ViewBag.SearchString = searchString;
+            
+            // Pass current sort order for paging links to keep same order while paging
+            ViewBag.CurrentSort = sort;
+
+            // Toggle sort order for column headers
             ViewBag.NextNameSort = (string.IsNullOrEmpty(sort)) ? "name_desc" : "";
             ViewBag.NextCreatedDateSort = (sort == "createdDate_asc") ? "createdDate_desc" : "createdDate_asc";
             ViewBag.NextModifiedDateSort = (sort == "modifiedDate_asc") ? "modifiedDate_desc" : "modifiedDate_asc";
-            ViewBag.SearchString = searchString;
+            
 
-            return View(publishers.ToList());
+            //Setup paging
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(publishers.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Books/Publishers/Details/5

@@ -1,4 +1,7 @@
-﻿@model IEnumerable<TblAdmin.Areas.Books.Models.Publisher>
+﻿@model PagedList.IPagedList<TblAdmin.Areas.Books.Models.Publisher>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Publishers";
@@ -6,12 +9,12 @@
 
 <h2>Publishers</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Publishers", FormMethod.Get))
 {
     <div class="row">
         <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                @Html.TextBox("searchString", ViewBag.SearchString as string, new { @class = "form-control" })
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-default">Search</button>
                 </span>
@@ -27,13 +30,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
         </th>
         <th>
-            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
         </th>
         <th>
-            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
         </th>
         <th></th>
     </tr>
@@ -58,3 +61,12 @@
 }
 
 </table>
+<p>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(
+        Model, 
+        page => Url.Action(
+            "Index",
+                    new { page, sort = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+</p>
