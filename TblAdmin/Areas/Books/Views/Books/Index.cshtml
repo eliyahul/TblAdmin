@@ -1,18 +1,21 @@
-﻿@model IEnumerable<TblAdmin.Areas.Books.Models.Book>
+﻿@model PagedList.IPagedList<TblAdmin.Areas.Books.Models.Book>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Books";
 }
 
 <h2>Books</h2>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Books", FormMethod.Get))
 {
     <div class="row">
         <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                @Html.TextBox("searchString", ViewBag.SearchString as string, new { @class = "form-control" })
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
             </div>
         </div>
@@ -26,15 +29,60 @@
     <tr>
         <th>
             @Html.ActionLink("Publisher", "Index", new { sort = ViewBag.NextPublisherSort, searchString = ViewBag.SearchString })
+            @if (ViewBag.currentSort == "publisher_desc" || ViewBag.currentSort == "publisher_asc")
+            {
+                if (ViewBag.nextNameSort == "publisher_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
         </th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "name_desc" || String.IsNullOrEmpty(ViewBag.currentSort))
+            {
+                if (ViewBag.nextNameSort == "name_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
+
         </th>
         <th>
-            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "createdDate_desc" || ViewBag.currentSort == "createdDate_asc")
+            {
+                if (ViewBag.nextCreatedDateSort == "createdDate_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
         </th>
         <th>
-            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString })
+            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "modifiedDate_desc" || ViewBag.currentSort == "modifiedDate_asc")
+            {
+                if (ViewBag.nextModifiedDateSort == "modifiedDate_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
         </th>
         <th></th>
     </tr>
@@ -62,3 +110,13 @@
 }
 
 </table>
+<p>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action(
+            "Index",
+                    new { page, sort = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+</p>
+

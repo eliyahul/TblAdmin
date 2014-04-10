@@ -16,7 +16,7 @@
             <div class="input-group">
                 @Html.TextBox("searchString", ViewBag.SearchString as string, new { @class = "form-control" })
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
             </div>
         </div>
@@ -31,12 +31,46 @@
     <tr>
         <th>
             @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "name_desc" || String.IsNullOrEmpty(ViewBag.currentSort))
+            {
+                if (ViewBag.nextNameSort == "name_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
+            
         </th>
         <th>
             @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "createdDate_desc" || ViewBag.currentSort == "createdDate_asc")
+            {
+                if (ViewBag.nextCreatedDateSort == "createdDate_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
         </th>
         <th>
             @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
+            @if (ViewBag.currentSort == "modifiedDate_desc" || ViewBag.currentSort == "modifiedDate_asc")
+            {
+                if (ViewBag.nextModifiedDateSort == "modifiedDate_desc")
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+                }
+            }
         </th>
         <th></th>
     </tr>
