@@ -31,7 +31,7 @@
             @Html.ActionLink("Publisher", "Index", new { sort = ViewBag.NextPublisherSort, searchString = ViewBag.SearchString })
             @if (ViewBag.currentSort == "publisher_desc" || ViewBag.currentSort == "publisher_asc")
             {
-                if (ViewBag.nextNameSort == "publisher_desc")
+                if (ViewBag.nextPublisherSort == "publisher_desc")
                 {
                     <span class="glyphicon glyphicon-sort-by-alphabet"></span>
                 }
