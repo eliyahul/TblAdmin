@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
+using Moq;
 using TblAdmin;
 using TblAdmin.Controllers;
 
@@ -13,11 +14,20 @@ namespace TblAdmin.Tests.Controllers
     [TestFixture]
     public class HomeControllerTest
     {
+        private HomeController controller;
+
+        [SetUp]
+        public void init()
+        {
+            controller = new HomeController();
+            //Mock<HomeController> mock = new Mock<HomeController>(); // just wanted to see if it builds.
+        }
+
         [Test]
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            // .. add anything specific here for this test, that is not in the global [Setup] routine above.
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -30,7 +40,7 @@ namespace TblAdmin.Tests.Controllers
         public void About()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            // .. add anything specific here for this test, that is not in the global [Setup] routine above.
 
             // Act
             ViewResult result = controller.About() as ViewResult;
@@ -43,7 +53,7 @@ namespace TblAdmin.Tests.Controllers
         public void Contact()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            // .. add anything specific here for this test, that is not in the global [Setup] routine above.
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;
