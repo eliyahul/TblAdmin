@@ -14,7 +14,13 @@ namespace TblAdmin.Areas.Books.Controllers
 {
     public class BooksController : Controller
     {
-        private TblAdminContext db = new TblAdminContext();
+        private TblAdminContext db;
+
+        public BooksController(TblAdminContext context)
+        {
+            db = context;
+        }
+        
 
         // GET: Books/Books
         public ActionResult Index(string sort, string searchString, int? page)

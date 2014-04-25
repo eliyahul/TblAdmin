@@ -12,6 +12,7 @@ namespace TblAdmin
     {
         protected void Application_Start()
         {
+            DIConfig.Register(); //AutoFac setup.
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
