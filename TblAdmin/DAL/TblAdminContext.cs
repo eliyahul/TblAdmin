@@ -6,7 +6,9 @@ namespace TblAdmin.DAL
 {
     public class TblAdminContext : DbContext
     {
-        public DbSet<Publisher> Publishers { get; set; }
-        public DbSet<Book> Books { get; set; }
+        // virtual - to allow for mocking.
+
+        public virtual DbSet<Publisher> Publishers { get; set; } 
+        public virtual DbSet<Book> Books { get; set; }
     }
 }
