@@ -25,7 +25,9 @@ namespace TblAdmin.Areas.Books.Controllers
         // GET: Books/Books
         public ActionResult Index(string sort, string searchString, int? page)
         {
-            var books = db.Books.Include(b => b.Publisher);
+            //var books = db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
+            var books = from b in db.Books
+                             select b;
 
             // Filter according to searchString
             if (!String.IsNullOrEmpty(searchString))
