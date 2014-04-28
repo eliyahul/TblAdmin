@@ -26,7 +26,25 @@ namespace TblAdmin.Tests.Controllers
             { 
                 new Book { Name = "BBB" }, 
                 new Book { Name = "ZZZ" }, 
-                new Book { Name = "AAA" }, 
+                new Book { Name = "AAA" },
+                new Book { Name = "DDD" }, 
+                new Book { Name = "MMM" }, 
+                new Book { Name = "QQQ" },
+                new Book { Name = "FFF" }, 
+                new Book { Name = "RRR" }, 
+                new Book { Name = "HHH" },
+                new Book { Name = "EEE" }, 
+                new Book { Name = "OOO" }, 
+                new Book { Name = "KKK" },
+                new Book { Name = "GGG" }, 
+                new Book { Name = "NNN" }, 
+                new Book { Name = "JJJ" },
+                new Book { Name = "SSS" }, 
+                new Book { Name = "CCC" }, 
+                new Book { Name = "TTT" },
+                new Book { Name = "LLL" }, 
+                new Book { Name = "III" }, 
+ 
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<Book>>();
@@ -42,25 +60,61 @@ namespace TblAdmin.Tests.Controllers
         }
 
         [Test]
-        public void Index()
+        public void List_with_no_params_displays_first_page_sorted_by_name()
         {
             // Arrange
-            // .. add anything specific here for this test, that is not in the global [Setup] routine above.
-            string sort = "name_desc";
-            string searchString = "AAA";
-            int? page = 1;
+            string sort = null;
+            string searchString = null;
+            int page = 1;
 
             // Act
-            ActionResult result = controller.Index(sort, searchString, page) as ActionResult;
-            ViewResult vresult = result as ViewResult;
-            PagedList.IPagedList<Book> books = vresult.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(sort, searchString, page) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, books.Count);
+            Assert.AreEqual(3, books.Count);
             Assert.AreEqual("AAA", books[0].Name);
-            //Assert.AreEqual("BBB", books[1].Name);
-            //Assert.AreEqual("ZZZ", books[2].Name);
+            Assert.AreEqual("CCC", books[2].Name);
+        }
+
+        [Test]
+        public void List_with_no_params_display_second_page_sorted_by_name()
+        {
+            // Arrange
+            string sort = null;
+            string searchString = null;
+            int page = 2;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, books.Count);
+            Assert.AreEqual("DDD", books[0].Name);
+            Assert.AreEqual("FFF", books[2].Name);
+        }
+
+        [Test]
+        public void List_with_no_params_display_first_page_where_user_sets_page_size()
+        {
+            // Arrange
+            string sort = null;
+            string searchString = null;
+            int page = 2;
+            int pageSize = 5;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page, pageSize) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(pageSize, books.Count);
+            Assert.AreEqual("FFF", books[0].Name);
+            Assert.AreEqual("JJJ", books[pageSize-1].Name);
         }
 
         

@@ -23,7 +23,7 @@ namespace TblAdmin.Areas.Books.Controllers
         
 
         // GET: Books/Books
-        public ActionResult Index(string sort, string searchString, int? page)
+        public ActionResult Index(string sort, string searchString, int pageNumber=1, int pageSize=3)
         {
             //var books = db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             var books = from b in db.Books
@@ -78,8 +78,8 @@ namespace TblAdmin.Areas.Books.Controllers
             
 
             //Setup paging
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
+            //int pageSize = (int) entriesPerPage;
+            //int pageNumber = (page ?? 1);
             return View(books.ToPagedList(pageNumber, pageSize));
         }
 
