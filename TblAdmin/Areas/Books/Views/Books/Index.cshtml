@@ -25,63 +25,47 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@helper SortGlyphicon(string sortOrder)
+{ 
+    if (sortOrder == "desc")
+    {
+        <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+    }
+}
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Publisher", "Index", new { sort = ViewBag.NextPublisherSort, searchString = ViewBag.SearchString })
-            @if (ViewBag.currentSort == "publisher_desc" || ViewBag.currentSort == "publisher_asc")
+            @Html.ActionLink("Publisher", "Index", new { searchString = ViewBag.SearchString, sortCol = "publisher", sortOrder = ViewBag.NextSortOrder, page = Model.PageNumber })
+            @if (ViewBag.currentSortCol == "publisher")
             {
-                if (ViewBag.nextPublisherSort == "publisher_desc")
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                }
+                @SortGlyphicon(ViewBag.CurrentSortOrder);
             }
         </th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sort = ViewBag.nextNameSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
-            @if (ViewBag.currentSort == "name_desc" || String.IsNullOrEmpty(ViewBag.currentSort))
+            @Html.ActionLink("Name", "Index", new { searchString = ViewBag.SearchString, sortCol = "name", sortOrder = ViewBag.NextSortOrder, page = Model.PageNumber })
+            @if (ViewBag.currentSortCol == "name")
             {
-                if (ViewBag.nextNameSort == "name_desc")
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                }
+                @SortGlyphicon(ViewBag.CurrentSortOrder);
             }
 
         </th>
         <th>
-            @Html.ActionLink("Created", "Index", new { sort = ViewBag.nextCreatedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
-            @if (ViewBag.currentSort == "createdDate_desc" || ViewBag.currentSort == "createdDate_asc")
+            @Html.ActionLink("Created", "Index", new { searchString = ViewBag.SearchString, sortCol = "createdDate", sortOrder = ViewBag.NextSortOrder, page = Model.PageNumber })
+            @if (ViewBag.currentSortCol == "createdDate")
             {
-                if (ViewBag.nextCreatedDateSort == "createdDate_desc")
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                }
+                @SortGlyphicon(ViewBag.CurrentSortOrder);
             }
         </th>
         <th>
-            @Html.ActionLink("Modified", "Index", new { sort = ViewBag.nextModifiedDateSort, searchString = ViewBag.SearchString, page = Model.PageNumber })
-            @if (ViewBag.currentSort == "modifiedDate_desc" || ViewBag.currentSort == "modifiedDate_asc")
+            @Html.ActionLink("Modified", "Index", new { searchString = ViewBag.SearchString, sortCol = "modifiedDate", sortOrder = ViewBag.NextSortOrder, page = Model.PageNumber })
+            @if (ViewBag.currentSortCol == "modifiedDate")
             {
-                if (ViewBag.nextModifiedDateSort == "modifiedDate_desc")
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                }
+                @SortGlyphicon(ViewBag.CurrentSortOrder);
             }
         </th>
         <th></th>
@@ -117,6 +101,6 @@
         Model,
         page => Url.Action(
             "Index",
-                    new { page, sort = ViewBag.CurrentSort, searchString = ViewBag.SearchString }))
+                                                    new { searchString = ViewBag.SearchString, sortCol = ViewBag.CurrentSortCol, sortOrder = ViewBag.CurrentSortOrder, page }))
 </p>
 

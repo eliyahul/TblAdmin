@@ -23,7 +23,7 @@ namespace TblAdmin.Areas.Books.Controllers
         
 
         // GET: Books/Books
-        public ActionResult Index(string sort, string searchString, int page=1, int pageSize=3)
+        public ActionResult Index(string searchString, string sortCol="name", string sortOrder = "asc", int page = 1, int pageSize = 3)
         {
             //var books = db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             var books = from b in db.Books
@@ -36,31 +36,57 @@ namespace TblAdmin.Areas.Books.Controllers
             }
 
             // retrieve the books according to the specified sort order
-            switch (sort)
+            switch (sortCol)
             {
-                case "name_desc":
-                    books = books.OrderByDescending(b => b.Name);
+                case "name":
+                    if (sortOrder == "desc")
+                    {
+                        books = books.OrderByDescending(b => b.Name);
+                    }
+                    else
+                    {
+                        books = books.OrderBy(b => b.Name);
+                    }
                     break;
-                case "createdDate_asc":
-                    books = books.OrderBy(b => b.CreatedDate);
+                case "createdDate":
+                    if (sortOrder == "desc")
+                    {
+                        books = books.OrderByDescending(b => b.CreatedDate);
+                    }
+                    else
+                    {
+                        books = books.OrderBy(b => b.CreatedDate);
+                    }
                     break;
-                case "createdDate_desc":
-                    books = books.OrderByDescending(b => b.CreatedDate);
+                case "modifiedDate":
+                    if (sortOrder == "desc")
+                    {
+                        books = books.OrderByDescending(b => b.ModifiedDate);
+                    }
+                    else
+                    {
+                        books = books.OrderBy(b => b.ModifiedDate);
+                    }
                     break;
-                case "modifiedDate_asc":
-                    books = books.OrderBy(b => b.ModifiedDate);
-                    break;
-                case "modifiedDate_desc":
-                    books = books.OrderByDescending(b => b.ModifiedDate);
-                    break;
-                case "publisher_asc":
-                    books = books.OrderBy(b => b.Publisher.Name);
-                    break;
-                case "publisher_desc":
-                    books = books.OrderByDescending(b => b.Publisher.Name);
+                case "publisher":
+                    if (sortOrder == "desc")
+                    {
+                        books = books.OrderByDescending(b => b.Publisher.Name);
+                    }
+                    else
+                    {
+                        books = books.OrderBy(b => b.Publisher.Name);
+                    }
                     break;
                 default:
-                    books = books.OrderBy(b => b.Name);
+                    if (sortOrder == "desc")
+                    {
+                        books = books.OrderByDescending(b => b.Name);
+                    }
+                    else
+                    {
+                        books = books.OrderBy(b => b.Name);
+                    }
                     break;
             }
 
@@ -68,18 +94,13 @@ namespace TblAdmin.Areas.Books.Controllers
             ViewBag.SearchString = searchString;
 
             // Pass current sort order for paging links to keep same order while paging
-            ViewBag.CurrentSort = sort;
+            ViewBag.CurrentSortCol = sortCol;
+            ViewBag.CurrentSortOrder = sortOrder;
 
             // Toggle sort order for column headers
-            ViewBag.NextNameSort = (string.IsNullOrEmpty(sort)) ? "name_desc" : "";
-            ViewBag.NextCreatedDateSort = (sort == "createdDate_asc") ? "createdDate_desc" : "createdDate_asc";
-            ViewBag.NextModifiedDateSort = (sort == "modifiedDate_asc") ? "modifiedDate_desc" : "modifiedDate_asc";
-            ViewBag.NextPublisherSort = (sort == "publisher_asc") ? "publisher_desc" : "publisher_asc";
-            
+            ViewBag.NextSortOrder = (sortOrder == "desc") ? "asc" : "desc"; 
 
             //Setup paging
-            //int pageSize = (int) entriesPerPage;
-            //int page = (page ?? 1);
             return View(books.ToPagedList(page, pageSize));
         }
 
