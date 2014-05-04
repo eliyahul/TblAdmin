@@ -98,6 +98,43 @@ namespace TblAdmin.Tests.Controllers
         }
 
         [Test]
+        public void List_with_no_params_display_last_page_sorted_by_name()
+        {
+            // Arrange
+            string sort = null;
+            string searchString = null;
+            int page = 4;
+            int pageSize = 5;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page, pageSize) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(5, books.Count);
+            Assert.AreEqual("ZZZ", books[4].Name);
+        }
+
+        [Test]
+        public void List_with_no_params_display_first_page_sorted_by_name_desc()
+        {
+            // Arrange
+            string sort = "name desc";
+            string searchString = null;
+            int page = 1;
+            int pageSize = 5;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page, pageSize) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(5, books.Count);
+            Assert.AreEqual("AAA", books[0].Name);
+        }
+        [Test]
         public void List_with_no_params_display_first_page_where_user_sets_page_size()
         {
             // Arrange
@@ -117,6 +154,42 @@ namespace TblAdmin.Tests.Controllers
             Assert.AreEqual("JJJ", books[pageSize-1].Name);
         }
 
+        [Test]
+        public void List_with_search_params_for_string_which_exists()
+        {
+            // Arrange
+            string sort = null;
+            string searchString = "JJ";
+            int page = 1;
+            int pageSize = 5;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page, pageSize) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, books.Count);
+            Assert.AreEqual("JJJ", books[0].Name);
+        }
+
+        [Test]
+        public void List_with_search_params_for_string_which_does_not_exist()
+        {
+            // Arrange
+            string sort = null;
+            string searchString = "H3J";
+            int page = 1;
+            int pageSize = 5;
+
+            // Act
+            ViewResult result = controller.Index(sort, searchString, page, pageSize) as ViewResult;
+            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, books.Count);
+        }
         
     }
 }
