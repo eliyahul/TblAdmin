@@ -14,7 +14,7 @@
 *.suo
 *.user
 
-# Include dlls if theyÎéÎ÷re in the NuGet packages directory
+# Include dlls if they're in the NuGet packages directory
 !/packages/*/lib/*.dll
 !/packages/*/lib/*/*.dll
 
@@ -99,3 +99,6 @@ _[Ss]cripts
 
 # Let NuGet automatically restore missing packages for you.
 packages/
+#publish profiles
+TblAdmin/Properties/PublishProfiles/*
+
