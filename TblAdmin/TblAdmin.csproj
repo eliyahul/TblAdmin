@@ -234,6 +234,7 @@
     <Compile Include="Areas\Books\BooksAreaRegistration.cs" />
     <Compile Include="Areas\Books\Controllers\BooksController.cs" />
     <Compile Include="Areas\Books\Controllers\PublishersController.cs" />
+    <Compile Include="Areas\Books\ViewModels\Books\IndexViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\TblAdminInitializer.cs" />
