@@ -67,9 +67,10 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = null;
             string searchString = null;
             int page = 1;
+            int pageSize = 3;
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page) as ViewResult;
+            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
             PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
             
             // Assert
@@ -87,9 +88,10 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = null;
             string searchString = null;
             int page = 2;
+            int pageSize = 3;
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page) as ViewResult;
+            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
             PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
 
             // Assert
