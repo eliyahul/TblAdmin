@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Linq.Expressions;
-using Microsoft.Web.Mvc;
 
 namespace TblAdmin.Areas.Base.Controllers
 {
@@ -33,9 +32,9 @@ namespace TblAdmin.Areas.Base.Controllers
         // This is the strongly typed version you should use in your controllers
         // Usage: return this.RedirectToAction<BooksController>(c => c.Index());
         // Instead of: return RedirectToAction("Index", "Books");
-        protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action) where TController : Controller
-        {
-            return ControllerExtensions.RedirectToAction(this, action);
-        }
+        //protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action) where TController : Controller
+        //{
+        //    return ControllerExtensions.RedirectToAction(this, action);
+        //}
     }
 }
