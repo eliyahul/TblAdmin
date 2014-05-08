@@ -8,6 +8,7 @@ using Moq;
 using TblAdmin;
 using TblAdmin.Areas.Books.Controllers;
 using TblAdmin.Areas.Books.Models;
+using TblAdmin.Areas.Books.ViewModels;
 using TblAdmin.DAL;
 using System.Data.Entity;
 using PagedList;
@@ -63,141 +64,210 @@ namespace TblAdmin.Tests.Controllers
         public void List_with_no_params_displays_first_page_sorted_by_name()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
-            string searchString = null;
+            string searchString = "";
+            string sortCol = "Name"; 
+            string sortOrder = "asc"; 
+            string nextSortOrder = "desc";
             int page = 1;
             int pageSize = 3;
-
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+                
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel) result.ViewData.Model;
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, books.Count);
-            Assert.AreEqual("AAA", books[0].Name);
-            Assert.AreEqual("CCC", books[2].Name);
+            Assert.AreEqual(3, indexVM.Books.Count);
+            Assert.AreEqual("AAA", indexVM.Books[0].Name);
+            Assert.AreEqual("CCC", indexVM.Books[2].Name);
         }
 
         [Test]
         public void List_with_no_params_display_second_page_sorted_by_name()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
-            string searchString = null;
+            string searchString = "";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
             int page = 2;
             int pageSize = 3;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, books.Count);
-            Assert.AreEqual("DDD", books[0].Name);
-            Assert.AreEqual("FFF", books[2].Name);
+            Assert.AreEqual(3, indexVM.Books.Count);
+            Assert.AreEqual("DDD", indexVM.Books[0].Name);
+            Assert.AreEqual("FFF", indexVM.Books[2].Name);
         }
 
         [Test]
         public void List_with_no_params_display_last_page_sorted_by_name()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
-            string searchString = null;
+            string searchString = "";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
             int page = 4;
             int pageSize = 5;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(5, books.Count);
-            Assert.AreEqual("ZZZ", books[4].Name);
+            Assert.AreEqual(5, indexVM.Books.Count);
+            Assert.AreEqual("ZZZ", indexVM.Books[4].Name);
         }
 
         [Test]
         public void List_with_no_params_display_first_page_sorted_by_name_desc()
         {
             // Arrange
-            string sortCol = "name";
+            string searchString = "";
+            string sortCol = "Name";
             string sortOrder = "desc";
-            string searchString = null;
+            string nextSortOrder = "asc";
             int page = 1;
             int pageSize = 5;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(5, books.Count);
-            Assert.AreEqual("ZZZ", books[0].Name);
+            Assert.AreEqual(5, indexVM.Books.Count);
+            Assert.AreEqual("ZZZ", indexVM.Books[0].Name);
         }
         [Test]
         public void List_with_no_params_display_first_page_where_user_sets_page_size()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
-            string searchString = null;
+            string searchString = "";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
             int page = 2;
             int pageSize = 5;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(pageSize, books.Count);
-            Assert.AreEqual("FFF", books[0].Name);
-            Assert.AreEqual("JJJ", books[pageSize-1].Name);
+            Assert.AreEqual(pageSize, indexVM.Books.Count);
+            Assert.AreEqual("FFF", indexVM.Books[0].Name);
+            Assert.AreEqual("JJJ", indexVM.Books[pageSize - 1].Name);
+        }
+
+        [Test]
+        public void List_with_no_params_display_first_page_where_hacker_sets_negative_page_params()
+        {
+            // Arrange
+            string searchString = "";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
+            int page = -1;
+            int pageSize = -1;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+
+            // Act
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, indexVM.Books.Count);
+            Assert.AreEqual("AAA", indexVM.Books[0].Name);
+            Assert.AreEqual("CCC", indexVM.Books[3 - 1].Name);
+        }
+
+        [Test]
+        public void List_with_no_params_display_first_page_where_hacker_sets_too_large_page_params()
+        {
+            // Arrange
+            string searchString = "";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
+            int page = 999999999;
+            int pageSize = 999999999;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+
+            // Act
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, indexVM.Books.Count);
+            Assert.AreEqual("AAA", indexVM.Books[0].Name);
+            Assert.AreEqual("CCC", indexVM.Books[3 - 1].Name);
         }
 
         [Test]
         public void List_with_search_params_for_string_which_exists()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
             string searchString = "JJ";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
             int page = 1;
             int pageSize = 5;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, books.Count);
-            Assert.AreEqual("JJJ", books[0].Name);
+            Assert.AreEqual(1, indexVM.Books.Count);
+            Assert.AreEqual("JJJ", indexVM.Books[0].Name);
         }
 
         [Test]
         public void List_with_search_params_for_string_which_does_not_exist()
         {
             // Arrange
-            string sortCol = null;
-            string sortOrder = null;
             string searchString = "H3J";
+            string sortCol = "Name";
+            string sortOrder = "asc";
+            string nextSortOrder = "desc";
             int page = 1;
             int pageSize = 5;
+            PagedList.IPagedList<Book> books = null;
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
 
             // Act
-            ViewResult result = controller.Index(searchString, sortCol, sortOrder, page, pageSize) as ViewResult;
-            PagedList.IPagedList<Book> books = result.ViewData.Model as PagedList.IPagedList<Book>;
+            ViewResult result = controller.Index(indexVM) as ViewResult;
+            indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(0, books.Count);
+            Assert.AreEqual(0, indexVM.Books.Count);
         }
         
     }
