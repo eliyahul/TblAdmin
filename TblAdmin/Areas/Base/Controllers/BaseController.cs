@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Linq.Expressions;
+using Microsoft.Web.Mvc; // for strongly typed redirects
 
 namespace TblAdmin.Areas.Base.Controllers
 {
@@ -30,11 +31,14 @@ namespace TblAdmin.Areas.Base.Controllers
         // You can mask/hide other overloads of RedirectToAction as well, here.
 
         // This is the strongly typed version you should use in your controllers
+        // In order to not have to add a "using Microsoft.Web.Mvc;" to every controller, we add it to the base
+        // controller. So, all child controllers should prefix the redirect with "this."
         // Usage: return this.RedirectToAction<BooksController>(c => c.Index());
         // Instead of: return RedirectToAction("Index", "Books");
-        //protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action) where TController : Controller
-        //{
-        //    return ControllerExtensions.RedirectToAction(this, action);
-        //}
+        protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action) where TController : Controller
+        {
+            return ControllerExtensions.RedirectToAction(this, action);
+        }
+
     }
 }

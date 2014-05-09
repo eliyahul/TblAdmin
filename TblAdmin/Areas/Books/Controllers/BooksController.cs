@@ -11,7 +11,6 @@ using TblAdmin.Areas.Books.ViewModels;
 using TblAdmin.Areas.Base.Controllers;
 using TblAdmin.DAL;
 using PagedList;
-using Microsoft.Web.Mvc;
 
 namespace TblAdmin.Areas.Books.Controllers
 {
@@ -24,7 +23,6 @@ namespace TblAdmin.Areas.Books.Controllers
             db = context;
         }
 
-        
         // GET: Books/Books
         public ActionResult Index(IndexViewModel vm)
         {
@@ -94,98 +92,6 @@ namespace TblAdmin.Areas.Books.Controllers
             return View(vm);
         }
         
-
-        /*
-        // GET: Books/Books
-        public ActionResult Index(string searchString, string sortCol, string sortOrder, int? page, int? pageSize)
-        {
-            //var books = db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
-            var books = from b in db.Books
-                             select b;
-
-            // Assign default values. We are doing this to avoid using optional parameters, so 
-            // we can have strongly typed RedirectToAction<BooksController>(c=>c.index()), and not have to
-            // unnecessarily supply dummy parameters to the c.index() everywhere.
-            sortCol = sortCol ?? "name";
-            sortOrder = sortOrder ?? "asc";
-            page = page ?? 1;
-            pageSize = pageSize ?? 3;
-
-            // Filter according to searchString
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                books = books.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()));
-            }
-
-            // retrieve the books according to the specified sort order
-            switch (sortCol)
-            {
-                case "name":
-                    if (sortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.Name);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.Name);
-                    }
-                    break;
-                case "createdDate":
-                    if (sortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.CreatedDate);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.CreatedDate);
-                    }
-                    break;
-                case "modifiedDate":
-                    if (sortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.ModifiedDate);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.ModifiedDate);
-                    }
-                    break;
-                case "publisher":
-                    if (sortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.Publisher.Name);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.Publisher.Name);
-                    }
-                    break;
-                default:
-                    if (sortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.Name);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.Name);
-                    }
-                    break;
-            }
-
-            // Pass current filter for column headers to sort through, paging links to page through, and searchbox to display.
-            ViewBag.SearchString = searchString;
-
-            // Pass current sort order for paging links to keep same order while paging
-            ViewBag.CurrentSortCol = sortCol;
-            ViewBag.CurrentSortOrder = sortOrder;
-
-            // Toggle sort order for column headers
-            ViewBag.NextSortOrder = (sortOrder == "desc") ? "asc" : "desc"; 
-
-            //Setup paging
-            return View(books.ToPagedList((int) page, (int) pageSize));
-        }
-        */
         // GET: Books/Books/Details/5
         public ActionResult Details(int? id)
         {
@@ -219,10 +125,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 db.Books.Add(book);
                 db.SaveChanges();
-                //return RedirectToAction("Index");
-                IndexViewModel indexVM = new IndexViewModel();
-                return this.RedirectToAction<BooksController>(c => c.Index(indexVM ));
-                //return this.RedirectToAction<BooksController>(c => c.Index());
+                return this.RedirectToAction<BooksController>(c => c.Index(null));
             }
 
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
@@ -256,7 +159,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 db.Entry(book).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return this.RedirectToAction<BooksController>(c => c.Index(null));
             }
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
             return View(book);
@@ -285,7 +188,7 @@ namespace TblAdmin.Areas.Books.Controllers
             Book book = db.Books.Find(id);
             db.Books.Remove(book);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return this.RedirectToAction<BooksController>(c => c.Index(null));
         }
 
         protected override void Dispose(bool disposing)
