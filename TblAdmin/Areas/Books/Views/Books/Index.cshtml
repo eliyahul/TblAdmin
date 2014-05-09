@@ -1,4 +1,6 @@
 ﻿@using PagedList.Mvc;
+@using TblAdmin.Areas.Books.Controllers;
+@using Microsoft.Web.Mvc;
 
 @model TblAdmin.Areas.Books.ViewModels.IndexViewModel
 
@@ -106,9 +108,9 @@
             @Html.DisplayFor(modelItem => item.ModifiedDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @(Html.ActionLink<BooksController>(c => c.Edit(item.ID), "Edit")) |
+            @(Html.ActionLink<BooksController>(c => c.Details(item.ID), "Details")) |
+            @(Html.ActionLink<BooksController>(c => c.Delete(item.ID), "Delete")) 
         </td>
     </tr>
 }
@@ -122,6 +124,7 @@
         Model.Books,
         page => Url.Action(
             "Index",
-                new { Model.SearchString, Model.SortCol, Model.SortOrder, page = page }))
+            new { Model.SearchString, Model.SortCol, Model.SortOrder, page = page }
+    ))
 </p>
 
