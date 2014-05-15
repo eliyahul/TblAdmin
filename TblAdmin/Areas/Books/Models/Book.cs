@@ -13,10 +13,12 @@ namespace TblAdmin.Areas.Books.Models
         public string Name { get; set; }
 
         [Display(Name = "Created")]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime CreatedDate { get; set; }
         
         [Display(Name = "Modified")]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime ModifiedDate { get; set; }
 
