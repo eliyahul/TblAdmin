@@ -75,14 +75,11 @@ namespace TblAdmin.Areas.Books.Controllers
                     }
                     break;
                 default:
-                    if (vm.SortOrder == "desc")
-                    {
-                        books = books.OrderByDescending(b => b.Name);
-                    }
-                    else
-                    {
-                        books = books.OrderBy(b => b.Name);
-                    }
+                    vm.SortCol = "name";
+                    vm.SortOrder = "asc";
+                    vm.Page = IndexViewModel.DEFAULT_PAGE_NUMBER;
+                    vm.PageSize = IndexViewModel.DEFAULT_PAGE_SIZE;
+                    books = books.OrderBy(b => b.Name);
                     break;
             }
 

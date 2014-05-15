@@ -65,7 +65,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name"; 
+            string sortCol = "name"; 
             string sortOrder = "asc"; 
             string nextSortOrder = "desc";
             int page = 1;
@@ -89,7 +89,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 2;
@@ -113,7 +113,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 4;
@@ -136,7 +136,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "desc";
             string nextSortOrder = "asc";
             int page = 1;
@@ -158,7 +158,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 2;
@@ -182,7 +182,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = -1;
@@ -206,7 +206,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 999999999;
@@ -230,7 +230,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "JJ";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 1;
@@ -253,7 +253,7 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "H3J";
-            string sortCol = "Name";
+            string sortCol = "name";
             string sortOrder = "asc";
             string nextSortOrder = "desc";
             int page = 1;
