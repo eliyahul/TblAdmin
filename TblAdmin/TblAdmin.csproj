@@ -231,6 +231,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
     <Compile Include="Areas\Base\Controllers\BaseController.cs" />
+    <Compile Include="Areas\Base\ViewModels\SearchSortPageViewModel.cs" />
     <Compile Include="Areas\Books\BooksAreaRegistration.cs" />
     <Compile Include="Areas\Books\Controllers\BooksController.cs" />
     <Compile Include="Areas\Books\Controllers\PublishersController.cs" />

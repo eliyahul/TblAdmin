@@ -11,12 +11,12 @@
 }
 
 <h2>Books</h2>
-@using (Html.BeginForm(FormMethod.Get))
+@using (Html.BeginForm("Index", "Books", FormMethod.Get))
 {
     <div class="row">
         <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(x => x.SearchString, Model.SearchString, new { @class = "form-control" })
+                @Html.TextBox("SearchString", Model.SearchSortPageParams.SearchString, new { @class = "form-control" })
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
@@ -31,7 +31,7 @@
 
 @helper SortGlyphicon(string sortOrder)
 { 
-    if (sortOrder == "desc")
+    if (sortOrder == "asc")
     {
         <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
     }
@@ -45,48 +45,48 @@
 <table class="table">
     <tr>
         <th>
-            @if (Model.SortCol == "publisher")
+            @if (Model.SearchSortPageParams.SortCol == "publisher")
             {
-                @Html.ActionLink("Publisher", "Index", new { Model.SearchString, SortCol = "publisher", SortOrder = Model.NextSortOrder, Model.Page })
-                @SortGlyphicon(Model.SortOrder)
+                @Html.ActionLink("Publisher", "Index", Model.SearchSortPageParams)
+                @SortGlyphicon(Model.SearchSortPageParams.SortOrder)
             }
             else
             {
-                @Html.ActionLink("Publisher", "Index", new { Model.SearchString, SortCol = "publisher", SortOrder = "asc", Model.Page }) 
+                @Html.ActionLink("Publisher", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "publisher"}) 
             }
         </th>
         <th>
-            @if (Model.SortCol == "name")
+            @if (Model.SearchSortPageParams.SortCol == "name")
             {
-                @Html.ActionLink("Name", "Index", new { Model.SearchString, SortCol = "name", SortOrder = Model.NextSortOrder, Model.Page })
-                @SortGlyphicon(Model.SortOrder);
+                @Html.ActionLink("Name", "Index", Model.SearchSortPageParams)
+                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
             }
             else
             {
-                @Html.ActionLink("Name", "Index", new { Model.SearchString, SortCol = "name", SortOrder = "asc", Model.Page })
+                 @Html.ActionLink("Name", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "name"})
             }
         </th>
         <th>
-            @if (Model.SortCol == "createdDate")
+            @if (Model.SearchSortPageParams.SortCol == "createdDate")
             {
-                @Html.ActionLink("Created", "Index", new { Model.SearchString, SortCol = "createdDate", SortOrder = Model.NextSortOrder, Model.Page })
-                @SortGlyphicon(Model.SortOrder);
+                @Html.ActionLink("Created", "Index", Model.SearchSortPageParams)
+                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
             }
             else
             {
-                @Html.ActionLink("Created", "Index", new { Model.SearchString, SortCol = "createdDate", SortOrder = "asc", Model.Page })
+                @Html.ActionLink("Created", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "createdDate" })
             
             }
         </th>
         <th>
             @if (ViewBag.SortCol == "modifiedDate")
             {
-                @Html.ActionLink("Modified", "Index", new { Model.SearchString, SortCol = "modifiedDate", SortOrder = Model.NextSortOrder, Model.Page })
-                @SortGlyphicon(Model.SortOrder);
+                @Html.ActionLink("Modified", "Index", Model.SearchSortPageParams)
+                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
             }
             else
             {
-                @Html.ActionLink("Modified", "Index", new { Model.SearchString, SortCol = "modifiedDate", SortOrder = "asc", Model.Page })
+                @Html.ActionLink("Modified", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "modifiedDate" })
                 
             }
     </th>
@@ -119,12 +119,21 @@
 <p>
     
     Page @(Model.Books.PageCount < Model.Books.PageNumber ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
+    
+    @*KLUDGE - Paging shouldn't change sort order, but since controller toggles it automatically, we compensate by first reversing it.*@
+    @if (Model.SearchSortPageParams.SortOrder == "asc")
+    {
+        Model.SearchSortPageParams.SortOrder = "desc";
+    }else
+    {
+        Model.SearchSortPageParams.SortOrder = "asc";
+    }
 
     @Html.PagedListPager(
         Model.Books,
         page => Url.Action(
             "Index",
-            new { Model.SearchString, Model.SortCol, Model.SortOrder, page = page }
+                    new { Model.SearchSortPageParams.SearchString, Model.SearchSortPageParams.SortCol, Model.SearchSortPageParams.SortOrder, page }
     ))
 </p>
 

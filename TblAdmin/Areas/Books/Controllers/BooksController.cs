@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using TblAdmin.Areas.Books.Models;
 using TblAdmin.Areas.Books.ViewModels;
 using TblAdmin.Areas.Base.Controllers;
+using TblAdmin.Areas.Base.ViewModels;
 using TblAdmin.DAL;
 using PagedList;
 
@@ -24,7 +25,7 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books
-        public ActionResult Index(IndexViewModel vm)
+        public ActionResult Index(SearchSortPageViewModel vm)
         {
             IQueryable<Book> books = from b in db.Books select b; //db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             if (!String.IsNullOrEmpty(vm.SearchString))
@@ -76,17 +77,17 @@ namespace TblAdmin.Areas.Books.Controllers
                     break;
                 default:
                     vm.SortCol = "name";
-                    vm.SortOrder = "asc";
-                    vm.Page = IndexViewModel.DEFAULT_PAGE_NUMBER;
-                    vm.PageSize = IndexViewModel.DEFAULT_PAGE_SIZE;
+                    vm.Page = SearchSortPageViewModel.DEFAULT_PAGE_NUMBER;
+                    vm.PageSize = SearchSortPageViewModel.DEFAULT_PAGE_SIZE;
                     books = books.OrderBy(b => b.Name);
                     break;
             }
 
-            vm.NextSortOrder = (vm.SortOrder == "desc") ? "asc" : "desc"; 
-            vm.Books = books.ToPagedList(vm.Page, vm.PageSize);
-            
-            return View(vm);
+            vm.SortOrder = (vm.SortOrder == "asc") ? "desc" : "asc";
+            IndexViewModel Ivm = new IndexViewModel(vm, books.ToPagedList(vm.Page, vm.PageSize));
+            //Ivm.Books = books.ToPagedList(vm.Page, vm.PageSize);
+
+            return View(Ivm);
         }
         
         // GET: Books/Books/Details/5

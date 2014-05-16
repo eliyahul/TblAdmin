@@ -66,12 +66,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name"; 
-            string sortOrder = "asc"; 
-            string nextSortOrder = "desc";
+            string sortOrder = "asc";
             int page = 1;
             int pageSize = 3;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
                 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -91,11 +90,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 2;
             int pageSize = 3;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -115,11 +113,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 4;
             int pageSize = 5;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -138,11 +135,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "desc";
-            string nextSortOrder = "asc";
             int page = 1;
             int pageSize = 5;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -160,11 +156,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 2;
             int pageSize = 5;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -184,11 +179,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = -1;
             int pageSize = -1;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -208,11 +202,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 999999999;
             int pageSize = 999999999;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -232,11 +225,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "JJ";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 1;
             int pageSize = 5;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
@@ -255,11 +247,10 @@ namespace TblAdmin.Tests.Controllers
             string searchString = "H3J";
             string sortCol = "name";
             string sortOrder = "asc";
-            string nextSortOrder = "desc";
             int page = 1;
             int pageSize = 5;
             PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, nextSortOrder, page, pageSize, books);
+            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
 
             // Act
             ViewResult result = controller.Index(indexVM) as ViewResult;
