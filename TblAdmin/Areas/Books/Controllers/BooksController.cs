@@ -76,16 +76,12 @@ namespace TblAdmin.Areas.Books.Controllers
                     }
                     break;
                 default:
-                    vm.SortCol = "name";
-                    vm.Page = SearchSortPageViewModel.DEFAULT_PAGE_NUMBER;
-                    vm.PageSize = SearchSortPageViewModel.DEFAULT_PAGE_SIZE;
                     books = books.OrderBy(b => b.Name);
                     break;
             }
 
             vm.SortOrder = (vm.SortOrder == "asc") ? "desc" : "asc";
             IndexViewModel Ivm = new IndexViewModel(vm, books.ToPagedList(vm.Page, vm.PageSize));
-            //Ivm.Books = books.ToPagedList(vm.Page, vm.PageSize);
 
             return View(Ivm);
         }
