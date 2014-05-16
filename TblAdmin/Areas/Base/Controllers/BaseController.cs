@@ -8,37 +8,48 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Linq.Expressions;
-using Microsoft.Web.Mvc; // for strongly typed redirects
 
 namespace TblAdmin.Areas.Base.Controllers
 {
     public abstract class BaseController : Controller
     {
-        // Add some good ideas from Matt Honeycutt: http://blog.pluralsight.com/what-is-application-framework
+        // Strongly typed redirect
+        //
+        // SO, INSTEAD OF:
+        //          Object routeValues = new { SearchString = "", SortCol = "name", SortOrder = "asc", Page = "1", PageSize = "3" };
+        //          return RedirectToAction("Index", "Books", routeValues);
+        // USE: 
+        //      1)  return this.RedirectToAction<BooksController>(c => c.Index());   // index action has no parameters
+        //      2)  return this.RedirectToAction<BooksController>(c => c.Index(id)); // parameter of type int
+        //      3)  return this.RedirectToAction<BooksController>(c => c.Index(s));  // parameter of type string
+        //
+        // OR FOR VIEW MODEL OBJECTS:
+        //      4)  return this.RedirectToAction<BooksController>(c => c.Index(null), new IndexViewModel());
+        //
+        // OR FOR GENERAL ROUTE VALUES IN QUERY STRING:
+        //      5)  Object routeValues = new { SearchString = "", SortCol = "name", SortOrder = "asc", Page = "1", PageSize = "3" };
+        //          return this.RedirectToAction<BooksController>(c => c.Index(null), routeValues);
+
+        // Inspired by https://github.com/uglybugger/MvcNavigationHelpers
+
+        private string extractControllerName<TController>()
+        {
+            return typeof(TController).Name.Replace("Controller", String.Empty);
+        }
+        private string extractActionName<TController>(Expression<Action<TController>>  action)
+        {
+            return ((MethodCallExpression)action.Body).Method.Name;
+        }
+
+        // RedirectToActionFor()
+
+        protected ActionResult RedirectToActionFor<TController>(Expression<Action<TController>> action, Object routeValues = null) where TController : Controller
+        {
+            string controllerName = extractControllerName<TController>();
+            string actionName = extractActionName<TController>(action);
+
+            return RedirectToAction(actionName, controllerName, routeValues);
+        }
         
-        [Obsolete("Do not use string based redirects. Please use the strongly typed version instead in the BaseController.")]
-        protected override RedirectToRouteResult RedirectToAction(string actionName, string controllerName, RouteValueDictionary routeValues)
-        {
-            throw (new InvalidOperationException("Do not use string based redirects. Please use the strongly typed version instead in the BaseController."));
-        }
-
-        [Obsolete("Do not use string based redirects. Please use the strongly typed version instead in the BaseController.")]
-        protected new RedirectToRouteResult RedirectToAction(string actionName, string controllerName)
-        {
-            throw (new InvalidOperationException("Do not use string based redirects. Please use the strongly typed version instead in the BaseController."));
-        }
-        
-        // You can mask/hide other overloads of RedirectToAction as well, here.
-
-        // This is the strongly typed version you should use in your controllers
-        // In order to not have to add a "using Microsoft.Web.Mvc;" to every controller, we add it to the base
-        // controller. So, all child controllers should prefix the redirect with "this."
-        // Usage: return this.RedirectToAction<BooksController>(c => c.Index());
-        // Instead of: return RedirectToAction("Index", "Books");
-        protected ActionResult RedirectToAction<TController>(Expression<Action<TController>> action) where TController : Controller
-        {
-            return ControllerExtensions.RedirectToAction(this, action);
-        }
-
     }
 }

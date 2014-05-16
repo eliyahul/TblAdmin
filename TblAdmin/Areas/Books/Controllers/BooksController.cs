@@ -122,7 +122,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 db.Books.Add(book);
                 db.SaveChanges();
-                return this.RedirectToAction<BooksController>(c => c.Index(null));
+                return RedirectToActionFor<BooksController>(c => c.Index(null));
             }
 
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
@@ -156,7 +156,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 db.Entry(book).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction<BooksController>(c => c.Index(null));
+                return RedirectToActionFor<BooksController>(c => c.Index(null));
             }
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
             return View(book);
@@ -185,7 +185,7 @@ namespace TblAdmin.Areas.Books.Controllers
             Book book = db.Books.Find(id);
             db.Books.Remove(book);
             db.SaveChanges();
-            return this.RedirectToAction<BooksController>(c => c.Index(null));
+            return RedirectToActionFor<BooksController>(c => c.Index(null));
         }
 
         protected override void Dispose(bool disposing)
