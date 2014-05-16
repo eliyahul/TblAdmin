@@ -131,9 +131,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.2.1.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.Futures.5.0.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -235,6 +232,7 @@
     <Compile Include="Areas\Books\BooksAreaRegistration.cs" />
     <Compile Include="Areas\Books\Controllers\BooksController.cs" />
     <Compile Include="Areas\Books\Controllers\PublishersController.cs" />
+    <Compile Include="Areas\Books\ViewModels\Books\EditViewModel.cs" />
     <Compile Include="Areas\Books\ViewModels\Books\IndexViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
