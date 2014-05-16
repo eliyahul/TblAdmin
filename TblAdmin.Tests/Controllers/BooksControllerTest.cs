@@ -9,6 +9,7 @@ using TblAdmin;
 using TblAdmin.Areas.Books.Controllers;
 using TblAdmin.Areas.Books.Models;
 using TblAdmin.Areas.Books.ViewModels;
+using TblAdmin.Areas.Base.ViewModels;
 using TblAdmin.DAL;
 using System.Data.Entity;
 using PagedList;
@@ -69,12 +70,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 1;
             int pageSize = 3;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            
                 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel) result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel) result.ViewData.Model;
             
             // Assert
             Assert.IsNotNull(result);
@@ -92,12 +93,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 2;
             int pageSize = 3;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -115,12 +116,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 4;
             int pageSize = 5;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -137,12 +138,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "desc";
             int page = 1;
             int pageSize = 5;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -158,12 +159,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 2;
             int pageSize = 5;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -181,12 +182,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = -1;
             int pageSize = -1;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -204,12 +205,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 999999999;
             int pageSize = 999999999;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -227,12 +228,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 1;
             int pageSize = 5;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -249,12 +250,12 @@ namespace TblAdmin.Tests.Controllers
             string sortOrder = "asc";
             int page = 1;
             int pageSize = 5;
-            PagedList.IPagedList<Book> books = null;
-            IndexViewModel indexVM = new IndexViewModel(searchString, sortCol, sortOrder, page, pageSize, books);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
 
             // Act
-            ViewResult result = controller.Index(indexVM) as ViewResult;
-            indexVM = (IndexViewModel)result.ViewData.Model;
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
