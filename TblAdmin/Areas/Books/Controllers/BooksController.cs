@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TblAdmin.Areas.Books.Models;
-using TblAdmin.Areas.Books.ViewModels;
+using TblAdmin.Areas.Books.ViewModels.Books;
 using TblAdmin.Areas.Base.Controllers;
 using TblAdmin.Areas.Base.ViewModels;
 using TblAdmin.DAL;
@@ -127,19 +127,25 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(EditViewModel evm)
         {
-            if (id == null)
+            Book book;
+            IEnumerable<SelectListItem> publishers; 
+            EditInputModel eim;
+
+            if (evm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            book = db.Books.Find(evm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
-            return View(book);
+            
+            publishers = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
+            eim = new EditInputModel(evm.SearchSortPageParams, book, publishers);
+            return View(eim);
         }
 
         // POST: Books/Books/Edit/5

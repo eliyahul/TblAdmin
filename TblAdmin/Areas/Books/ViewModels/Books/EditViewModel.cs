@@ -3,21 +3,21 @@ using TblAdmin.Areas.Base.ViewModels;
 
 namespace TblAdmin.Areas.Books.ViewModels.Books
 {
-    public class IndexViewModel
+    public class EditViewModel
     {
         public SearchSortPageViewModel SearchSortPageParams { get; set; }
-        public PagedList.IPagedList<Book> Books { get; set; }
+        public int Id { get; set; }
 
-        public IndexViewModel() 
+        public EditViewModel() 
         {
             SearchSortPageParams = new SearchSortPageViewModel();
-            Books = null;
+            Id = 0;
         }
 
-        public IndexViewModel(SearchSortPageViewModel searchSortPageParams, PagedList.IPagedList<Book> books)
+        public EditViewModel(SearchSortPageViewModel searchSortPageParams, int id)
         {
             SearchSortPageParams = searchSortPageParams;
-            Books = books;
+            Id = id;
         }
     }
 }

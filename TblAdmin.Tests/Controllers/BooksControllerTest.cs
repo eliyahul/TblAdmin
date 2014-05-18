@@ -8,7 +8,7 @@ using Moq;
 using TblAdmin;
 using TblAdmin.Areas.Books.Controllers;
 using TblAdmin.Areas.Books.Models;
-using TblAdmin.Areas.Books.ViewModels;
+using TblAdmin.Areas.Books.ViewModels.Books;
 using TblAdmin.Areas.Base.ViewModels;
 using TblAdmin.DAL;
 using System.Data.Entity;

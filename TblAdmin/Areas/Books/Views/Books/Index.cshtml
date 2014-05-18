@@ -1,8 +1,8 @@
 ﻿@using PagedList.Mvc;
 @using TblAdmin.Areas.Books.Controllers;
-@using Microsoft.Web.Mvc;
+@using TblAdmin.Areas.Books.ViewModels.Books;
 
-@model TblAdmin.Areas.Books.ViewModels.IndexViewModel
+@model TblAdmin.Areas.Books.ViewModels.Books.IndexViewModel
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -89,9 +89,19 @@
                 @Html.ActionLink("Modified", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "modifiedDate" })
                 
             }
-    </th>
+        </th>
         <th></th>
     </tr>
+
+    @*KLUDGE - Paging and Edit/Delete/Details need the current sort order, not the next sort order which the controller provides for the colums, so toggle it back.*@
+    @if (Model.SearchSortPageParams.SortOrder == "asc")
+    {
+        Model.SearchSortPageParams.SortOrder = "desc";
+    }
+    else
+    {
+        Model.SearchSortPageParams.SortOrder = "asc";
+    }
 
 @foreach (var item in Model.Books) {
     <tr>
@@ -108,9 +118,13 @@
             @Html.DisplayFor(modelItem => item.ModifiedDate)
         </td>
         <td>
-            @(Html.ActionLink<BooksController>(c => c.Edit(item.ID), "Edit")) |
-            @(Html.ActionLink<BooksController>(c => c.Details(item.ID), "Details")) |
-            @(Html.ActionLink<BooksController>(c => c.Delete(item.ID), "Delete")) 
+            @{EditViewModel evm = new EditViewModel(Model.SearchSortPageParams, item.ID);}
+            @{string theQueryString = "?SearchSortPageParams.SearchString=" + @evm.SearchSortPageParams.SearchString + "&SearchSortPageParams.SortCol=" + @evm.SearchSortPageParams.SortCol + "&SearchSortPageParams.SortOrder=" + @evm.SearchSortPageParams.SortOrder + "&SearchSortPageParams.Page=" + @evm.SearchSortPageParams.Page + "&SearchSortPageParams.PageSize=" + @evm.SearchSortPageParams.PageSize;}
+            
+            <a href="@Url.Action("Edit", new { evm.Id })@(theQueryString)">Edit</a> |
+            <a href="@Url.Action("Details", new { evm.Id })@(theQueryString)">Details</a> |
+            <a href="@Url.Action("Delete", new { evm.Id })@(theQueryString)">Delete</a>
+            
         </td>
     </tr>
 }
@@ -120,15 +134,6 @@
     
     Page @(Model.Books.PageCount < Model.Books.PageNumber ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
     
-    @*KLUDGE - Paging shouldn't change sort order, but since controller toggles it automatically, we compensate by first reversing it.*@
-    @if (Model.SearchSortPageParams.SortOrder == "asc")
-    {
-        Model.SearchSortPageParams.SortOrder = "desc";
-    }else
-    {
-        Model.SearchSortPageParams.SortOrder = "asc";
-    }
-
     @Html.PagedListPager(
         Model.Books,
         page => Url.Action(

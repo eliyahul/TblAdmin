@@ -232,6 +232,7 @@
     <Compile Include="Areas\Books\BooksAreaRegistration.cs" />
     <Compile Include="Areas\Books\Controllers\BooksController.cs" />
     <Compile Include="Areas\Books\Controllers\PublishersController.cs" />
+    <Compile Include="Areas\Books\ViewModels\Books\EditInputModel.cs" />
     <Compile Include="Areas\Books\ViewModels\Books\EditViewModel.cs" />
     <Compile Include="Areas\Books\ViewModels\Books\IndexViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
