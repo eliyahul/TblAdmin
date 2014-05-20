@@ -194,12 +194,12 @@ namespace TblAdmin.Areas.Books.Controllers
         // POST: Books/Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(RecordViewModel recordVm)
         {
-            Book book = db.Books.Find(id);
+            Book book = db.Books.Find(recordVm.Id);
             db.Books.Remove(book);
             db.SaveChanges();
-            return RedirectToActionFor<BooksController>(c => c.Index(null));
+            return RedirectToActionFor<BooksController>(c => c.Index(null), recordVm.SearchSortPageParams);
         }
 
         protected override void Dispose(bool disposing)
