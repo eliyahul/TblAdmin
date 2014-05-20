@@ -87,22 +87,22 @@ namespace TblAdmin.Areas.Books.Controllers
         }
         
         // GET: Books/Books/Details/5
-        public ActionResult Details(EditViewModel evm)
+        public ActionResult Details(RecordViewModel recordVm)
         {
             Book book;
             DetailsViewModel dvm;
 
-            if (evm == null)
+            if (recordVm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            book = db.Books.Find(evm.Id);
+            book = db.Books.Find(recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
 
-            dvm = new DetailsViewModel(evm.SearchSortPageParams, book);
+            dvm = new DetailsViewModel(recordVm.SearchSortPageParams, book);
             return View(dvm);
         }
 
@@ -132,24 +132,24 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Edit/5
-        public ActionResult Edit(EditViewModel evm)
+        public ActionResult Edit(RecordViewModel recordVm)
         {
             Book book;
             IEnumerable<SelectListItem> publishers; 
             EditInputModel eim;
 
-            if (evm == null)
+            if (recordVm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            book = db.Books.Find(evm.Id);
+            book = db.Books.Find(recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
             
             publishers = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
-            eim = new EditInputModel(evm.SearchSortPageParams, book, publishers);
+            eim = new EditInputModel(recordVm.SearchSortPageParams, book, publishers);
             return View(eim);
         }
 
@@ -171,22 +171,22 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Delete/5
-        public ActionResult Delete(DeleteViewModel dvm)
+        public ActionResult Delete(RecordViewModel recordVm)
         {
             Book book;
             DeleteInputModel dim;
 
-            if (dvm == null)
+            if (recordVm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            book = db.Books.Find(dvm.Id);
+            book = db.Books.Find(recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
-            
-            dim = new DeleteInputModel(dvm.SearchSortPageParams, book);
+
+            dim = new DeleteInputModel(recordVm.SearchSortPageParams, book);
             
             return View(dim);
         }

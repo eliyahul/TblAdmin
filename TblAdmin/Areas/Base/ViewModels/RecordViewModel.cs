@@ -1,20 +1,19 @@
-﻿using TblAdmin.Areas.Books.Models;
-using TblAdmin.Areas.Base.ViewModels;
+﻿using TblAdmin.Areas.Base.ViewModels;
 
-namespace TblAdmin.Areas.Books.ViewModels.Books
+namespace TblAdmin.Areas.Base.ViewModels
 {
-    public class DeleteViewModel
+    public class RecordViewModel
     {
         public SearchSortPageViewModel SearchSortPageParams { get; set; }
         public int Id { get; set; }
 
-        public DeleteViewModel() 
+        public RecordViewModel() 
         {
             SearchSortPageParams = new SearchSortPageViewModel();
             Id = 0;
         }
 
-        public DeleteViewModel(SearchSortPageViewModel searchSortPageParams, int id)
+        public RecordViewModel(SearchSortPageViewModel searchSortPageParams, int id)
         {
             SearchSortPageParams = searchSortPageParams;
             Id = id;
