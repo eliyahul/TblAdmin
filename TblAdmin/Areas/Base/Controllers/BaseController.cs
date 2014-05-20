@@ -16,7 +16,7 @@ namespace TblAdmin.Areas.Base.Controllers
         // Strongly typed redirect
         //
         // SO, INSTEAD OF:
-        //          Object routeValues = new { SearchString = "", SortCol = "name", SortOrder = "asc", Page = "1", PageSize = "3" };
+        //          Object routeValues = new { SearchString = "", SortCol = "name", SortColOrder = "asc", Page = "1", PageSize = "3" };
         //          return RedirectToAction("Index", "Books", routeValues);
         // USE: 
         //      1)  return this.RedirectToAction<BooksController>(c => c.Index());   // index action has no parameters
@@ -27,7 +27,7 @@ namespace TblAdmin.Areas.Base.Controllers
         //      4)  return this.RedirectToAction<BooksController>(c => c.Index(null), new IndexViewModel());
         //
         // OR FOR GENERAL ROUTE VALUES IN QUERY STRING:
-        //      5)  Object routeValues = new { SearchString = "", SortCol = "name", SortOrder = "asc", Page = "1", PageSize = "3" };
+        //      5)  Object routeValues = new { SearchString = "", SortCol = "name", SortColOrder = "asc", Page = "1", PageSize = "3" };
         //          return this.RedirectToAction<BooksController>(c => c.Index(null), routeValues);
 
         // Inspired by https://github.com/uglybugger/MvcNavigationHelpers

@@ -36,7 +36,7 @@ namespace TblAdmin.Areas.Books.Controllers
             switch (vm.SortCol)
             {
                 case "name":
-                    if (vm.SortOrder == "desc")
+                    if (vm.SortColOrder == "desc")
                     {
                         books = books.OrderByDescending(b => b.Name);
                     }
@@ -46,7 +46,7 @@ namespace TblAdmin.Areas.Books.Controllers
                     }
                     break;
                 case "createdDate":
-                    if (vm.SortOrder == "desc")
+                    if (vm.SortColOrder == "desc")
                     {
                         books = books.OrderByDescending(b => b.CreatedDate);
                     }
@@ -56,7 +56,7 @@ namespace TblAdmin.Areas.Books.Controllers
                     }
                     break;
                 case "modifiedDate":
-                    if (vm.SortOrder == "desc")
+                    if (vm.SortColOrder == "desc")
                     {
                         books = books.OrderByDescending(b => b.ModifiedDate);
                     }
@@ -66,7 +66,7 @@ namespace TblAdmin.Areas.Books.Controllers
                     }
                     break;
                 case "publisher":
-                    if (vm.SortOrder == "desc")
+                    if (vm.SortColOrder == "desc")
                     {
                         books = books.OrderByDescending(b => b.Publisher.Name);
                     }
@@ -80,25 +80,30 @@ namespace TblAdmin.Areas.Books.Controllers
                     break;
             }
 
-            vm.SortOrder = (vm.SortOrder == "asc") ? "desc" : "asc";
+            vm.SortColOrder = (vm.SortColOrder == "asc") ? "desc" : "asc";
             IndexViewModel Ivm = new IndexViewModel(vm, books.ToPagedList(vm.Page, vm.PageSize));
 
             return View(Ivm);
         }
         
         // GET: Books/Books/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(EditViewModel evm)
         {
-            if (id == null)
+            Book book;
+            DetailsViewModel dvm;
+
+            if (evm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            book = db.Books.Find(evm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
-            return View(book);
+
+            dvm = new DetailsViewModel(evm.SearchSortPageParams, book);
+            return View(dvm);
         }
 
         // GET: Books/Books/Create
@@ -166,18 +171,24 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(DeleteViewModel dvm)
         {
-            if (id == null)
+            Book book;
+            DeleteInputModel dim;
+
+            if (dvm == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            book = db.Books.Find(dvm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
-            return View(book);
+            
+            dim = new DeleteInputModel(dvm.SearchSortPageParams, book);
+            
+            return View(dim);
         }
 
         // POST: Books/Books/Delete/5

@@ -50,7 +50,7 @@
             @if (Model.SearchSortPageParams.SortCol == "publisher")
             {
                 @Html.ActionLink("Publisher", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortOrder)
+                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder)
             }
             else
             {
@@ -61,7 +61,7 @@
             @if (Model.SearchSortPageParams.SortCol == "name")
             {
                 @Html.ActionLink("Name", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
+                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
             }
             else
             {
@@ -72,7 +72,7 @@
             @if (Model.SearchSortPageParams.SortCol == "createdDate")
             {
                 @Html.ActionLink("Created", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
+                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
             }
             else
             {
@@ -84,7 +84,7 @@
             @if (ViewBag.SortCol == "modifiedDate")
             {
                 @Html.ActionLink("Modified", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortOrder);
+                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
             }
             else
             {
@@ -96,13 +96,13 @@
     </tr>
 
     @*KLUDGE - Paging and Edit/Delete/Details need the current sort order, not the next sort order which the controller provides for the colums, so toggle it back.*@
-    @if (Model.SearchSortPageParams.SortOrder == "asc")
+    @if (Model.SearchSortPageParams.SortColOrder == "asc")
     {
-        Model.SearchSortPageParams.SortOrder = "desc";
+        Model.SearchSortPageParams.SortColOrder = "desc";
     }
     else
     {
-        Model.SearchSortPageParams.SortOrder = "asc";
+        Model.SearchSortPageParams.SortColOrder = "asc";
     }
 
 @foreach (var item in Model.Books) {
@@ -124,7 +124,7 @@
                 RouteValueDictionary rvd = new RouteValueDictionary {
                     {"SearchSortPageParams.SearchString", Model.SearchSortPageParams.SearchString },
                     {"SearchSortPageParams.SortCol", Model.SearchSortPageParams.SortCol },
-                    {"SearchSortPageParams.SortOrder", Model.SearchSortPageParams.SortOrder },
+                    {"SearchSortPageParams.SortColOrder", Model.SearchSortPageParams.SortColOrder },
                     {"SearchSortPageParams.Page", Model.SearchSortPageParams.Page },
                     {"SearchSortPageParams.PageSize", Model.SearchSortPageParams.PageSize },
                     {"Id", item.ID },
@@ -147,7 +147,7 @@
         Model.Books,
         page => Url.Action(
             "Index",
-                    new { Model.SearchSortPageParams.SearchString, Model.SearchSortPageParams.SortCol, Model.SearchSortPageParams.SortOrder, page }
+                    new { Model.SearchSortPageParams.SearchString, Model.SearchSortPageParams.SortCol, Model.SearchSortPageParams.SortColOrder, page }
     ))
 </p>
 

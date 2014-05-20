@@ -1,4 +1,4 @@
-﻿@model TblAdmin.Areas.Books.Models.Book
+﻿@model TblAdmin.Areas.Books.ViewModels.Books.DetailsViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -11,40 +11,50 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Publisher.Name)
+            @Html.DisplayNameFor(model => model.Book.Publisher.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Publisher.Name)
+            @Html.DisplayFor(model => model.Book.Publisher.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Book.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Book.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            @Html.DisplayNameFor(model => model.Book.CreatedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
+            @Html.DisplayFor(model => model.Book.CreatedDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
+            @Html.DisplayNameFor(model => model.Book.ModifiedDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
+            @Html.DisplayFor(model => model.Book.ModifiedDate)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @{
+        RouteValueDictionary rvd = new RouteValueDictionary {
+            {"SearchSortPageParams.SearchString", Model.SearchSortPageParams.SearchString },
+            {"SearchSortPageParams.SortCol", Model.SearchSortPageParams.SortCol },
+            {"SearchSortPageParams.SortColOrder", Model.SearchSortPageParams.SortColOrder },
+            {"SearchSortPageParams.Page", Model.SearchSortPageParams.Page },
+            {"SearchSortPageParams.PageSize", Model.SearchSortPageParams.PageSize },
+            {"Id", Model.Book.ID },
+        };
+    }
+    @Html.ActionLink("Edit", "Edit", rvd) |
+    @Html.ActionLink("Back to List", "Index", Model.SearchSortPageParams)
 </p>

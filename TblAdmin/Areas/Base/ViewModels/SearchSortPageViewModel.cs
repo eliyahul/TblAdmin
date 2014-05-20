@@ -4,7 +4,7 @@
     {
         public string SearchString { get; set; }
         public string SortCol { get; set; }
-        public string SortOrder { get; set; }
+        public string SortColOrder { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
 
@@ -15,7 +15,7 @@
         { 
             SearchString = "";
             SortCol = "name";
-            SortOrder = "asc";
+            SortColOrder = "asc";
             Page = DEFAULT_PAGE_NUMBER;
             PageSize = DEFAULT_PAGE_SIZE;
         }
@@ -36,10 +36,10 @@
                 SortCol = sortCol;
             }
 
-            SortOrder = "asc";
+            SortColOrder = "asc";
             if (!string.IsNullOrEmpty(sortOrder))
             {
-                SortOrder = sortOrder;
+                SortColOrder = sortOrder;
             }
             
             if ((page <= 0) || (page > 1000000))
