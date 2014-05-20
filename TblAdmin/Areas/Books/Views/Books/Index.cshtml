@@ -1,6 +1,8 @@
 ﻿@using PagedList.Mvc;
 @using TblAdmin.Areas.Books.Controllers;
 @using TblAdmin.Areas.Books.ViewModels.Books;
+@using System.Reflection;
+
 
 @model TblAdmin.Areas.Books.ViewModels.Books.IndexViewModel
 
@@ -118,13 +120,20 @@
             @Html.DisplayFor(modelItem => item.ModifiedDate)
         </td>
         <td>
-            @{EditViewModel evm = new EditViewModel(Model.SearchSortPageParams, item.ID);}
-            @{string theQueryString = "?SearchSortPageParams.SearchString=" + @evm.SearchSortPageParams.SearchString + "&SearchSortPageParams.SortCol=" + @evm.SearchSortPageParams.SortCol + "&SearchSortPageParams.SortOrder=" + @evm.SearchSortPageParams.SortOrder + "&SearchSortPageParams.Page=" + @evm.SearchSortPageParams.Page + "&SearchSortPageParams.PageSize=" + @evm.SearchSortPageParams.PageSize;}
-            
-            <a href="@Url.Action("Edit", new { evm.Id })@(theQueryString)">Edit</a> |
-            <a href="@Url.Action("Details", new { evm.Id })@(theQueryString)">Details</a> |
-            <a href="@Url.Action("Delete", new { evm.Id })@(theQueryString)">Delete</a>
-            
+            @{
+                RouteValueDictionary rvd = new RouteValueDictionary {
+                    {"SearchSortPageParams.SearchString", Model.SearchSortPageParams.SearchString },
+                    {"SearchSortPageParams.SortCol", Model.SearchSortPageParams.SortCol },
+                    {"SearchSortPageParams.SortOrder", Model.SearchSortPageParams.SortOrder },
+                    {"SearchSortPageParams.Page", Model.SearchSortPageParams.Page },
+                    {"SearchSortPageParams.PageSize", Model.SearchSortPageParams.PageSize },
+                    {"Id", item.ID },
+                };
+            }
+            @Html.ActionLink("Edit", "Edit", rvd) |
+            @Html.ActionLink("Details", "Details", rvd) |
+            @Html.ActionLink("Delete", "Delete", rvd)
+
         </td>
     </tr>
 }
@@ -132,7 +141,7 @@
 </table>
 <p>
     
-    Page @(Model.Books.PageCount < Model.Books.PageNumber ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
+    Page @( (Model.Books.PageNumber > Model.Books.PageCount) ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
     
     @Html.PagedListPager(
         Model.Books,
