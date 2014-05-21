@@ -262,6 +262,27 @@ namespace TblAdmin.Tests.Controllers
             Assert.AreEqual(0, indexVM.Books.Count);
         }
 
+        [Test]
+        public void List_with_search_params_for_string_which_does_not_exist()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+
+
+            // Act
+            ViewResult result = controller.Index(sspVM) as ViewResult;
+            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, indexVM.Books.Count);
+        }
+
         // Verify if I pass in a new value for created or modified dates to Edit, I cannot change the date in the db.
 
         
