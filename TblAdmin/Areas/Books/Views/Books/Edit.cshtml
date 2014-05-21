@@ -1,6 +1,6 @@
 ﻿@using TblAdmin.Areas.Books.ViewModels.Books
 
-@model TblAdmin.Areas.Books.ViewModels.Books.EditInputModel
+@model TblAdmin.Areas.Books.ViewModels.Books.EditViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -18,6 +18,12 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Book.ID)
+        
+        @Html.HiddenFor(model => model.SearchSortPageParams.SearchString)
+        @Html.HiddenFor(model => model.SearchSortPageParams.SortCol)
+        @Html.HiddenFor(model => model.SearchSortPageParams.SortColOrder)
+        @Html.HiddenFor(model => model.SearchSortPageParams.Page)
+        @Html.HiddenFor(model => model.SearchSortPageParams.PageSize)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Book.Name, htmlAttributes: new { @class = "control-label col-md-2" })

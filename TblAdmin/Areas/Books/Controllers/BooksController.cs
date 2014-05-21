@@ -136,7 +136,7 @@ namespace TblAdmin.Areas.Books.Controllers
         {
             Book book;
             IEnumerable<SelectListItem> publishers; 
-            EditInputModel eim;
+            EditViewModel evm;
 
             if (recordVm == null)
             {
@@ -149,8 +149,8 @@ namespace TblAdmin.Areas.Books.Controllers
             }
             
             publishers = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
-            eim = new EditInputModel(recordVm.SearchSortPageParams, book, publishers);
-            return View(eim);
+            evm = new EditViewModel(recordVm.SearchSortPageParams, book, publishers);
+            return View(evm);
         }
 
         // POST: Books/Books/Edit/5
@@ -158,16 +158,22 @@ namespace TblAdmin.Areas.Books.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,CreatedDate,ModifiedDate,PublisherID")] Book book)
+        public ActionResult Edit(EditInputModel eim)
         {
+            IEnumerable<SelectListItem> publishers;
+            EditViewModel evm;
+
             if (ModelState.IsValid)
             {
-                db.Entry(book).State = EntityState.Modified;
+                // here is where we would do mapping.
+
+                db.Entry(eim.Book).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToActionFor<BooksController>(c => c.Index(null));
+                return RedirectToActionFor<BooksController>(c => c.Index(null), eim.SearchSortPageParams);
             }
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
-            return View(book);
+            publishers = new SelectList(db.Publishers, "ID", "Name", eim.Book.PublisherID);
+            evm = new EditViewModel(eim.SearchSortPageParams, eim.Book, publishers);
+            return View(evm);
         }
 
         // GET: Books/Books/Delete/5

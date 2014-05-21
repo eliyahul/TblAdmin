@@ -47,7 +47,12 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
+        
+        @Html.HiddenFor(model => model.SearchSortPageParams.SearchString)
+        @Html.HiddenFor(model => model.SearchSortPageParams.SortCol)
+        @Html.HiddenFor(model => model.SearchSortPageParams.SortColOrder)
+        @Html.HiddenFor(model => model.SearchSortPageParams.Page)
+        @Html.HiddenFor(model => model.SearchSortPageParams.PageSize)
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index", Model.SearchSortPageParams)
