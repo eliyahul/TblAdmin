@@ -26,7 +26,7 @@ namespace TblAdmin.Tests.Controllers
         {
             var data = new List<Book> 
             { 
-                new Book { Name = "BBB" }, 
+                new Book { ID = 1, Name = "BBB" }, 
                 new Book { Name = "ZZZ" }, 
                 new Book { Name = "AAA" },
                 new Book { Name = "DDD" }, 
@@ -57,7 +57,6 @@ namespace TblAdmin.Tests.Controllers
             
             var mockContext = new Mock<TblAdminContext>();
             mockContext.Setup(c => c.Books).Returns(mockSet.Object);
-            mockContext.Setup(c => c.Books).Returns(mockSet.Object);
             controller = new BooksController(mockContext.Object);
         }
 
@@ -67,10 +66,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name"; 
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 1;
             int pageSize = 3;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
             
                 
             // Act
@@ -90,10 +89,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 2;
             int pageSize = 3;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -113,10 +112,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 4;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -135,10 +134,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "desc";
+            string sortColOrder = "desc";
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -156,10 +155,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 2;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -179,10 +178,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = -1;
             int pageSize = -1;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -202,10 +201,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 999999999;
             int pageSize = 999999999;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -225,10 +224,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "JJ";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -247,10 +246,10 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
 
 
             // Act
@@ -263,28 +262,41 @@ namespace TblAdmin.Tests.Controllers
         }
 
         [Test]
-        public void List_with_search_params_for_string_which_does_not_exist()
+        public void Details_passes_correct_book_and_searchSortPageParams_to_view()
         {
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortOrder = "asc";
+            string sortColOrder = "asc";
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortOrder, page, pageSize);
+            int id = 1;
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
 
             // Act
-            ViewResult result = controller.Index(sspVM) as ViewResult;
-            IndexViewModel indexVM = (IndexViewModel)result.ViewData.Model;
-
+            ViewResult result = controller.Details(rVM) as ViewResult;
+            DetailsViewModel detailsVM = (DetailsViewModel)result.ViewData.Model;
+            
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(0, indexVM.Books.Count);
+
+            Assert.AreEqual(id, detailsVM.Book.ID);
+            Assert.AreEqual("BBB", detailsVM.Book.Name);
+
+            Assert.IsNotNull(detailsVM.SearchSortPageParams);
+            Assert.AreEqual(searchString, detailsVM.SearchSortPageParams.SearchString);
+            Assert.AreEqual(sortCol, detailsVM.SearchSortPageParams.SortCol);
+            Assert.AreEqual(sortColOrder, detailsVM.SearchSortPageParams.SortColOrder);
+            Assert.AreEqual(page, detailsVM.SearchSortPageParams.Page);
+            Assert.AreEqual(pageSize, detailsVM.SearchSortPageParams.PageSize);
         }
 
+        // Verify for Details if rvm is null, it gives error.
+        // Verify for Details if book does not exist it gives error (really should print message not found)
         // Verify if I pass in a new value for created or modified dates to Edit, I cannot change the date in the db.
-
+        // Verify all actions pass correct SearchSortPage params to view, in addition to their other data
         
     }
 }
