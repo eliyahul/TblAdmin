@@ -96,13 +96,14 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             //book = db.Books.Find(recordVm.Id); // Testing issue: don't use find, as it does not work when mocking EF 6
-            book = db.Books.FirstOrDefault(i => i.ID == 1);
+            book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
             }
-
+                
             dvm = new DetailsViewModel(recordVm.SearchSortPageParams, book);
             return View(dvm);
         }
