@@ -150,7 +150,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            book = db.Books.Find(recordVm.Id);
+            book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -194,7 +194,7 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            book = db.Books.Find(recordVm.Id);
+            book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -210,7 +210,18 @@ namespace TblAdmin.Areas.Books.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(RecordViewModel recordVm)
         {
-            Book book = db.Books.Find(recordVm.Id);
+            Book book;
+
+            if (recordVm == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+
             db.Books.Remove(book);
             db.SaveChanges();
             return RedirectToActionFor<BooksController>(c => c.Index(null), recordVm.SearchSortPageParams);
