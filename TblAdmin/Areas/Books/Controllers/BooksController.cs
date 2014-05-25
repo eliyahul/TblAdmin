@@ -27,6 +27,12 @@ namespace TblAdmin.Areas.Books.Controllers
         // GET: Books/Books
         public ActionResult Index(SearchSortPageViewModel vm)
         {
+
+            if (vm == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            } 
+            
             IQueryable<Book> books = from b in db.Books select b; //db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             if (!String.IsNullOrEmpty(vm.SearchString))
             {
