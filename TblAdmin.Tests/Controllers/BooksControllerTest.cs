@@ -65,6 +65,12 @@ namespace TblAdmin.Tests.Controllers
         }
 
         [Test]
+        [Ignore("Implementation for this test is not complete yet.")]
+        public void AA_example_ignored_testcase_to_keep_the_ignore_attribute_handy()
+        {
+        }
+
+        [Test]
         public void List_with_no_params_displays_first_page_sorted_by_name()
         {
             // Arrange
@@ -348,6 +354,171 @@ namespace TblAdmin.Tests.Controllers
             Assert.IsInstanceOf<HttpNotFoundResult>(result);
         }
 
+        // Delete action
+
+        [Test]
+        public void Delete_GET_passes_correct_book_and_searchSortPageParams_to_view()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = 1;
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+
+            // Act
+            ViewResult result = controller.Delete(rVM) as ViewResult;
+            DeleteInputModel deleteVM = (DeleteInputModel)result.ViewData.Model;
+
+            // Assert
+            Assert.IsNotNull(result);
+
+            Assert.AreEqual(id, deleteVM.Book.ID);
+            Assert.AreEqual("BBB", deleteVM.Book.Name);
+
+            Assert.IsNotNull(deleteVM.SearchSortPageParams);
+            Assert.AreEqual(searchString, deleteVM.SearchSortPageParams.SearchString);
+            Assert.AreEqual(sortCol, deleteVM.SearchSortPageParams.SortCol);
+            Assert.AreEqual(sortColOrder, deleteVM.SearchSortPageParams.SortColOrder);
+            Assert.AreEqual(page, deleteVM.SearchSortPageParams.Page);
+            Assert.AreEqual(pageSize, deleteVM.SearchSortPageParams.PageSize);
+        }
+
+        [Test]
+        public void Delete_returns_BadRequest_StatusCode_on_null_input_param()
+        {
+            // Arrange
+
+            // Act
+            //ViewResult result = controller.Details(null) as ViewResult;  // don't use - result is always null for some reason??!!
+            var result = controller.Delete(null);
+
+            // Assert
+            Assert.IsInstanceOf<HttpStatusCodeResult>(result);
+
+        }
+
+        [Test]
+        public void Delete_returns_HttpNotFoundResult_on_record_which_doesnt_exist()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = -1;  // a record id which doesn't exist
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+            // Act
+            var result = controller.Delete(rVM);
+
+            // Assert
+            Assert.IsInstanceOf<HttpNotFoundResult>(result);
+        }
+
+        [Test]
+        public void Delete_returns_DeleteInputModel_on_record_which_exists()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = 1;  // a record id which exists
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+            // Act
+            ViewResult result = controller.Delete(rVM) as ViewResult;
+            DeleteInputModel deleteVM = (DeleteInputModel)result.ViewData.Model;
+
+            // Assert
+            Assert.IsInstanceOf<DeleteInputModel>(deleteVM);
+        }
+
+
+        // DeleteConfirmed action
+
+        [Test]
+        public void DeleteConfirmed_returns_BadRequest_StatusCode_on_null_input_param()
+        {
+            // Arrange
+
+            // Act
+            //ViewResult result = controller.Details(null) as ViewResult;  // don't use - result is always null for some reason??!!
+            var result = controller.DeleteConfirmed(null);
+
+            // Assert
+            Assert.IsInstanceOf<HttpStatusCodeResult>(result);
+
+        }
+
+        [Test]
+        public void DeleteConfirmed_returns_HttpNotFoundResult_on_record_which_doesnt_exist()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = -1;  // a record id which doesn't exist
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+            // Act
+            var result = controller.DeleteConfirmed(rVM);
+
+            // Assert
+            Assert.IsInstanceOf<HttpNotFoundResult>(result);
+        }
+
+        [Test]
+        public void DeleteConfirm_calls_EF_to_delete_record_with_correct_id()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = 1;  // a record id which exists
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+            // Act
+            RedirectToRouteResult result = controller.DeleteConfirmed(rVM) as RedirectToRouteResult;
+
+            // Assert
+            mockSet.Verify(m => m.Remove(It.IsAny<Book>()), Times.Once());
+            mockContext.Verify(m => m.SaveChanges(), Times.Once());
+
+            Assert.IsInstanceOf<RedirectToRouteResult>(result);
+
+            Assert.AreEqual(result.RouteValues["Controller"], "Books");
+            Assert.AreEqual(result.RouteValues["Action"], "Index");
+
+            Assert.AreEqual(result.RouteValues["searchString"], searchString);
+            Assert.AreEqual(result.RouteValues["sortCol"], sortCol);
+            Assert.AreEqual(result.RouteValues["sortColOrder"], sortColOrder);
+            Assert.AreEqual(result.RouteValues["page"], page);
+            Assert.AreEqual(result.RouteValues["pageSize"], pageSize);
+            
+            // How can we test the parameters that it passes to the redirect to check for proper SearchSortPage values?
+            
+        }
+
+
+        // Create action
+
+
         [Test]
         [Ignore("Implementation for this test is not complete yet.")]
         public void Create_with_no_args_returns_selectlist_of_books()
@@ -356,10 +527,10 @@ namespace TblAdmin.Tests.Controllers
             
             // Act
             //var result = controller.Create();
-            //ViewResult result = controller.Create() as ViewResult;
+            ViewResult result = controller.Create() as ViewResult;
 
             // Assert
-            //Assert.IsInstanceOf<SelectList>(result.ViewBag.PublisherID);
+            Assert.IsInstanceOf<SelectList>(result.ViewBag.PublisherID);
             //Assert.IsInstanceOf<Publisher>(result.ViewBag.mySelectList.items);
             //ViewBag.mySelectList.Items.Count
         }
