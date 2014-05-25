@@ -20,8 +20,10 @@ namespace TblAdmin.Tests.Controllers
     [TestFixture]
     public class BooksControllerTest
     {
+        private Mock<DbSet<Book>> mockSet;
+        private Mock<TblAdminContext> mockContext; 
         private BooksController controller;
-
+            
         [SetUp]
         public void init()
         {
@@ -50,14 +52,15 @@ namespace TblAdmin.Tests.Controllers
  
             }.AsQueryable();
 
-            var mockSet = new Mock<DbSet<Book>>();
+            mockSet = new Mock<DbSet<Book>>();
             mockSet.As<IQueryable<Book>>().Setup(m => m.Provider).Returns(data.Provider);
             mockSet.As<IQueryable<Book>>().Setup(m => m.Expression).Returns(data.Expression);
             mockSet.As<IQueryable<Book>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mockSet.As<IQueryable<Book>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
             
-            var mockContext = new Mock<TblAdminContext>();
+            mockContext = new Mock<TblAdminContext>();
             mockContext.Setup(c => c.Books).Returns(mockSet.Object);
+
             controller = new BooksController(mockContext.Object);
         }
 
@@ -263,6 +266,23 @@ namespace TblAdmin.Tests.Controllers
         }
 
         [Test]
+        public void List_returns_BadRequest_StatusCode_on_null_input_param()
+        {
+            // Arrange
+
+            // Act
+            //ViewResult result = controller.Details(null) as ViewResult;  // don't use - result is always null for some reason??!!
+            var result = controller.Index(null);
+
+            // Assert
+            Assert.IsInstanceOf<HttpStatusCodeResult>(result);
+
+        }
+
+        // Details Action
+
+
+        [Test]
         public void Details_passes_correct_book_and_searchSortPageParams_to_view()
         {
             // Arrange
@@ -307,6 +327,7 @@ namespace TblAdmin.Tests.Controllers
             Assert.IsInstanceOf<HttpStatusCodeResult>(result);
             
         }
+
         [Test]
         public void Details_returns_HttpNotFoundResult_on_record_which_doesnt_exist()
         {
@@ -327,8 +348,31 @@ namespace TblAdmin.Tests.Controllers
             Assert.IsInstanceOf<HttpNotFoundResult>(result);
         }
 
-        // Verify for Details if rvm is null, it gives error.
-        // Verify for Details if book does not exist it gives error (really should print message not found)
+        [Test]
+        [Ignore("Implementation for this test is not complete yet.")]
+        public void Create_with_no_args_returns_selectlist_of_books()
+        {
+            // Arrange
+            
+            // Act
+            //var result = controller.Create();
+            //ViewResult result = controller.Create() as ViewResult;
+
+            // Assert
+            //Assert.IsInstanceOf<SelectList>(result.ViewBag.PublisherID);
+            //Assert.IsInstanceOf<Publisher>(result.ViewBag.mySelectList.items);
+            //ViewBag.mySelectList.Items.Count
+        }
+
+        [Test]
+        [Ignore("Implementation for this test is not complete yet.")]
+        public void Create_returns()
+        {
+            //controller.Create();
+
+            //mockSet.Verify(m => m.Add(It.IsAny<Book>()), Times.Once());
+            //mockContext.Verify(m => m.SaveChanges(), Times.Once());
+        }
         // Verify if I pass in a new value for created or modified dates to Edit, I cannot change the date in the db.
         // Verify all actions pass correct SearchSortPage params to view, in addition to their other data
         
