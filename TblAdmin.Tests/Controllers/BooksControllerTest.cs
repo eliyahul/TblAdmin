@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using NUnit.Framework;
@@ -291,6 +292,39 @@ namespace TblAdmin.Tests.Controllers
             Assert.AreEqual(sortColOrder, detailsVM.SearchSortPageParams.SortColOrder);
             Assert.AreEqual(page, detailsVM.SearchSortPageParams.Page);
             Assert.AreEqual(pageSize, detailsVM.SearchSortPageParams.PageSize);
+        }
+
+        [Test]
+        public void Details_returns_BadRequest_StatusCode_on_null_input_param()
+        {
+            // Arrange
+
+            // Act
+            //ViewResult result = controller.Details(null) as ViewResult;  // don't use - result is always null for some reason??!!
+            var result = controller.Details(null);
+
+            // Assert
+            Assert.IsInstanceOf<HttpStatusCodeResult>(result);
+            
+        }
+        [Test]
+        public void Details_returns_HttpNotFoundResult_on_record_which_doesnt_exist()
+        {
+            // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string sortColOrder = "asc";
+            int page = 1;
+            int pageSize = 5;
+            int id = -1;  // a record id which doesn't exist
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            RecordViewModel rVM = new RecordViewModel(sspVM, id);
+
+            // Act
+            var result = controller.Details(rVM);
+
+            // Assert
+            Assert.IsInstanceOf<HttpNotFoundResult>(result);
         }
 
         // Verify for Details if rvm is null, it gives error.
