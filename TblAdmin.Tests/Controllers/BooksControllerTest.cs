@@ -20,18 +20,19 @@ namespace TblAdmin.Tests.Controllers
     [TestFixture]
     public class BooksControllerTest
     {
-        private Mock<DbSet<Book>> mockSet;
+        private Mock<DbSet<Book>> mockSetBooks;
+        private Mock<DbSet<Publisher>> mockSetPublishers;
         private Mock<TblAdminContext> mockContext; 
         private BooksController controller;
             
         [SetUp]
         public void init()
         {
-            var data = new List<Book> 
+            var bookData = new List<Book> 
             { 
-                new Book { ID = 1, Name = "BBB" }, 
-                new Book { Name = "ZZZ" }, 
-                new Book { Name = "AAA" },
+                new Book { ID = 1, Name = "BBB", PublisherID = 1 }, 
+                new Book { Name = "ZZZ", PublisherID = 2 }, 
+                new Book { Name = "AAA", PublisherID = 3 },
                 new Book { Name = "DDD" }, 
                 new Book { Name = "MMM" }, 
                 new Book { Name = "QQQ" },
@@ -52,14 +53,29 @@ namespace TblAdmin.Tests.Controllers
  
             }.AsQueryable();
 
-            mockSet = new Mock<DbSet<Book>>();
-            mockSet.As<IQueryable<Book>>().Setup(m => m.Provider).Returns(data.Provider);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<Book>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            var publisherData = new List<Publisher> 
+            { 
+                new Publisher { ID = 1, Name = "P1" }, 
+                new Publisher { ID = 2, Name = "P2" }, 
+                new Publisher { ID = 3, Name = "P3" },
+                new Publisher { ID = 4, Name = "P4" }
+            }.AsQueryable();
+
+            mockSetBooks = new Mock<DbSet<Book>>();
+            mockSetBooks.As<IQueryable<Book>>().Setup(m => m.Provider).Returns(bookData.Provider);
+            mockSetBooks.As<IQueryable<Book>>().Setup(m => m.Expression).Returns(bookData.Expression);
+            mockSetBooks.As<IQueryable<Book>>().Setup(m => m.ElementType).Returns(bookData.ElementType);
+            mockSetBooks.As<IQueryable<Book>>().Setup(m => m.GetEnumerator()).Returns(bookData.GetEnumerator());
+            
+            mockSetPublishers = new Mock<DbSet<Publisher>>();
+            mockSetPublishers.As<IQueryable<Publisher>>().Setup(m => m.Provider).Returns(publisherData.Provider);
+            mockSetPublishers.As<IQueryable<Publisher>>().Setup(m => m.Expression).Returns(publisherData.Expression);
+            mockSetPublishers.As<IQueryable<Publisher>>().Setup(m => m.ElementType).Returns(publisherData.ElementType);
+            mockSetPublishers.As<IQueryable<Publisher>>().Setup(m => m.GetEnumerator()).Returns(publisherData.GetEnumerator());
             
             mockContext = new Mock<TblAdminContext>();
-            mockContext.Setup(c => c.Books).Returns(mockSet.Object);
+            mockContext.Setup(c => c.Books).Returns(mockSetBooks.Object);
+            mockContext.Setup(c => c.Publishers).Returns(mockSetPublishers.Object);
 
             controller = new BooksController(mockContext.Object);
         }
@@ -497,7 +513,7 @@ namespace TblAdmin.Tests.Controllers
             RedirectToRouteResult result = controller.DeleteConfirmed(rVM) as RedirectToRouteResult;
 
             // Assert
-            mockSet.Verify(m => m.Remove(It.IsAny<Book>()), Times.Once());
+            mockSetBooks.Verify(m => m.Remove(It.IsAny<Book>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
 
             Assert.IsInstanceOf<RedirectToRouteResult>(result);
@@ -530,9 +546,16 @@ namespace TblAdmin.Tests.Controllers
             ViewResult result = controller.Create() as ViewResult;
 
             // Assert
+            Assert.IsNotNull(result);
             Assert.IsInstanceOf<SelectList>(result.ViewBag.PublisherID);
-            //Assert.IsInstanceOf<Publisher>(result.ViewBag.mySelectList.items);
-            //ViewBag.mySelectList.Items.Count
+            //Assert.AreEqual(result.ViewBag.PublisherID.Items.Count(), 4);
+            //Assert.IsInstanceOf<Publisher>(result.ViewBag.PublisherID.Items);
+            // How can I tell if the items in the selectList are publishers?
+            foreach (var item in result.ViewBag.PublisherID.Items)
+            {
+                Console.WriteLine(item);
+            }
+            //Console.WriteLine(typeof(result.ViewBag.PublisherID.Items));
         }
 
         [Test]
