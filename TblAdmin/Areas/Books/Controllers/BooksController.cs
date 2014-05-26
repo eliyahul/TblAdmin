@@ -117,7 +117,7 @@ namespace TblAdmin.Areas.Books.Controllers
         // GET: Books/Books/Create
         public ActionResult Create()
         {
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name");
+            ViewBag.PublisherID = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name");
             return View();
         }
 
@@ -135,7 +135,7 @@ namespace TblAdmin.Areas.Books.Controllers
                 return RedirectToActionFor<BooksController>(c => c.Index(null));
             }
 
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
+            ViewBag.PublisherID = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", book.PublisherID);
             return View(book);
         }
 
@@ -155,8 +155,8 @@ namespace TblAdmin.Areas.Books.Controllers
             {
                 return HttpNotFound();
             }
-            
-            publishers = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
+
+            publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", book.PublisherID);
             evm = new EditViewModel(recordVm.SearchSortPageParams, book, publishers);
             return View(evm);
         }
@@ -179,7 +179,7 @@ namespace TblAdmin.Areas.Books.Controllers
                 db.SaveChanges();
                 return RedirectToActionFor<BooksController>(c => c.Index(null), eim.SearchSortPageParams);
             }
-            publishers = new SelectList(db.Publishers, "ID", "Name", eim.Book.PublisherID);
+            publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", eim.Book.PublisherID);
             evm = new EditViewModel(eim.SearchSortPageParams, eim.Book, publishers);
             return View(evm);
         }
