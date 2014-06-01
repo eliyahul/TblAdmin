@@ -72,7 +72,7 @@ namespace TblAdmin.Areas.Production.Controllers
             fileString = Regex.Replace(
                 fileString,
                 @"######",
-                "\n\r\n\r"
+                "\n\r\n\r\n\r"
             );
             // END KLUDGE
 
