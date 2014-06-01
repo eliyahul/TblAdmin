@@ -39,7 +39,7 @@ namespace TblAdmin.Areas.Production.Controllers
             }
 
             // Read file into a string
-            fileString = System.IO.File.ReadAllText(filePath);
+            fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
 
             
             // Standardize the chapter heading into Camel Case followed by period.
@@ -74,6 +74,18 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"######",
                 "\n\r\n\r\n\r"
             );
+
+            // Replace open and close quotes's with regular quotes
+            fileString = Regex.Replace(
+                fileString,
+                @"&ldquo;",
+                "\""
+            ); 
+            fileString = Regex.Replace(
+                 fileString,
+                 @"&rdquo;",
+                 "\""
+             );
             // END KLUDGE
 
             // Split into files based on the Chapter headings
@@ -88,11 +100,11 @@ namespace TblAdmin.Areas.Production.Controllers
                 chapterPartialPathNumbered = chapterPartialPath + i.ToString("D3");
                 chapterPathTxt = chapterPartialPathNumbered + @".txt";
                 chapterPathHtml = chapterPartialPathNumbered + @".html";
-
+                
                 if (i > 0)
                 {
-                    System.IO.File.WriteAllText(chapterPathTxt, s);
-                    System.IO.File.WriteAllText(chapterPathHtml, s);
+                    System.IO.File.WriteAllText(chapterPathTxt, s, Encoding.GetEncoding(1252));
+                    System.IO.File.WriteAllText(chapterPathHtml, s, Encoding.GetEncoding(1252));
                     ViewBag.Results = ViewBag.Results + @"==============================" + s;
                 }
                 i = i + 1;
