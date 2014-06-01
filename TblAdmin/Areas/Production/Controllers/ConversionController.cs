@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
+using System.Globalization;
 
 namespace TblAdmin.Areas.Production.Controllers
 {
@@ -20,7 +21,11 @@ namespace TblAdmin.Areas.Production.Controllers
         static string filePath = prefixPath + publisherPartialPath + bookPartialPath + bookName + "_FullBook_EDITED-MANUALLY.txt";
         static string destPath = prefixPath + publisherPartialPath + bookPartialPath + bookName + "_FullBook_EDITED-MANUALLY-TEST.txt";
         static string fileString;
-        static string chapterHeadingPattern = @"(?=chapter [a-z]{3,})"; // positive lookahead to include the chapter headings
+        
+        // positive lookahead to include the chapter headings
+        // chapter must be first thing on new line.
+        static string chapterHeadingPattern = @"^(?=chapter [a-z]{3,})";
+        //static string chapterHeadingPatternReplaced = @"(?=Chapter [a-z]{3,}.)";
         
         
         // GET: Production/Conversion
@@ -36,6 +41,20 @@ namespace TblAdmin.Areas.Production.Controllers
             // Read file into a string
             fileString = System.IO.File.ReadAllText(filePath);
 
+            
+            // Standardize the chapter heading into Camel Case followed by period.
+            fileString = Regex.Replace(
+                fileString, 
+                @"^chapter [a-z]{3,}", 
+                delegate(Match match)
+                {
+                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                    string v = match.ToString();
+                    return textInfo.ToTitleCase(v) + ".";
+                },
+                RegexOptions.IgnoreCase | RegexOptions.Multiline
+            );
+
             // Split into files based on the Chapter headings
             ViewBag.Results = "";
             string chapterPartialPath = prefixPath + publisherPartialPath + bookPartialPath + @"chapter-";
@@ -43,7 +62,7 @@ namespace TblAdmin.Areas.Production.Controllers
             string chapterPathTxt = "";
             string chapterPathHtml = "";
             int i = 0;
-            foreach (string s in Regex.Split(fileString, chapterHeadingPattern))
+            foreach (string s in Regex.Split(fileString, chapterHeadingPattern, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
                 chapterPartialPathNumbered = chapterPartialPath + i.ToString("D3");
                 chapterPathTxt = chapterPartialPathNumbered + @".txt";
