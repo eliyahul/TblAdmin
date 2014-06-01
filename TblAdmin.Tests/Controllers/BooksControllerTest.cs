@@ -548,6 +548,7 @@ namespace TblAdmin.Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<SelectList>(result.ViewBag.PublisherID);
+            //Assert.AreEqual(result.ViewBag.PublisherID.Count(), 4);
             //Assert.AreEqual(result.ViewBag.PublisherID.Items.Count(), 4);
             //Assert.IsInstanceOf<Publisher>(result.ViewBag.PublisherID.Items);
             // How can I tell if the items in the selectList are publishers?

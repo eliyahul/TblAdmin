@@ -242,6 +242,8 @@
     <Compile Include="Areas\Books\ViewModels\Books\DetailsViewModel.cs" />
     <Compile Include="Areas\Base\ViewModels\RecordViewModel.cs" />
     <Compile Include="Areas\Books\ViewModels\Books\IndexViewModel.cs" />
+    <Compile Include="Areas\Production\Controllers\ConversionController.cs" />
+    <Compile Include="Areas\Production\ProductionAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\TblAdminInitializer.cs" />
@@ -283,6 +285,8 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Areas\Base\Views\web.config" />
+    <Content Include="Areas\Production\Views\web.config" />
+    <Content Include="Areas\Production\Views\Conversion\Process.cshtml" />
     <None Include="Properties\PublishProfiles\tbladmin.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -333,6 +337,7 @@
     <Folder Include="Areas\Base\Models\" />
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Books\Views\Shared\" />
+    <Folder Include="Areas\Production\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
