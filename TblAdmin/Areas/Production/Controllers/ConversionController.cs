@@ -74,18 +74,6 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"######",
                 "\n\r\n\r\n\r"
             );
-
-            // Replace open and close quotes's with regular quotes
-            fileString = Regex.Replace(
-                fileString,
-                @"&ldquo;",
-                "\""
-            ); 
-            fileString = Regex.Replace(
-                 fileString,
-                 @"&rdquo;",
-                 "\""
-             );
             // END KLUDGE
 
             // Split into files based on the Chapter headings
