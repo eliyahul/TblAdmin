@@ -71,7 +71,7 @@ namespace TblAdmin.Areas.Production.Controllers
             // Replace ######'s with blank line
             fileString = Regex.Replace(
                 fileString,
-                @"######",
+                @"\s{0,}######\s{0,}",
                 "\n\r\n\r\n\r"
             );
             // END KLUDGE
