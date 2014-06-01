@@ -24,7 +24,7 @@ namespace TblAdmin.Areas.Production.Controllers
         
         // positive lookahead to include the chapter headings
         // chapter must be first thing on new line.
-        static string chapterHeadingPattern = @"^(?=chapter [a-z]{3,})";
+        static string chapterHeadingPattern = @"(?=chapter [a-z]{3,})";
         //static string chapterHeadingPatternReplaced = @"(?=Chapter [a-z]{3,}.)";
         
         
@@ -54,6 +54,27 @@ namespace TblAdmin.Areas.Production.Controllers
                 },
                 RegexOptions.IgnoreCase | RegexOptions.Multiline
             );
+
+            // BEGIN - KLUDGE
+            // Replace newlines between paragraphs with ######'s temporarily
+            fileString = Regex.Replace(
+                fileString,
+                @"\n\r",
+                @"######"
+            );
+            // Replace all remaining whitespace with a single space
+            fileString = Regex.Replace(
+                fileString,
+                @"\s{1,}",
+                @" "
+            );
+            // Replace ######'s with blank line
+            fileString = Regex.Replace(
+                fileString,
+                @"######",
+                "\n\r\n\r"
+            );
+            // END KLUDGE
 
             // Split into files based on the Chapter headings
             ViewBag.Results = "";
