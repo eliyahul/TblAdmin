@@ -104,20 +104,55 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"?""######"
             );
 
-            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+            // Replace "!""." at end of paragraph (just before the paragraph marker) with just "."""
             fileString = Regex.Replace(
                 fileString,
                 @"\!""\.######",
                 @"!""######"
             );
 
-            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+            // Replace "-""." at end of paragraph (just before the paragraph marker) with just "..."""
             fileString = Regex.Replace(
                 fileString,
                 @"\-""\.######",
                 @"...""######"
             );
+            /* ??? ... CANNOT GET &rdquo; to be matched ...??
+            // Replace ".&rdquo;." at end of paragraph (just before the paragraph marker) with just ".&rdquo;"
+            fileString = Regex.Replace(
+                fileString,
+                @"\.&rdquo;\.######",
+                @".&rdquo;######"
+            );
 
+            // Replace "?&rdquo;." at end of paragraph (just before the paragraph marker) with just "?&rdquo;"
+            fileString = Regex.Replace(
+                fileString,
+                @"\?&rdquo;\.######",
+                @"?&rdquo;######"
+            );
+
+            // Replace "!&rdquo;." at end of paragraph (just before the paragraph marker) with just "!&rdquo;"
+            fileString = Regex.Replace(
+                fileString,
+                @"\!&rdquo;\.######",
+                @"!&rdquo;######"
+            );
+
+            // Replace "-&rdquo;." at end of paragraph (just before the paragraph marker) with just "...&rdquo;"
+            fileString = Regex.Replace(
+                fileString,
+                @"\-&rdquo;\.######",
+                @"...&rdquo;######"
+            );
+            
+            // Replace all "&rdquo;" with "$$$$$"
+            fileString = Regex.Replace(
+                fileString,
+                @"\&rdquo;",
+                @"$$$$$"
+            );
+            */
             // Replace paragraph markers ###### with blank line
             fileString = Regex.Replace(
                  fileString,
