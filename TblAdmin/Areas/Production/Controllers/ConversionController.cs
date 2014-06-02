@@ -89,7 +89,35 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"\!\.######",
                 "!######"
             );
-            
+
+            // Replace ".""." at end of paragraph (just before the paragraph marker) with just "."""
+            fileString = Regex.Replace(
+                fileString,
+                @"\.""\.######",
+                @".""######"
+            );
+
+            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+            fileString = Regex.Replace(
+                fileString,
+                @"\?""\.######",
+                @"?""######"
+            );
+
+            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+            fileString = Regex.Replace(
+                fileString,
+                @"\!""\.######",
+                @"!""######"
+            );
+
+            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+            fileString = Regex.Replace(
+                fileString,
+                @"\-""\.######",
+                @"...""######"
+            );
+
             // Replace paragraph markers ###### with blank line
             fileString = Regex.Replace(
                  fileString,
