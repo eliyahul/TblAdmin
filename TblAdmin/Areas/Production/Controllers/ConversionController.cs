@@ -22,12 +22,6 @@ namespace TblAdmin.Areas.Production.Controllers
         static string destPath = prefixPath + publisherPartialPath + bookPartialPath + bookName + "_FullBook_EDITED-MANUALLY-TEST.txt";
         static string fileString;
         
-        // positive lookahead to include the chapter headings
-        // chapter must be first thing on new line.
-        static string chapterHeadingPattern = @"(?=chapter [a-z]{3,})";
-        //static string chapterHeadingPatternReplaced = @"(?=Chapter [a-z]{3,}.)";
-        
-        
         // GET: Production/Conversion
         public ActionResult Process()
         {
@@ -41,7 +35,8 @@ namespace TblAdmin.Areas.Production.Controllers
             // Read file into a string
             fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
 
-            
+            fileString = fileString.Trim();
+
             // Standardize the chapter heading into Camel Case followed by period.
             fileString = Regex.Replace(
                 fileString, 
@@ -77,11 +72,12 @@ namespace TblAdmin.Areas.Production.Controllers
             // END KLUDGE
 
             // Split into files based on the Chapter headings
-            ViewBag.Results = "";
             string chapterPartialPath = prefixPath + publisherPartialPath + bookPartialPath + @"chapter-";
             string chapterPartialPathNumbered = "";
             string chapterPathTxt = "";
             string chapterPathHtml = "";
+            string chapterHeadingPattern = @"(?=chapter [a-z]{3,})";// positive lookahead to include the chapter headings
+            
             int i = 0;
             foreach (string s in Regex.Split(fileString, chapterHeadingPattern, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
@@ -91,9 +87,21 @@ namespace TblAdmin.Areas.Production.Controllers
                 
                 if (i > 0)
                 {
-                    System.IO.File.WriteAllText(chapterPathTxt, s, Encoding.GetEncoding(1252));
-                    System.IO.File.WriteAllText(chapterPathHtml, s, Encoding.GetEncoding(1252));
-                    ViewBag.Results = ViewBag.Results + @"==============================" + s;
+                    string s_html = s.Trim();
+
+                    System.IO.File.WriteAllText(chapterPathTxt, s_html, Encoding.GetEncoding(1252));
+
+                    // Add html p tags to paragraph separations
+                    s_html = Regex.Replace(
+                        s_html,
+                        "\n\r\n\r\n\r",
+                        @"</p>" + "\n\r\n\r\n\r" + @"<p>"
+                    );
+
+                    // Add opening and closing p tags for the chapter.
+                    s_html = @"<p>" + s_html + @"</p>";
+
+                    System.IO.File.WriteAllText(chapterPathHtml, s_html, Encoding.GetEncoding(1252));
                 }
                 i = i + 1;
                 
