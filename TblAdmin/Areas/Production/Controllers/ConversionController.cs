@@ -59,7 +59,7 @@ namespace TblAdmin.Areas.Production.Controllers
             // Replace newlines between paragraphs with ######'s temporarily
             fileString = Regex.Replace(
                 fileString,
-                @"\n\r",
+                "\n\r",
                 @"######"
             );
             // Replace all remaining whitespace with a single space
