@@ -13,15 +13,15 @@ namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : Controller
     {
-        static string bookName = @"MangaTouch";
-        static string publisherName = @"Orca Currents";
+        static string bookName = "MangaTouch";
+        static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
         static string publisherPartialPath = publisherName + @"\";
         static string bookPartialPath = bookName + @"\";
         static string filePath = prefixPath + publisherPartialPath + bookPartialPath + bookName + "_FullBook_EDITED-MANUALLY.txt";
-        static string destPath = prefixPath + publisherPartialPath + bookPartialPath + bookName + "_FullBook_EDITED-MANUALLY-TEST.txt";
         static string fileString;
-        
+        static string blankLine = Environment.NewLine + Environment.NewLine;
+
         // GET: Production/Conversion
         public ActionResult Process()
         {
@@ -40,7 +40,7 @@ namespace TblAdmin.Areas.Production.Controllers
             // Standardize the chapter heading into Camel Case followed by period.
             fileString = Regex.Replace(
                 fileString, 
-                @"^chapter [a-z]{3,}", 
+                "^chapter [a-z]{3,}", 
                 delegate(Match match)
                 {
                     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -50,29 +50,28 @@ namespace TblAdmin.Areas.Production.Controllers
                 RegexOptions.IgnoreCase | RegexOptions.Multiline
             );
 
-            // BEGIN - KLUDGE
-            // Replace newlines between paragraphs with ######'s temporarily
+            // Replace blank lines between paragraphs with ######'s temporarily to mark them
             fileString = Regex.Replace(
                 fileString,
-                "\n\r",
-                @"######"
+                blankLine,
+                "######"
             );
-            // Replace all remaining whitespace with a single space
+            // Replace all whitespace with a space to remove any special chars and line breaks
             fileString = Regex.Replace(
                 fileString,
                 @"\s{1,}",
-                @" "
+                " "
             );
-            // Replace ######'s with blank line
+            // Replace paragraph markers ###### with blank line, removing any other space between paragraphs
             fileString = Regex.Replace(
                 fileString,
                 @"\s{0,}######\s{0,}",
-                "\n\r\n\r\n\r"
+                blankLine
             );
-            // END KLUDGE
+            
 
             // Split into files based on the Chapter headings
-            string chapterPartialPath = prefixPath + publisherPartialPath + bookPartialPath + @"chapter-";
+            string chapterPartialPath = prefixPath + publisherPartialPath + bookPartialPath + "chapter-";
             string chapterPartialPathNumbered = "";
             string chapterPathTxt = "";
             string chapterPathHtml = "";
@@ -82,8 +81,8 @@ namespace TblAdmin.Areas.Production.Controllers
             foreach (string s in Regex.Split(fileString, chapterHeadingPattern, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
                 chapterPartialPathNumbered = chapterPartialPath + i.ToString("D3");
-                chapterPathTxt = chapterPartialPathNumbered + @".txt";
-                chapterPathHtml = chapterPartialPathNumbered + @".html";
+                chapterPathTxt = chapterPartialPathNumbered + ".txt";
+                chapterPathHtml = chapterPartialPathNumbered + ".html";
                 
                 if (i > 0)
                 {
@@ -94,8 +93,8 @@ namespace TblAdmin.Areas.Production.Controllers
                     // Add html p tags to paragraph separations
                     s_html = Regex.Replace(
                         s_html,
-                        "\n\r\n\r\n\r",
-                        @"</p>" + "\r" + @"<p>"
+                        blankLine,
+                        @"</p>" + Environment.NewLine + @"<p>"
                     );
 
                     // Add opening and closing p tags for the chapter.
@@ -122,11 +121,7 @@ namespace TblAdmin.Areas.Production.Controllers
                 i = i + 1;
                 
             }
-            // Split the string on Chapters
-
-            // Output file
-            System.IO.File.WriteAllText(destPath, fileString);
-
+            
             return View();
         }
             
