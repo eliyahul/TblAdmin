@@ -25,6 +25,8 @@ namespace TblAdmin.Areas.Production.Controllers
         public ActionResult Process()
         {
             ViewBag.Results = "Success";
+            
+            // Verify file exists.
             bool fileExists = System.IO.File.Exists(filePath);
             if (!fileExists)
             {
@@ -49,25 +51,51 @@ namespace TblAdmin.Areas.Production.Controllers
                 RegexOptions.IgnoreCase | RegexOptions.Multiline
             );
 
-            // Replace blank lines between paragraphs with ######'s temporarily to mark them
+            // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
             fileString = Regex.Replace(
                 fileString,
-                blankLine,
+                @"\s{0,}" + blankLine + @"\s{0,}",
                 "######"
             );
-            // Replace all whitespace with a space to remove any special chars and line breaks
+            // Replace all remaining whitespace with a space to remove any special chars and line breaks
             fileString = Regex.Replace(
                 fileString,
                 @"\s{1,}",
                 " "
             );
-            // Replace paragraph markers ###### with blank line, removing any other space between paragraphs
+
+            // Prefix paragraph marker by period to make all paragraphs end in period.
             fileString = Regex.Replace(
                 fileString,
-                @"\s{0,}######\s{0,}",
-                blankLine
+                "######",
+                ".######"
+            );
+
+            // Replace ".." at end of paragraph (just before the paragraph marker) with just "."
+            fileString = Regex.Replace(
+                fileString,
+                @"\.\.######",
+                ".######"
+            );
+            // Replace "?." at end of paragraph (just before the paragraph marker) with just "?"
+            fileString = Regex.Replace(
+                fileString,
+                @"\?\.######",
+                "?######"
+            );
+            // Replace "!." at end of paragraph (just before the paragraph marker) with just "!"
+            fileString = Regex.Replace(
+                fileString,
+                @"\!\.######",
+                "!######"
             );
             
+            // Replace paragraph markers ###### with blank line
+            fileString = Regex.Replace(
+                 fileString,
+                 "######",
+                 blankLine
+             );
 
             // Split into files based on the Chapter headings
             int i = 0;
