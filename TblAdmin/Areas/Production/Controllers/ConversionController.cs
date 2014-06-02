@@ -95,13 +95,29 @@ namespace TblAdmin.Areas.Production.Controllers
                     s_html = Regex.Replace(
                         s_html,
                         "\n\r\n\r\n\r",
-                        @"</p>" + "\n\r\n\r\n\r" + @"<p>"
+                        @"</p>" + "\r" + @"<p>"
                     );
 
                     // Add opening and closing p tags for the chapter.
                     s_html = @"<p>" + s_html + @"</p>";
 
-                    System.IO.File.WriteAllText(chapterPathHtml, s_html, Encoding.GetEncoding(1252));
+                    //Add html file header.
+                    s_html = 
+@"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
+<html xmlns=""http://www.w3.org/1999/xhtml"">
+<head>
+<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
+<title></title>
+</head>
+<body>
+"                   + s_html;
+
+                    //Add html file footer
+                    s_html = s_html + 
+@"
+</body>
+</html>";
+                    System.IO.File.WriteAllText(chapterPathHtml, s_html);
                 }
                 i = i + 1;
                 
