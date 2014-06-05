@@ -9,22 +9,27 @@ namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : Controller
     {
-        static string bookName = "MangaTouch";
         static string bookNameRaw = "Manga Touch";
         static string authorFirstNameRaw = "Jacqueline";
         static string authorLastNameRaw = "Pearce";
         static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+
+        // Remove spaces in the raw book name, eg."MangaTouch";
+        static string bookName = Regex.Replace(
+                bookNameRaw,
+                @"\s{0,}",
+                ""
+            );
         static string fileToWorkOn = bookName + "_FullBook_EDITED-MANUALLY.txt";
         static string existingChapterHeading = "^chapter [a-z]{3,}";
         string chapterHeadingLookahead = @"(?=chapter [a-z]{3,})";// positive lookahead to include the chapter headings
-
         string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
         static string bookFolderPath = prefixPath + publisherName + @"\" + bookName + @"\";
         string filePath = bookFolderPath + fileToWorkOn;
         string fileString;
         string blankLine = Environment.NewLine + Environment.NewLine;
-        string myRdquo = @"\u201D";
+        //string myRdquo = @"\u201D";
         string numericPageNum = @"\d{1,}";
 
         // GET: Production/Conversion
