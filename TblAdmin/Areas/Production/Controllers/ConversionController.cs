@@ -14,6 +14,7 @@ namespace TblAdmin.Areas.Production.Controllers
         static string authorLastNameRaw = "Pearce";
         static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
 
         // Remove spaces in the raw book name, eg."MangaTouch";
         static string bookName = Regex.Replace(
@@ -231,13 +232,13 @@ namespace TblAdmin.Areas.Production.Controllers
              );
 
             // Split into files based on the Chapter headings
-            int i = 0;
+            int chapterNum = 0;
             foreach (string s in Regex.Split(fileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
-                string chapterPathTxt = bookFolderPath + "chapter-" + i.ToString("D3") + ".txt";
-                string chapterPathHtml = bookFolderPath + "chapter-" + i.ToString("D3") + ".html";
-                
-                if (i > 0)
+                string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
+                string chapterPathHtml = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
+
+                if (chapterNum > 0)
                 {
                     string s_html = s.Trim();
                     
@@ -273,10 +274,30 @@ namespace TblAdmin.Areas.Production.Controllers
 </html>";
                     System.IO.File.WriteAllText(chapterPathHtml, s_html);
                 }
-                i = i + 1;
+                chapterNum = chapterNum + 1;
                 
             }
             
+            // Create the titles.xml file
+            string s_xml = "";
+            string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
+
+            s_xml =
+@"<?xml version=""1.0"" encoding=""iso-8859-1""?>
+<library>
+	<items>
+		<book> 
+			<title>" + bookNameRaw + @"</title>
+			<author>" + authorLastNameRaw + ", " + authorFirstNameRaw + @"</author>
+			<bookFolder>" + bookName + @"</bookFolder>
+			<numChapters>" + (chapterNum - 1).ToString() + @"</numChapters>
+			<ra>n</ra>
+		</book>
+	</items>
+</library>
+";
+            System.IO.File.WriteAllText(titlesXMLPath, s_xml);
+
             return View();
         }
             
