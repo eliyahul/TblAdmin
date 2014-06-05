@@ -9,9 +9,18 @@ namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : Controller
     {
+        /*
         static string bookNameRaw = "Manga Touch";
         static string authorFirstNameRaw = "Jacqueline";
         static string authorLastNameRaw = "Pearce";
+        static string publisherName = "Orca Currents";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        */
+
+        static string bookNameRaw = "Power Chord";
+        static string authorFirstNameRaw = "Ted";
+        static string authorLastNameRaw = "Staunton";
         static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
         static string bookIdFromAdmin = "0000";
@@ -93,7 +102,7 @@ namespace TblAdmin.Areas.Production.Controllers
             
             fileString = Regex.Replace(
                 fileString,
-                @"\w{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}", 
+                @"[a-z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}", 
                 delegate(Match match)
                 {
                     string v = match.ToString();
