@@ -29,7 +29,8 @@ namespace TblAdmin.Areas.Production.Controllers
         string filePath = bookFolderPath + fileToWorkOn;
         string fileString;
         string blankLine = Environment.NewLine + Environment.NewLine;
-        //string myRdquo = @"\u201D";
+        string encodedRdquo = @"\u201D";
+        string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
         string numericPageNum = @"\d{1,}";
 
         // GET: Production/Conversion
@@ -117,6 +118,10 @@ namespace TblAdmin.Areas.Production.Controllers
                 " "
             );
 
+            // -----------------------------------------
+            // Working with end of sentence punctuation.
+            // -----------------------------------------
+
             // Prefix paragraph marker by period to make all paragraphs end in period.
             fileString = Regex.Replace(
                 fileString,
@@ -143,6 +148,10 @@ namespace TblAdmin.Areas.Production.Controllers
                 "!######"
             );
 
+            // ---------------------------
+            // Working with regular quotes
+            // ---------------------------
+            
             // Replace ".""." at end of paragraph (just before the paragraph marker) with just "."""
             fileString = Regex.Replace(
                 fileString,
@@ -170,43 +179,50 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"\-""\.######",
                 @"...""######"
             );
-            /*
+            
+
+            // -------------------
+            // Working with &rdquo
+            // -------------------
+
             // Replace ".&rdquo;." at end of paragraph (just before the paragraph marker) with just ".&rdquo;"
             fileString = Regex.Replace(
                 fileString,
-                @"\." + myRdquo + @"\.######",
-                @".\&rdquo######"
+                @"\." + encodedRdquo + @"\.######",
+                @"." + decodedRdquo + "######"
             );
 
             // Replace "?&rdquo;." at end of paragraph (just before the paragraph marker) with just "?&rdquo;"
             fileString = Regex.Replace(
                 fileString,
-                @"\?" + myRdquo + @"\.######",
-                @"?" + myRdquo + @"######"
+                @"\?" + encodedRdquo + @"\.######",
+                @"?" + decodedRdquo + @"######"
             );
 
             // Replace "!&rdquo;." at end of paragraph (just before the paragraph marker) with just "!&rdquo;"
             fileString = Regex.Replace(
                 fileString,
-                @"\!" + myRdquo + @"\.######",
-                @"!" + myRdquo + @"######"
+                @"\!" + encodedRdquo + @"\.######",
+                @"!" + decodedRdquo + @"######"
             );
 
             // Replace "-&rdquo;." at end of paragraph (just before the paragraph marker) with just "...&rdquo;"
             fileString = Regex.Replace(
                 fileString,
-                @"\-" + myRdquo + @"\.######",
-                @"..." + myRdquo + "######"
+                @"\-" + encodedRdquo + @"\.######",
+                @"..." + decodedRdquo + "######"
             );
             
-            // Replace all "&rdquo;" with "$$$$$"
+            /*
+            // Replace all "&rdquo;" with itself as a test
             fileString = Regex.Replace(
                 fileString,
-                myRdquo,
-                myRdquo
-               // @"$$$$$"
+                encodedRdquo,
+                //decodedRdquo
+                "$$$$$"
             );
-            */
+             * */
+
             // Replace paragraph markers ###### with blank line
             fileString = Regex.Replace(
                  fileString,
@@ -224,9 +240,10 @@ namespace TblAdmin.Areas.Production.Controllers
                 if (i > 0)
                 {
                     string s_html = s.Trim();
-                    s_html = HttpUtility.HtmlEncode(s_html);
-
+                    
                     System.IO.File.WriteAllText(chapterPathTxt, s_html);
+
+                    s_html = HttpUtility.HtmlEncode(s_html);
 
                     // Add html p tags to paragraph separations
                     s_html = Regex.Replace(
