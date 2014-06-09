@@ -16,14 +16,38 @@ namespace TblAdmin.Areas.Production.Controllers
         static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
         static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9]{1,})";// positive lookahead to include the chapter headings
         */
-
+        /*
         static string bookNameRaw = "Power Chord";
         static string authorFirstNameRaw = "Ted";
         static string authorLastNameRaw = "Staunton";
         static string publisherName = "Orca Currents";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
         static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9]{1,})";// positive lookahead to include the chapter headings
+        */
+        /*
+        static string bookNameRaw = "Anna Karenina";
+        static string authorFirstNameRaw = "Leo";
+        static string authorLastNameRaw = "Tolstoy";
+        static string publisherName = "Gutenberg";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9]{1,}";
+        string chapterHeadingLookahead = @"(?=part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9]{1,})";// positive lookahead to include the chapter headings
+        */
+        static string bookNameRaw = "Peter Pan";
+        static string authorFirstNameRaw = "James M.";
+        static string authorLastNameRaw = "Barrie";
+        static string publisherName = "Gutenberg";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+        
 
         // Remove spaces in the raw book name, eg."MangaTouch";
         static string bookName = Regex.Replace(
@@ -32,8 +56,6 @@ namespace TblAdmin.Areas.Production.Controllers
                 ""
             );
         static string fileToWorkOn = bookName + "_FullBook_EDITED-MANUALLY.txt";
-        static string existingChapterHeading = "^chapter [a-z]{3,}";
-        string chapterHeadingLookahead = @"(?=chapter [a-z]{3,})";// positive lookahead to include the chapter headings
         string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
         static string bookFolderPath = prefixPath + publisherName + @"\" + bookName + @"\";
         string filePath = bookFolderPath + fileToWorkOn;
@@ -60,7 +82,7 @@ namespace TblAdmin.Areas.Production.Controllers
             fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
             fileString = fileString.Trim();
 
-            // Standardize the chapter heading into Camel Case followed by period.
+            // Standardize the chapter heading into Camel Case.
             fileString = Regex.Replace(
                 fileString, 
                 existingChapterHeading, 
@@ -68,7 +90,7 @@ namespace TblAdmin.Areas.Production.Controllers
                 {
                     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                     string v = match.ToString();
-                    return textInfo.ToTitleCase(v) + ".";
+                    return textInfo.ToTitleCase(v);
                 },
                 RegexOptions.IgnoreCase | RegexOptions.Multiline
             );
@@ -102,7 +124,7 @@ namespace TblAdmin.Areas.Production.Controllers
             
             fileString = Regex.Replace(
                 fileString,
-                @"[a-z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}", 
+                @"[a-zA-Z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}", 
                 delegate(Match match)
                 {
                     string v = match.ToString();
@@ -111,8 +133,7 @@ namespace TblAdmin.Areas.Production.Controllers
                         @"\s{0,}" + blankLine + @"\s{0,}",
                         " "
                     );
-                },
-                RegexOptions.IgnoreCase
+                }
             );
 
             // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
