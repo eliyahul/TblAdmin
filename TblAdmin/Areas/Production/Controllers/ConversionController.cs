@@ -5,6 +5,13 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
 
+/*
+ * WARNING - QUICK AND DIRTY CODE TO MASSAGE SOME OF OUR PROJECT SPECIFIC TEXT FILES.
+ * 
+ * THIS CLASS IS UNRELATED TO THE GENERAL ADMIN PROJECT DEVELOPMENT IN THE REST OF THIS REPOSITORY.
+ * I JUST NEEDED A QUICK PLACE TO TRY STUFF OUT.
+ */
+
 namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : Controller
@@ -39,6 +46,7 @@ namespace TblAdmin.Areas.Production.Controllers
         static string existingChapterHeading = "^part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9]{1,}";
         string chapterHeadingLookahead = @"(?=part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9]{1,})";// positive lookahead to include the chapter headings
         */
+        /*
         static string bookNameRaw = "Peter Pan";
         static string authorFirstNameRaw = "James M.";
         static string authorLastNameRaw = "Barrie";
@@ -47,8 +55,38 @@ namespace TblAdmin.Areas.Production.Controllers
         static string bookIdFromAdmin = "0000";
         static string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
         string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
-        
+        */
 
+        /*
+        static string bookNameRaw = "Lady Windermeres Fan";
+        static string authorFirstNameRaw = "David";
+        static string authorLastNameRaw = "Price";
+        static string publisherName = "Gutenberg";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+        */
+        /*
+        static string bookNameRaw = "Major Barbara";
+        static string authorFirstNameRaw = "George Bernard";
+        static string authorLastNameRaw = "Shaw";
+        static string publisherName = "Gutenberg";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+        */
+
+        static string bookNameRaw = "Uncle Vanya";
+        static string authorFirstNameRaw = "Anton";
+        static string authorLastNameRaw = "Chekhov";
+        static string publisherName = "Gutenberg";
+        static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+        static string bookIdFromAdmin = "0000";
+        static string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+        string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+        
         // Remove spaces in the raw book name, eg."MangaTouch";
         static string bookName = Regex.Replace(
                 bookNameRaw,
@@ -142,13 +180,14 @@ namespace TblAdmin.Areas.Production.Controllers
                 @"\s{0,}" + blankLine + @"\s{0,}",
                 "######"
             );
+
             // Replace all remaining whitespace with a space to remove any special chars and line breaks
             fileString = Regex.Replace(
                 fileString,
                 @"\s{1,}",
                 " "
             );
-
+            
             // -----------------------------------------
             // Working with end of sentence punctuation.
             // -----------------------------------------
