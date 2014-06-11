@@ -248,6 +248,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\TblAdminInitializer.cs" />
     <Compile Include="DAL\TblAdminContext.cs" />
+    <Compile Include="Domain\Production\Services\Converter.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
