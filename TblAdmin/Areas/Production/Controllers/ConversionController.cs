@@ -102,9 +102,8 @@ namespace TblAdmin.Areas.Production.Controllers
                     @"\s{0,}",
                     ""
                 );
-            string fileToWorkOn = bookName + fileNameSuffix;
             string bookFolderPath = prefixPath + publisherName + @"\" + bookName + @"\";
-            string filePath = bookFolderPath + fileToWorkOn;
+            string filePath = bookFolderPath + bookName + fileNameSuffix;
 
             Converter myConverter = new Converter();
             bool result = myConverter.Convert(
