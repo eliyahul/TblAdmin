@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using NUnit.Framework;
 using Moq;
 using TblAdmin;
-using TblAdmin.Domain.Production.Services;
+using TblAdmin.Core.Production.Services;
 using System.Data.Entity;
 using PagedList;
 using System.Text.RegularExpressions;
@@ -29,25 +29,13 @@ namespace TblAdmin.Tests.Core.Production.Services
         static string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
         static string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
-        // Remove spaces in the raw book name, eg."MangaTouch";
-        static string bookName = Regex.Replace(
-                bookNameRaw,
-                @"\s{0,}",
-                ""
-            );
-        static string bookFolderPath = prefixPath + publisherName + @"\" + bookName + @"\";
-        string filePath = bookFolderPath + bookName + fileNameSuffix;
+        static string bookNameNoSpaces = Regex.Replace(bookNameRaw,  @"\s{0,}", "");
+        static string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
+        string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
         
         [SetUp]
         public void init()
         {
-            
-
-            
-
-            
-            
-
             converter = new Converter();
         }
 

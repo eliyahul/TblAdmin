@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
-using TblAdmin.Domain.Production.Services;
+using TblAdmin.Core.Production.Services;
 
 /*
  * WARNING - QUICK AND DIRTY CODE TO MASSAGE SOME OF OUR PROJECT SPECIFIC TEXT FILES.
