@@ -69,7 +69,7 @@ namespace TblAdmin.Tests.Core.Production.Services
         }
 
         [Test]
-        public void Converts_a_file_which_does_exist()
+        public void Converts_a_play_format()
         {
             // Arrange
             string bookNameRaw = "Uncle Vanya";
@@ -102,6 +102,66 @@ namespace TblAdmin.Tests.Core.Production.Services
                 );
 
             
+            // Assert
+            Assert.IsTrue(result);
+
+            IEnumerable<String> expectedFilePaths = System.IO.Directory.EnumerateFiles(expectedResultsPath);
+            foreach (string path in expectedFilePaths)
+            {
+                string expectedFileName = System.IO.Path.GetFileName(path);
+                string actualPath = actualResultsPath + expectedFileName;
+                Assert.IsTrue(System.IO.File.Exists(actualPath), "The following file does not exist in Actual Results: " + actualPath);
+
+                string expectedFileString = System.IO.File.ReadAllText(path);
+                string actualFileString = System.IO.File.ReadAllText(actualPath);
+
+                Assert.AreEqual(expectedFileString, actualFileString, " *** " + expectedFileName + " *** ");
+            }
+
+            // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
+            IEnumerable<String> actualFilePaths = System.IO.Directory.EnumerateFiles(actualResultsPath);
+            foreach (string path in actualFilePaths)
+            {
+                System.IO.File.Delete(path);
+            }
+
+        }
+
+        [Test]
+        public void Converts_a_novel_format_modified_with_special_cases()
+        {
+            // Arrange
+            string bookNameRaw = "Manga Touch";
+            string authorFirstNameRaw = "Jacqueline";
+            string authorLastNameRaw = "Pearce";
+            string bookIdFromAdmin = "4421";
+
+            string publisherName = "Orca Currents";
+            //string fileNameSuffix = "_FullBook_EDITED-MANUALLY_MODIFIED_FOR_TESTING_PARAG_ENDING_PUNCTUATION.txt";
+            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
+            string prefixPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
+            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
+            string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
+            string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
+            string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
+
+            string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+
+
+            // Act
+            Boolean result = converter.Convert(
+                bookNameRaw,
+                authorFirstNameRaw,
+                authorLastNameRaw,
+                actualResultsPath,
+                filePath,
+                bookIdFromAdmin,
+                existingChapterHeading,
+                chapterHeadingLookahead
+                );
+
+
             // Assert
             Assert.IsTrue(result);
 
