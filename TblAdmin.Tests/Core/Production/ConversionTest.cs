@@ -41,8 +41,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string publisherName = "Gutenberg";
             string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
             string bookIdFromAdmin = "0000";
-            string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
             string bookNameNoSpaces = Regex.Replace(bookNameRaw,  @"\s{0,}", "");
@@ -60,8 +59,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 bookFolderPath,
                 filePath,
                 bookIdFromAdmin,
-                existingChapterHeading,
-                chapterHeadingLookahead
+                chapterHeadingPattern
                 );
 
             // Assert
@@ -84,9 +82,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
-            
-            string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
+
+            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
             
             
             // Act
@@ -97,8 +94,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 actualResultsPath,
                 filePath,
                 bookIdFromAdmin,
-                existingChapterHeading,
-                chapterHeadingLookahead
+                chapterHeadingPattern
                 );
 
             
@@ -127,9 +123,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string existingChapterHeading = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            string chapterHeadingLookahead = @"(?=chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
-
+            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            
 
             // Act
             Boolean result = converter.Convert(
@@ -139,8 +134,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 actualResultsPath,
                 filePath,
                 bookIdFromAdmin,
-                existingChapterHeading,
-                chapterHeadingLookahead
+                chapterHeadingPattern
                 );
 
 
@@ -169,10 +163,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string existingChapterHeading = "^part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            string chapterHeadingLookahead = @"(?=part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?"", ]{1,})";// positive lookahead to include the chapter headings
-
-
+            string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            
             // Act
             Boolean result = converter.Convert(
                 bookNameRaw,
@@ -181,8 +173,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 actualResultsPath,
                 filePath,
                 bookIdFromAdmin,
-                existingChapterHeading,
-                chapterHeadingLookahead
+                chapterHeadingPattern
                 );
 
 

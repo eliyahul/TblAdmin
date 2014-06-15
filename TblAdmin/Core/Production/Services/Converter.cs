@@ -15,8 +15,7 @@ namespace TblAdmin.Core.Production.Services
             string bookFolderPath,
             string filePath,
             string bookIdFromAdmin,
-            string existingChapterHeading,
-            string chapterHeadingLookahead
+            string chapterHeadingPattern
            )
         {
             string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
@@ -26,7 +25,11 @@ namespace TblAdmin.Core.Production.Services
             string encodedRdquo = @"\u201D";
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
             string numericPageNum = @"\d{1,}";
-        
+
+            string existingChapterHeading = "^" + chapterHeadingPattern;
+            string chapterHeadingLookahead = @"(?=" + chapterHeadingPattern + @")";// positive lookahead to include the chapter headings
+
+
             fileString = getFileAsString(filePath);
             if (fileString.Length == 0){
                 return false;
