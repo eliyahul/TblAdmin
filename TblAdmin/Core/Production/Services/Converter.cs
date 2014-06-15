@@ -36,51 +36,12 @@ namespace TblAdmin.Core.Production.Services
             titleCaseTheChapterHeadings(chapterHeadingPattern);
             removePageHeadersAndFooters(bookNameRaw, authorFullName);
             removeBlankLinesWithinSentences();
+            addMarkersBetweenParagraphs();
+            removeSpecialCharacters();
+            addEndOfParagraphPunctuation();
+
             
-
-            // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
-            fileString = Regex.Replace(
-                fileString,
-                @"\s{0,}" + blankLine + @"\s{0,}",
-                "######"
-            );
-
-            // Replace all remaining whitespace with a space to remove any special chars and line breaks
-            fileString = Regex.Replace(
-                fileString,
-                @"\s{1,}",
-                " "
-            );
             
-            // -----------------------------------------
-            // Working with end of sentence punctuation.
-            // -----------------------------------------
-
-            // Prefix paragraph marker by period to make all paragraphs end in period.
-            fileString = Regex.Replace(
-                fileString,
-                "######",
-                ".######"
-            );
-
-            // Replace ".." at end of paragraph (just before the paragraph marker) with just "."
-            fileString = Regex.Replace(
-                fileString,
-                @"\.\.######",
-                ".######"
-            );
-            // Replace "?." at end of paragraph (just before the paragraph marker) with just "?"
-            fileString = Regex.Replace(
-                fileString,
-                @"\?\.######",
-                "?######"
-            );
-            // Replace "!." at end of paragraph (just before the paragraph marker) with just "!"
-            fileString = Regex.Replace(
-                fileString,
-                @"\!\.######",
-                "!######"
-            );
 
             // ---------------------------
             // Working with regular quotes
@@ -321,6 +282,54 @@ namespace TblAdmin.Core.Production.Services
                        " "
                    );
                }
+           );
+       }
+       public void addMarkersBetweenParagraphs()
+       {
+           // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
+           fileString = Regex.Replace(
+               fileString,
+               @"\s{0,}" + blankLine + @"\s{0,}",
+               "######"
+           );
+       }
+
+       public void removeSpecialCharacters()
+       {
+           // Replace all remaining whitespace with a space to remove any special chars and line breaks
+           fileString = Regex.Replace(
+               fileString,
+               @"\s{1,}",
+               " "
+           );
+       }
+
+       public void addEndOfParagraphPunctuation()
+       {
+           // Prefix paragraph marker by period to make all paragraphs end in period.
+           fileString = Regex.Replace(
+               fileString,
+               "######",
+               ".######"
+           );
+
+           // Replace ".." at end of paragraph (just before the paragraph marker) with just "."
+           fileString = Regex.Replace(
+               fileString,
+               @"\.\.######",
+               ".######"
+           );
+           // Replace "?." at end of paragraph (just before the paragraph marker) with just "?"
+           fileString = Regex.Replace(
+               fileString,
+               @"\?\.######",
+               "?######"
+           );
+           // Replace "!." at end of paragraph (just before the paragraph marker) with just "!"
+           fileString = Regex.Replace(
+               fileString,
+               @"\!\.######",
+               "!######"
            );
        }
  
