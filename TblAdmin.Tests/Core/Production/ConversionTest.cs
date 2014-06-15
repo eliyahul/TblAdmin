@@ -105,25 +105,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
-            IEnumerable<String> expectedFilePaths = System.IO.Directory.EnumerateFiles(expectedResultsPath);
-            foreach (string path in expectedFilePaths)
-            {
-                string expectedFileName = System.IO.Path.GetFileName(path);
-                string actualPath = actualResultsPath + expectedFileName;
-                Assert.IsTrue(System.IO.File.Exists(actualPath), "The following file does not exist in Actual Results: " + actualPath);
-
-                string expectedFileString = System.IO.File.ReadAllText(path);
-                string actualFileString = System.IO.File.ReadAllText(actualPath);
-
-                Assert.AreEqual(expectedFileString, actualFileString, " *** " + expectedFileName + " *** ");
-            }
-
-            // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
-            IEnumerable<String> actualFilePaths = System.IO.Directory.EnumerateFiles(actualResultsPath);
-            foreach (string path in actualFilePaths)
-            {
-                System.IO.File.Delete(path);
-            }
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
 
         }
 
@@ -165,25 +147,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
-            IEnumerable<String> expectedFilePaths = System.IO.Directory.EnumerateFiles(expectedResultsPath);
-            foreach (string path in expectedFilePaths)
-            {
-                string expectedFileName = System.IO.Path.GetFileName(path);
-                string actualPath = actualResultsPath + expectedFileName;
-                Assert.IsTrue(System.IO.File.Exists(actualPath), "The following file does not exist in Actual Results: " + actualPath);
-
-                string expectedFileString = System.IO.File.ReadAllText(path);
-                string actualFileString = System.IO.File.ReadAllText(actualPath);
-
-                Assert.AreEqual(expectedFileString, actualFileString, " *** " + expectedFileName + " *** ");
-            }
-
-            // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
-            IEnumerable<String> actualFilePaths = System.IO.Directory.EnumerateFiles(actualResultsPath);
-            foreach (string path in actualFilePaths)
-            {
-                System.IO.File.Delete(path);
-            }
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
 
         }
 
@@ -225,6 +189,12 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
+           compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
+
+        }
+
+        public bool compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath)
+        {
             IEnumerable<String> expectedFilePaths = System.IO.Directory.EnumerateFiles(expectedResultsPath);
             Assert.AreNotEqual(expectedFilePaths.Count(), 0, "There were no files in the ExpectedResultsDirectory");
 
@@ -246,7 +216,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             {
                 System.IO.File.Delete(path);
             }
-
+            return true;
         }
     }
 }
