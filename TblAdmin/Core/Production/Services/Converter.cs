@@ -8,6 +8,9 @@ namespace TblAdmin.Core.Production.Services
 {
     public class Converter
     {
+        string blankLine = Environment.NewLine + Environment.NewLine;
+        string numericPageNum = @"\d{1,}";
+    
         public bool Convert(
             string bookNameRaw,
             string authorFirstNameRaw,
@@ -21,11 +24,9 @@ namespace TblAdmin.Core.Production.Services
             string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
         
             string fileString;
-            string blankLine = Environment.NewLine + Environment.NewLine;
             string encodedRdquo = @"\u201D";
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
-            string numericPageNum = @"\d{1,}";
-
+            
             fileString = getFileAsString(filePath);
             if (fileString.Length == 0){
                 return false;
@@ -34,30 +35,10 @@ namespace TblAdmin.Core.Production.Services
 
             fileString = fileString.Trim();
             fileString = titleCaseTheChapterHeadings(fileString, chapterHeadingPattern);
+            fileString = removePageHeadersAndFooters(fileString, bookNameRaw, authorFullName);
             
 
-            // Remove page numbers alone on its own line (usually means its part of page header or footer)
-            fileString = Regex.Replace(
-                fileString,
-                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + numericPageNum + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-                blankLine
-            );
-
-            // Remove title alone on its own line (usually means its part of page header or footer)
-            fileString = Regex.Replace(
-                fileString,
-                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + bookNameRaw + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-                blankLine,
-                RegexOptions.IgnoreCase
-            );
-
-            // Remove author alone on its own line (usually means its part of page header or footer)
-            fileString = Regex.Replace(
-                fileString,
-                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-                blankLine,
-                RegexOptions.IgnoreCase
-            );
+            
 
             // Before putting in the paragraph markers, replace blank lines within a sentence with a space. 
             // Assume it is within a sentence, if there is no ending punctuation before the blank line,
@@ -317,6 +298,34 @@ namespace TblAdmin.Core.Production.Services
                },
                RegexOptions.IgnoreCase | RegexOptions.Multiline
            );
+           return fileString;
+       }
+
+       public string removePageHeadersAndFooters(string fileString, string bookNameRaw, string authorFullName)
+       {
+           // Remove page numbers alone on its own line (usually means its part of page header or footer)
+           fileString = Regex.Replace(
+               fileString,
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + numericPageNum + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               blankLine
+           );
+
+           // Remove title alone on its own line (usually means its part of page header or footer)
+           fileString = Regex.Replace(
+               fileString,
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + bookNameRaw + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               blankLine,
+               RegexOptions.IgnoreCase
+           );
+
+           // Remove author alone on its own line (usually means its part of page header or footer)
+           fileString = Regex.Replace(
+               fileString,
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               blankLine,
+               RegexOptions.IgnoreCase
+           );
+
            return fileString;
        }
  
