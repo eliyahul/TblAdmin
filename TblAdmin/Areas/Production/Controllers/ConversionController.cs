@@ -85,7 +85,7 @@ namespace TblAdmin.Areas.Production.Controllers
         static string publisherName = "Gutenberg";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
         static string bookIdFromAdmin = "0000";
-        static string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+        static string chapterHeadingPattern = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
         
         string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
         

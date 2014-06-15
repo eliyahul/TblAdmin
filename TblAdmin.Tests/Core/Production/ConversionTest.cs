@@ -41,7 +41,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string publisherName = "Gutenberg";
             string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
             string bookIdFromAdmin = "0000";
-            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            string chapterHeadingPattern = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
             string bookNameNoSpaces = Regex.Replace(bookNameRaw,  @"\s{0,}", "");

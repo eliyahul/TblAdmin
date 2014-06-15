@@ -26,10 +26,6 @@ namespace TblAdmin.Core.Production.Services
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
             string numericPageNum = @"\d{1,}";
 
-            string existingChapterHeading = "^" + chapterHeadingPattern;
-            string chapterHeadingLookahead = @"(?=" + chapterHeadingPattern + @")";// positive lookahead to include the chapter headings
-
-
             fileString = getFileAsString(filePath);
             if (fileString.Length == 0){
                 return false;
@@ -40,8 +36,8 @@ namespace TblAdmin.Core.Production.Services
 
             // Standardize the chapter heading into Camel Case.
             fileString = Regex.Replace(
-                fileString, 
-                existingChapterHeading, 
+                fileString,
+                chapterHeadingPattern, 
                 delegate(Match match)
                 {
                     TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -220,6 +216,8 @@ namespace TblAdmin.Core.Production.Services
 
             // Split into files based on the Chapter headings
             int chapterNum = 0;
+            string chapterHeadingLookahead = @"(?=" + chapterHeadingPattern + @")";// positive lookahead to include the chapter headings
+            
             foreach (string s in Regex.Split(fileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
                 string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
