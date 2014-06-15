@@ -27,15 +27,12 @@ namespace TblAdmin.Core.Production.Services
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
             string numericPageNum = @"\d{1,}";
         
-            // Verify file exists.
-            bool fileExists = System.IO.File.Exists(filePath);
-            if (!fileExists)
-            {
+            fileString = getFileAsString(filePath);
+            if (fileString.Length == 0){
                 return false;
             }
+            
 
-            // Read file into a string and trim it.
-            fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
             fileString = fileString.Trim();
 
             // Standardize the chapter heading into Camel Case.
@@ -264,17 +261,43 @@ namespace TblAdmin.Core.Production.Services
                 chapterNum = chapterNum + 1;
                 
             }
-            
-            // Create the titles.xml file
-            string s_xml = "";
-            string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
-            string bookNameNoSpaces = Regex.Replace(
-                bookNameRaw,
-                @"\s{0,}",
-                ""
-            );
 
-            s_xml =
+            int numChapters = chapterNum - 1;
+            string titlesXMLAsString = generateTitlesXMLAsString(
+               bookNameRaw,
+               authorLastNameRaw,
+               authorFirstNameRaw,
+               numChapters
+            );
+            string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
+            System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
+            return true;
+        }
+            
+       public string getFileAsString (string filePath)
+       {
+            string fileString = "";
+
+            bool fileExists = System.IO.File.Exists(filePath);
+            if (fileExists)
+            {
+                fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
+            }
+
+            return fileString;
+       }
+
+       public string generateTitlesXMLAsString(
+           string bookNameRaw,
+           string authorLastNameRaw,
+           string authorFirstNameRaw,
+           int numChapters
+           )
+       {
+           string titlesXMLAsString = "";
+           string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
+
+           titlesXMLAsString =
 @"<?xml version=""1.0"" encoding=""iso-8859-1""?>
 <library>
 	<items>
@@ -282,16 +305,16 @@ namespace TblAdmin.Core.Production.Services
 			<title>" + bookNameRaw + @"</title>
 			<author>" + authorLastNameRaw + ", " + authorFirstNameRaw + @"</author>
 			<bookFolder>" + bookNameNoSpaces + @"</bookFolder>
-			<numChapters>" + (chapterNum - 1).ToString() + @"</numChapters>
+			<numChapters>" + numChapters.ToString() + @"</numChapters>
 			<ra>n</ra>
 		</book>
 	</items>
 </library>
 ";
-            System.IO.File.WriteAllText(titlesXMLPath, s_xml);
-            return true;
-        }
-            
-        
+           return titlesXMLAsString;
+       }
+ 
     }
+
+    
 }
