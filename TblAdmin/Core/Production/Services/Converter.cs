@@ -10,7 +10,8 @@ namespace TblAdmin.Core.Production.Services
     {
         string blankLine = Environment.NewLine + Environment.NewLine;
         string numericPageNum = @"\d{1,}";
-    
+        string fileString;
+            
         public bool Convert(
             string bookNameRaw,
             string authorFirstNameRaw,
@@ -23,22 +24,17 @@ namespace TblAdmin.Core.Production.Services
         {
             string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
         
-            string fileString;
             string encodedRdquo = @"\u201D";
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
             
-            fileString = getFileAsString(filePath);
-            if (fileString.Length == 0){
+            if (!getFileAsString(filePath))
+            {
                 return false;
             }
             
-
             fileString = fileString.Trim();
-            fileString = titleCaseTheChapterHeadings(fileString, chapterHeadingPattern);
-            fileString = removePageHeadersAndFooters(fileString, bookNameRaw, authorFullName);
-            
-
-            
+            titleCaseTheChapterHeadings(chapterHeadingPattern);
+            removePageHeadersAndFooters(bookNameRaw, authorFullName);
 
             // Before putting in the paragraph markers, replace blank lines within a sentence with a space. 
             // Assume it is within a sentence, if there is no ending punctuation before the blank line,
@@ -245,17 +241,15 @@ namespace TblAdmin.Core.Production.Services
             return true;
         }
             
-       public string getFileAsString (string filePath)
+       public bool getFileAsString (string filePath)
        {
-            string fileString = "";
-
             bool fileExists = System.IO.File.Exists(filePath);
             if (fileExists)
             {
                 fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
             }
 
-            return fileString;
+            return fileExists;
        }
 
        public string generateTitlesXMLAsString(
@@ -285,7 +279,7 @@ namespace TblAdmin.Core.Production.Services
            return titlesXMLAsString;
        }
 
-       public string titleCaseTheChapterHeadings(string fileString, string chapterHeadingPattern)
+       public void titleCaseTheChapterHeadings(string chapterHeadingPattern)
        {
            fileString = Regex.Replace(
                fileString,
@@ -298,10 +292,9 @@ namespace TblAdmin.Core.Production.Services
                },
                RegexOptions.IgnoreCase | RegexOptions.Multiline
            );
-           return fileString;
        }
 
-       public string removePageHeadersAndFooters(string fileString, string bookNameRaw, string authorFullName)
+       public void removePageHeadersAndFooters(string bookNameRaw, string authorFullName)
        {
            // Remove page numbers alone on its own line (usually means its part of page header or footer)
            fileString = Regex.Replace(
@@ -325,8 +318,6 @@ namespace TblAdmin.Core.Production.Services
                blankLine,
                RegexOptions.IgnoreCase
            );
-
-           return fileString;
        }
  
     }
