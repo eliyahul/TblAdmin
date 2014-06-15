@@ -32,27 +32,11 @@ namespace TblAdmin.Core.Production.Services
                 return false;
             }
             
-            fileString = fileString.Trim();
+            fileString.Trim();
             titleCaseTheChapterHeadings(chapterHeadingPattern);
             removePageHeadersAndFooters(bookNameRaw, authorFullName);
-
-            // Before putting in the paragraph markers, replace blank lines within a sentence with a space. 
-            // Assume it is within a sentence, if there is no ending punctuation before the blank line,
-            // and the first letter in the word after the blank line is not capitalized.
+            removeBlankLinesWithinSentences();
             
-            fileString = Regex.Replace(
-                fileString,
-                @"[a-zA-Z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}", 
-                delegate(Match match)
-                {
-                    string v = match.ToString();
-                    return Regex.Replace(
-                        v,
-                        @"\s{0,}" + blankLine + @"\s{0,}",
-                        " "
-                    );
-                }
-            );
 
             // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
             fileString = Regex.Replace(
@@ -317,6 +301,26 @@ namespace TblAdmin.Core.Production.Services
                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
                blankLine,
                RegexOptions.IgnoreCase
+           );
+       }
+
+       public void removeBlankLinesWithinSentences()
+       {
+           // Assume it is within a sentence, if there is no ending punctuation before the blank line,
+           // and the first letter in the word after the blank line is not capitalized.
+
+           fileString = Regex.Replace(
+               fileString,
+               @"[a-zA-Z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}",
+               delegate(Match match)
+               {
+                   string v = match.ToString();
+                   return Regex.Replace(
+                       v,
+                       @"\s{0,}" + blankLine + @"\s{0,}",
+                       " "
+                   );
+               }
            );
        }
  
