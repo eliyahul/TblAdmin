@@ -33,19 +33,8 @@ namespace TblAdmin.Core.Production.Services
             
 
             fileString = fileString.Trim();
-
-            // Standardize the chapter heading into Camel Case.
-            fileString = Regex.Replace(
-                fileString,
-                chapterHeadingPattern, 
-                delegate(Match match)
-                {
-                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                    string v = match.ToString();
-                    return textInfo.ToTitleCase(v);
-                },
-                RegexOptions.IgnoreCase | RegexOptions.Multiline
-            );
+            fileString = titleCaseTheChapterHeadings(fileString, chapterHeadingPattern);
+            
 
             // Remove page numbers alone on its own line (usually means its part of page header or footer)
             fileString = Regex.Replace(
@@ -313,6 +302,22 @@ namespace TblAdmin.Core.Production.Services
 </library>
 ";
            return titlesXMLAsString;
+       }
+
+       public string titleCaseTheChapterHeadings(string fileString, string chapterHeadingPattern)
+       {
+           fileString = Regex.Replace(
+               fileString,
+               chapterHeadingPattern,
+               delegate(Match match)
+               {
+                   TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                   string v = match.ToString();
+                   return textInfo.ToTitleCase(v);
+               },
+               RegexOptions.IgnoreCase | RegexOptions.Multiline
+           );
+           return fileString;
        }
  
     }
