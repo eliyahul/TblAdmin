@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<library>
+	<items>
+		<book> 
+			<title>Uncle Vanya</title>
+			<author>Chekhov, Anton</author>
+			<bookFolder>UncleVanya</bookFolder>
+			<numChapters>5</numChapters>
+			<ra>n</ra>
+		</book>
+	</items>
+</library>
