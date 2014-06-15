@@ -137,8 +137,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookIdFromAdmin = "4421";
 
             string publisherName = "Orca Currents";
-            //string fileNameSuffix = "_FullBook_EDITED-MANUALLY_MODIFIED_FOR_TESTING_PARAG_ENDING_PUNCTUATION.txt";
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
+            string fileNameSuffix = "_FullBook_EDITED-MANUALLY_MODIFIED_FOR_TESTING_PARAG_ENDING_PUNCTUATION.txt";
+            //string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
             string prefixPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
             string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
             string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
