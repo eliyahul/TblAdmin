@@ -96,9 +96,8 @@ namespace TblAdmin.Core.Production.Services
             }
 
             int numChapters = chapterNum - 1;
-            string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
-            string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
-            System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
+            CreateTitlesXMLFile(numChapters, bookFolderPath, bookIdFromAdmin);
+            
             return true;
         }
             
@@ -326,6 +325,14 @@ namespace TblAdmin.Core.Production.Services
                 BlankLine
             );
        }
+       public void CreateTitlesXMLFile(int numChapters, string bookFolderPath, string bookIdFromAdmin)
+       {
+           string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
+           string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
+
+           System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
+       }
+            
  
     }
 
