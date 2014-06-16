@@ -9,10 +9,11 @@ namespace TblAdmin.Core.Production.Services
     public class Converter
     {
         string BlankLine = Environment.NewLine + Environment.NewLine;
-        string NumericPageNum = @"\d{1,}";
         string FileString;
-        string AuthorFullName;
         string ChapterHeadingPattern;
+        string BookNameRaw;
+        string AuthorFirstNameRaw;
+        string AuthorLastNameRaw;
             
         public bool Convert(
             string bookNameRaw,
@@ -24,8 +25,10 @@ namespace TblAdmin.Core.Production.Services
             string chapterHeadingPattern
            )
         {
-            AuthorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
             ChapterHeadingPattern = chapterHeadingPattern;
+            BookNameRaw = bookNameRaw;
+            AuthorFirstNameRaw = authorFirstNameRaw;
+            AuthorLastNameRaw = authorLastNameRaw;
 
             if (!GetFileAsString(filePath))
             {
@@ -34,21 +37,15 @@ namespace TblAdmin.Core.Production.Services
             
             FileString.Trim();
             TitleCaseTheChapterHeadings();
-            RemovePageHeadersAndFooters(bookNameRaw);
+            RemovePageHeadersAndFooters();
             RemoveBlankLinesWithinSentences();
             AddMarkersBetweenParagraphs();
             RemoveSpecialCharacters();
             AddEndOfParagraphPunctuation();
             AllowPunctuationInsideQuotesToEndAParagraph();
+            RestoreBlankLineBetweenParagraphs();
             
             
-            // Replace paragraph markers ###### with blank line
-            FileString = Regex.Replace(
-                 FileString,
-                 "######",
-                 BlankLine
-             );
-
             // Split into files based on the Chapter headings
             int chapterNum = 0;
             string chapterHeadingLookahead = @"(?=" + ChapterHeadingPattern + @")";// positive lookahead to include the chapter headings
@@ -99,12 +96,7 @@ namespace TblAdmin.Core.Production.Services
             }
 
             int numChapters = chapterNum - 1;
-            string titlesXMLAsString = GenerateTitlesXMLAsString(
-               bookNameRaw,
-               authorLastNameRaw,
-               authorFirstNameRaw,
-               numChapters
-            );
+            string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
             string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
             System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
             return true;
@@ -121,23 +113,18 @@ namespace TblAdmin.Core.Production.Services
             return fileExists;
        }
 
-       public string GenerateTitlesXMLAsString(
-           string bookNameRaw,
-           string authorLastNameRaw,
-           string authorFirstNameRaw,
-           int numChapters
-           )
+       public string GenerateTitlesXMLAsString(int numChapters)
        {
            string titlesXMLAsString = "";
-           string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
+           string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s{0,}", "");
 
            titlesXMLAsString =
 @"<?xml version=""1.0"" encoding=""iso-8859-1""?>
 <library>
 	<items>
 		<book> 
-			<title>" + bookNameRaw + @"</title>
-			<author>" + authorLastNameRaw + ", " + authorFirstNameRaw + @"</author>
+			<title>" + BookNameRaw + @"</title>
+			<author>" + AuthorLastNameRaw + ", " + AuthorFirstNameRaw + @"</author>
 			<bookFolder>" + bookNameNoSpaces + @"</bookFolder>
 			<numChapters>" + numChapters.ToString() + @"</numChapters>
 			<ra>n</ra>
@@ -163,8 +150,10 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void RemovePageHeadersAndFooters(string bookNameRaw)
+       public void RemovePageHeadersAndFooters()
        {
+           string NumericPageNum = @"\d{1,}";
+        
            // Remove page numbers alone on its own line (usually means its part of page header or footer)
            FileString = Regex.Replace(
                FileString,
@@ -175,15 +164,16 @@ namespace TblAdmin.Core.Production.Services
            // Remove title alone on its own line (usually means its part of page header or footer)
            FileString = Regex.Replace(
                FileString,
-               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + bookNameRaw + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + BookNameRaw + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
                BlankLine,
                RegexOptions.IgnoreCase
            );
 
            // Remove author alone on its own line (usually means its part of page header or footer)
+           string authorFullName = AuthorFirstNameRaw + " " + AuthorLastNameRaw;
            FileString = Regex.Replace(
                FileString,
-               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + AuthorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
                BlankLine,
                RegexOptions.IgnoreCase
            );
@@ -326,16 +316,15 @@ namespace TblAdmin.Core.Production.Services
                @"\-" + encodedRdquo + @"\.######",
                @"..." + decodedRdquo + "######"
            );
-
-           /*
-           // Replace all "&rdquo;" with itself as a test
+       }
+       public void RestoreBlankLineBetweenParagraphs()
+       {
+           // Replace temporary paragraph markers ###### with blank line
            FileString = Regex.Replace(
-               FileString,
-               encodedRdquo,
-               //decodedRdquo
-               "$$$$$"
-           );
-            * */
+                FileString,
+                "######",
+                BlankLine
+            );
        }
  
     }
