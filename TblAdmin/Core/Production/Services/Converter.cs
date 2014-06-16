@@ -8,9 +8,9 @@ namespace TblAdmin.Core.Production.Services
 {
     public class Converter
     {
-        string blankLine = Environment.NewLine + Environment.NewLine;
-        string numericPageNum = @"\d{1,}";
-        string fileString;
+        string BlankLine = Environment.NewLine + Environment.NewLine;
+        string NumericPageNum = @"\d{1,}";
+        string FileString;
             
         public bool Convert(
             string bookNameRaw,
@@ -32,7 +32,7 @@ namespace TblAdmin.Core.Production.Services
                 return false;
             }
             
-            fileString.Trim();
+            FileString.Trim();
             titleCaseTheChapterHeadings(chapterHeadingPattern);
             removePageHeadersAndFooters(bookNameRaw, authorFullName);
             removeBlankLinesWithinSentences();
@@ -48,29 +48,29 @@ namespace TblAdmin.Core.Production.Services
             // ---------------------------
             
             // Replace ".""." at end of paragraph (just before the paragraph marker) with just "."""
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\.""\.######",
                 @".""######"
             );
 
             // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\?""\.######",
                 @"?""######"
             );
 
             // Replace "!""." at end of paragraph (just before the paragraph marker) with just "."""
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\!""\.######",
                 @"!""######"
             );
 
             // Replace "-""." at end of paragraph (just before the paragraph marker) with just "..."""
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\-""\.######",
                 @"...""######"
             );
@@ -81,37 +81,37 @@ namespace TblAdmin.Core.Production.Services
             // -------------------
 
             // Replace ".&rdquo;." at end of paragraph (just before the paragraph marker) with just ".&rdquo;"
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\." + encodedRdquo + @"\.######",
                 @"." + decodedRdquo + "######"
             );
 
             // Replace "?&rdquo;." at end of paragraph (just before the paragraph marker) with just "?&rdquo;"
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\?" + encodedRdquo + @"\.######",
                 @"?" + decodedRdquo + @"######"
             );
 
             // Replace "!&rdquo;." at end of paragraph (just before the paragraph marker) with just "!&rdquo;"
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\!" + encodedRdquo + @"\.######",
                 @"!" + decodedRdquo + @"######"
             );
 
             // Replace "-&rdquo;." at end of paragraph (just before the paragraph marker) with just "...&rdquo;"
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 @"\-" + encodedRdquo + @"\.######",
                 @"..." + decodedRdquo + "######"
             );
             
             /*
             // Replace all "&rdquo;" with itself as a test
-            fileString = Regex.Replace(
-                fileString,
+            FileString = Regex.Replace(
+                FileString,
                 encodedRdquo,
                 //decodedRdquo
                 "$$$$$"
@@ -119,17 +119,17 @@ namespace TblAdmin.Core.Production.Services
              * */
 
             // Replace paragraph markers ###### with blank line
-            fileString = Regex.Replace(
-                 fileString,
+            FileString = Regex.Replace(
+                 FileString,
                  "######",
-                 blankLine
+                 BlankLine
              );
 
             // Split into files based on the Chapter headings
             int chapterNum = 0;
             string chapterHeadingLookahead = @"(?=" + chapterHeadingPattern + @")";// positive lookahead to include the chapter headings
             
-            foreach (string s in Regex.Split(fileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
+            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
                 string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
                 string chapterPathHtml = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
@@ -145,7 +145,7 @@ namespace TblAdmin.Core.Production.Services
                     // Add html p tags to paragraph separations
                     s_html = Regex.Replace(
                         s_html,
-                        blankLine,
+                        BlankLine,
                         @"</p>" + Environment.NewLine + @"<p>"
                     );
 
@@ -191,7 +191,7 @@ namespace TblAdmin.Core.Production.Services
             bool fileExists = System.IO.File.Exists(filePath);
             if (fileExists)
             {
-                fileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
+                FileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
             }
 
             return fileExists;
@@ -226,8 +226,8 @@ namespace TblAdmin.Core.Production.Services
 
        public void titleCaseTheChapterHeadings(string chapterHeadingPattern)
        {
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                chapterHeadingPattern,
                delegate(Match match)
                {
@@ -242,25 +242,25 @@ namespace TblAdmin.Core.Production.Services
        public void removePageHeadersAndFooters(string bookNameRaw, string authorFullName)
        {
            // Remove page numbers alone on its own line (usually means its part of page header or footer)
-           fileString = Regex.Replace(
-               fileString,
-               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + numericPageNum + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-               blankLine
+           FileString = Regex.Replace(
+               FileString,
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + NumericPageNum + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               BlankLine
            );
 
            // Remove title alone on its own line (usually means its part of page header or footer)
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + bookNameRaw + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-               blankLine,
+               BlankLine,
                RegexOptions.IgnoreCase
            );
 
            // Remove author alone on its own line (usually means its part of page header or footer)
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
-               blankLine,
+               BlankLine,
                RegexOptions.IgnoreCase
            );
        }
@@ -270,15 +270,15 @@ namespace TblAdmin.Core.Production.Services
            // Assume it is within a sentence, if there is no ending punctuation before the blank line,
            // and the first letter in the word after the blank line is not capitalized.
 
-           fileString = Regex.Replace(
-               fileString,
-               @"[a-zA-Z,;]{1,}" + @"\s{0,}" + blankLine + @"\s{0,}" + @"[a-z]{1,}",
+           FileString = Regex.Replace(
+               FileString,
+               @"[a-zA-Z,;]{1,}" + @"\s{0,}" + BlankLine + @"\s{0,}" + @"[a-z]{1,}",
                delegate(Match match)
                {
                    string v = match.ToString();
                    return Regex.Replace(
                        v,
-                       @"\s{0,}" + blankLine + @"\s{0,}",
+                       @"\s{0,}" + BlankLine + @"\s{0,}",
                        " "
                    );
                }
@@ -287,9 +287,9 @@ namespace TblAdmin.Core.Production.Services
        public void addMarkersBetweenParagraphs()
        {
            // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
-           fileString = Regex.Replace(
-               fileString,
-               @"\s{0,}" + blankLine + @"\s{0,}",
+           FileString = Regex.Replace(
+               FileString,
+               @"\s{0,}" + BlankLine + @"\s{0,}",
                "######"
            );
        }
@@ -297,8 +297,8 @@ namespace TblAdmin.Core.Production.Services
        public void removeSpecialCharacters()
        {
            // Replace all remaining whitespace with a space to remove any special chars and line breaks
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\s{1,}",
                " "
            );
@@ -307,27 +307,27 @@ namespace TblAdmin.Core.Production.Services
        public void addEndOfParagraphPunctuation()
        {
            // Prefix paragraph marker by period to make all paragraphs end in period.
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                "######",
                ".######"
            );
 
            // Replace ".." at end of paragraph (just before the paragraph marker) with just "."
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\.\.######",
                ".######"
            );
            // Replace "?." at end of paragraph (just before the paragraph marker) with just "?"
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\?\.######",
                "?######"
            );
            // Replace "!." at end of paragraph (just before the paragraph marker) with just "!"
-           fileString = Regex.Replace(
-               fileString,
+           FileString = Regex.Replace(
+               FileString,
                @"\!\.######",
                "!######"
            );
