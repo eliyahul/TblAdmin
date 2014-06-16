@@ -77,10 +77,9 @@ namespace TblAdmin.Core.Production.Services
 
        public string GenerateTitlesXMLAsString(int numChapters)
        {
-           string titlesXMLAsString = "";
            string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s{0,}", "");
 
-           titlesXMLAsString =
+           string titlesXMLAsString =
 @"<?xml version=""1.0"" encoding=""iso-8859-1""?>
 <library>
 	<items>
@@ -104,9 +103,9 @@ namespace TblAdmin.Core.Production.Services
                ChapterHeadingPattern,
                delegate(Match match)
                {
+                   string chapterHeading = match.ToString();
                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                   string v = match.ToString();
-                   return textInfo.ToTitleCase(v);
+                   return textInfo.ToTitleCase(chapterHeading);
                },
                RegexOptions.IgnoreCase | RegexOptions.Multiline
            );
@@ -151,9 +150,9 @@ namespace TblAdmin.Core.Production.Services
                @"[a-zA-Z,;]{1,}" + @"\s{0,}" + BlankLine + @"\s{0,}" + @"[a-z]{1,}",
                delegate(Match match)
                {
-                   string v = match.ToString();
+                   string s = match.ToString();
                    return Regex.Replace(
-                       v,
+                       s,
                        @"\s{0,}" + BlankLine + @"\s{0,}",
                        " "
                    );
@@ -304,14 +303,12 @@ namespace TblAdmin.Core.Production.Services
 
            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
            {
-               string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
                string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
-
+               
                if (chapterNum > 0)
                {
                    string s_html = s.Trim();
-
-                   File.WriteAllText(chapterPathTxt, s_html);
+                   GenerateChapterTextFile(s_html, chapterNum);
 
                    s_html = HttpUtility.HtmlEncode(s_html);
 
@@ -348,9 +345,11 @@ namespace TblAdmin.Core.Production.Services
            }
            return chapterNum-1;  // return number of chapters.
        }
-            
- 
-    }
 
-    
+       public void GenerateChapterTextFile(string s, int chapterNum)
+       {
+           string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
+           File.WriteAllText(chapterPathTxt, s);
+       }
+    }
 }
