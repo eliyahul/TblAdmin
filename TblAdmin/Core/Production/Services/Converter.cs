@@ -303,27 +303,39 @@ namespace TblAdmin.Core.Production.Services
 
            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
            {
-               string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
-               
                if (chapterNum > 0)
                {
-                   string s_html = s.Trim();
-                   GenerateChapterTextFile(s_html, chapterNum);
+                   string s_trimmed = s.Trim();
+                   GenerateChapterTextFile(s_trimmed, chapterNum);
+                   GenerateChapterHtmlFile(s_trimmed, chapterNum);
+               }
+               chapterNum = chapterNum + 1;
+           }
+           return chapterNum-1;  // return number of chapters.
+       }
 
-                   s_html = HttpUtility.HtmlEncode(s_html);
+       public void GenerateChapterTextFile(string s_trimmed, int chapterNum)
+       {
+           string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
+           File.WriteAllText(chapterPathTxt, s_trimmed);
+       }
 
-                   // Add html p tags to paragraph separations
-                   s_html = Regex.Replace(
-                       s_html,
-                       BlankLine,
-                       @"</p>" + Environment.NewLine + @"<p>"
-                   );
+       public void GenerateChapterHtmlFile(string s_trimmed, int chapterNum)
+       {
+           s_trimmed = HttpUtility.HtmlEncode(s_trimmed);
 
-                   // Add opening and closing p tags for the chapter.
-                   s_html = @"<p>" + s_html + @"</p>";
+           // Add html p tags to paragraph separations
+           s_trimmed = Regex.Replace(
+               s_trimmed,
+               BlankLine,
+               @"</p>" + Environment.NewLine + @"<p>"
+           );
 
-                   //Add html file header.
-                   s_html =
+           // Add opening and closing p tags for the chapter.
+           s_trimmed = @"<p>" + s_trimmed + @"</p>";
+
+           //Add html file header.
+           s_trimmed =
 @"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
 <html xmlns=""http://www.w3.org/1999/xhtml"">
 <head>
@@ -331,25 +343,15 @@ namespace TblAdmin.Core.Production.Services
 <title></title>
 </head>
 <body>
-" + s_html;
+" + s_trimmed;
 
-                   //Add html file footer
-                   s_html = s_html +
+           //Add html file footer
+           s_trimmed = s_trimmed +
 @"
 </body>
 </html>";
-                   File.WriteAllText(chapterPathHtml, s_html);
-               }
-               chapterNum = chapterNum + 1;
-
-           }
-           return chapterNum-1;  // return number of chapters.
-       }
-
-       public void GenerateChapterTextFile(string s, int chapterNum)
-       {
-           string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
-           File.WriteAllText(chapterPathTxt, s);
+           string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
+           File.WriteAllText(chapterPathHtml, s_trimmed);
        }
     }
 }
