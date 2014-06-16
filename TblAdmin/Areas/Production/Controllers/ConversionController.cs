@@ -104,8 +104,7 @@ namespace TblAdmin.Areas.Production.Controllers
             string bookFolderPath = prefixPath + publisherName + @"\" + bookName + @"\";
             string filePath = bookFolderPath + bookName + fileNameSuffix;
 
-            Converter myConverter = new Converter();
-            bool result = myConverter.Convert(
+            Converter myConverter = new Converter(
                 bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
@@ -114,6 +113,7 @@ namespace TblAdmin.Areas.Production.Controllers
                 bookIdFromAdmin,
                 chapterHeadingPattern
                 );
+            Boolean result = myConverter.Convert();
 
             if (result)
             {

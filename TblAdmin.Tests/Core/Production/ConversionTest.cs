@@ -11,6 +11,7 @@ using TblAdmin.Core.Production.Services;
 using System.Data.Entity;
 using PagedList;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace TblAdmin.Tests.Core.Production.Services
 {
@@ -22,7 +23,6 @@ namespace TblAdmin.Tests.Core.Production.Services
         [SetUp]
         public void init()
         {
-            converter = new Converter();
         }
 
         [Test]
@@ -52,8 +52,7 @@ namespace TblAdmin.Tests.Core.Production.Services
 
 
             // Act
-            Boolean result = converter.Convert(
-                bookNameRaw,
+            converter = new Converter(bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
                 bookFolderPath,
@@ -61,6 +60,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 bookIdFromAdmin,
                 chapterHeadingPattern
                 );
+            Boolean result = converter.Convert();
 
             // Assert
             Assert.IsFalse(result);
@@ -84,10 +84,10 @@ namespace TblAdmin.Tests.Core.Production.Services
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
             string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            
-            
+
+
             // Act
-            Boolean result = converter.Convert(
+            converter = new Converter(
                 bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
@@ -96,7 +96,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 bookIdFromAdmin,
                 chapterHeadingPattern
                 );
-
+            Boolean result = converter.Convert();
             
             // Assert
             Assert.IsTrue(result);
@@ -127,7 +127,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             
 
             // Act
-            Boolean result = converter.Convert(
+            
+            converter = new Converter(
                 bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
@@ -136,7 +137,8 @@ namespace TblAdmin.Tests.Core.Production.Services
                 bookIdFromAdmin,
                 chapterHeadingPattern
                 );
-
+            Boolean result = converter.Convert();
+            
 
             // Assert
             Assert.IsTrue(result);
@@ -164,18 +166,17 @@ namespace TblAdmin.Tests.Core.Production.Services
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
             string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            
-            // Act
-            Boolean result = converter.Convert(
-                bookNameRaw,
-                authorFirstNameRaw,
-                authorLastNameRaw,
-                actualResultsPath,
-                filePath,
-                bookIdFromAdmin,
-                chapterHeadingPattern
-                );
 
+            converter = new Converter(
+                 bookNameRaw,
+                 authorFirstNameRaw,
+                 authorLastNameRaw,
+                 actualResultsPath,
+                 filePath,
+                 bookIdFromAdmin,
+                 chapterHeadingPattern
+                 );
+            Boolean result = converter.Convert();
 
             // Assert
             Assert.IsTrue(result);
@@ -186,26 +187,26 @@ namespace TblAdmin.Tests.Core.Production.Services
 
         public bool compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath)
         {
-            IEnumerable<String> expectedFilePaths = System.IO.Directory.EnumerateFiles(expectedResultsPath);
+            IEnumerable<String> expectedFilePaths = Directory.EnumerateFiles(expectedResultsPath);
             Assert.AreNotEqual(expectedFilePaths.Count(), 0, "There were no files in the ExpectedResultsDirectory");
 
             foreach (string path in expectedFilePaths)
             {
-                string expectedFileName = System.IO.Path.GetFileName(path);
+                string expectedFileName = Path.GetFileName(path);
                 string actualPath = actualResultsPath + expectedFileName;
-                Assert.IsTrue(System.IO.File.Exists(actualPath), "The following file does not exist in Actual Results: " + actualPath);
+                Assert.IsTrue(File.Exists(actualPath), "The following file does not exist in Actual Results: " + actualPath);
 
-                string expectedFileString = System.IO.File.ReadAllText(path);
-                string actualFileString = System.IO.File.ReadAllText(actualPath);
+                string expectedFileString = File.ReadAllText(path);
+                string actualFileString = File.ReadAllText(actualPath);
 
                 Assert.AreEqual(expectedFileString, actualFileString, " *** " + expectedFileName + " *** ");
             }
 
             // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
-            IEnumerable<String> actualFilePaths = System.IO.Directory.EnumerateFiles(actualResultsPath);
+            IEnumerable<String> actualFilePaths = Directory.EnumerateFiles(actualResultsPath);
             foreach (string path in actualFilePaths)
             {
-                System.IO.File.Delete(path);
+                File.Delete(path);
             }
             return true;
         }

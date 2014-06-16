@@ -3,6 +3,7 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
+using System.IO;
 
 namespace TblAdmin.Core.Production.Services
 {
@@ -10,12 +11,18 @@ namespace TblAdmin.Core.Production.Services
     {
         string BlankLine = Environment.NewLine + Environment.NewLine;
         string FileString;
-        string ChapterHeadingPattern;
-        string BookNameRaw;
-        string AuthorFirstNameRaw;
-        string AuthorLastNameRaw;
-            
-        public bool Convert(
+
+        string BookNameRaw { get; set; }
+        string AuthorFirstNameRaw { get; set; }
+        string AuthorLastNameRaw { get; set; }
+
+        string BookFolderPath { get; set; }
+        string FilePath { get; set; }
+        string BookIdFromAdmin { get; set; }
+
+        string ChapterHeadingPattern { get; set; }
+        
+        public Converter(
             string bookNameRaw,
             string authorFirstNameRaw,
             string authorLastNameRaw,
@@ -23,14 +30,20 @@ namespace TblAdmin.Core.Production.Services
             string filePath,
             string bookIdFromAdmin,
             string chapterHeadingPattern
-           )
+        )
         {
-            ChapterHeadingPattern = chapterHeadingPattern;
             BookNameRaw = bookNameRaw;
             AuthorFirstNameRaw = authorFirstNameRaw;
             AuthorLastNameRaw = authorLastNameRaw;
-
-            if (!GetFileAsString(filePath))
+            BookFolderPath = bookFolderPath;
+            FilePath = filePath;
+            BookIdFromAdmin = bookIdFromAdmin;
+            ChapterHeadingPattern = chapterHeadingPattern;
+        }
+            
+        public bool Convert()
+        {
+            if (!GetBookFileAsString())
             {
                 return false;
             }
@@ -45,18 +58,18 @@ namespace TblAdmin.Core.Production.Services
             AllowPunctuationInsideQuotesToEndAParagraph();
             RestoreBlankLineBetweenParagraphs();
             
-            int numChapters = SplitIntoChapterFiles(bookFolderPath);
-            CreateTitlesXMLFile(numChapters, bookFolderPath, bookIdFromAdmin);
+            int numChapters = SplitIntoChapterFiles();
+            CreateTitlesXMLFile(numChapters);
             
             return true;
         }
             
-       public bool GetFileAsString (string filePath)
+       public bool GetBookFileAsString ()
        {
-            bool fileExists = System.IO.File.Exists(filePath);
+            bool fileExists = File.Exists(FilePath);
             if (fileExists)
             {
-                FileString = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(1252));
+                FileString = File.ReadAllText(FilePath, Encoding.GetEncoding(1252));
             }
 
             return fileExists;
@@ -275,15 +288,15 @@ namespace TblAdmin.Core.Production.Services
                 BlankLine
             );
        }
-       public void CreateTitlesXMLFile(int numChapters, string bookFolderPath, string bookIdFromAdmin)
+       public void CreateTitlesXMLFile(int numChapters)
        {
            string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
-           string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
+           string titlesXMLPath = BookFolderPath + BookIdFromAdmin + ".xml";
 
-           System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
+           File.WriteAllText(titlesXMLPath, titlesXMLAsString);
        }
 
-       public int SplitIntoChapterFiles(string bookFolderPath)
+       public int SplitIntoChapterFiles()
        {
            // Split into files based on the Chapter headings
            int chapterNum = 0;
@@ -291,14 +304,14 @@ namespace TblAdmin.Core.Production.Services
 
            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
            {
-               string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
-               string chapterPathHtml = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
+               string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
+               string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
 
                if (chapterNum > 0)
                {
                    string s_html = s.Trim();
 
-                   System.IO.File.WriteAllText(chapterPathTxt, s_html);
+                   File.WriteAllText(chapterPathTxt, s_html);
 
                    s_html = HttpUtility.HtmlEncode(s_html);
 
@@ -328,7 +341,7 @@ namespace TblAdmin.Core.Production.Services
 @"
 </body>
 </html>";
-                   System.IO.File.WriteAllText(chapterPathHtml, s_html);
+                   File.WriteAllText(chapterPathHtml, s_html);
                }
                chapterNum = chapterNum + 1;
 
