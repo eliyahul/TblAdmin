@@ -13,15 +13,15 @@ namespace TblAdmin.Core.Production.Services
         string FileString;
 
         string BookNameRaw { get; set; }
-        string AuthorFirstNameRaw { get; set; }
-        string AuthorLastNameRaw { get; set; }
-
+        string AuthorFirstName { get; set; }
+        string AuthorLastName { get; set; }
         string BookFolderPath { get; set; }
+
         string FilePath { get; set; }
+        string ChapterHeadingPattern { get; set; }
+
         string BookIdFromAdmin { get; set; }
 
-        string ChapterHeadingPattern { get; set; }
-        
         public Converter(
             string bookNameRaw,
             string authorFirstNameRaw,
@@ -33,8 +33,8 @@ namespace TblAdmin.Core.Production.Services
         )
         {
             BookNameRaw = bookNameRaw;
-            AuthorFirstNameRaw = authorFirstNameRaw;
-            AuthorLastNameRaw = authorLastNameRaw;
+            AuthorFirstName = authorFirstNameRaw;
+            AuthorLastName = authorLastNameRaw;
             BookFolderPath = bookFolderPath;
             FilePath = filePath;
             BookIdFromAdmin = bookIdFromAdmin;
@@ -59,12 +59,12 @@ namespace TblAdmin.Core.Production.Services
             RestoreBlankLineBetweenParagraphs();
             
             int numChapters = SplitIntoChapterFiles();
-            CreateTitlesXMLFile(numChapters);
+            GenerateTitlesXMLFile(numChapters);
             
             return true;
         }
             
-       public bool GetBookFileAsString ()
+       private bool GetBookFileAsString ()
        {
             bool fileExists = File.Exists(FilePath);
             if (fileExists)
@@ -75,7 +75,7 @@ namespace TblAdmin.Core.Production.Services
             return fileExists;
        }
 
-       public string GenerateTitlesXMLAsString(int numChapters)
+       private string GenerateTitlesXMLAsString(int numChapters)
        {
            string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s{0,}", "");
 
@@ -85,7 +85,7 @@ namespace TblAdmin.Core.Production.Services
 	<items>
 		<book> 
 			<title>" + BookNameRaw + @"</title>
-			<author>" + AuthorLastNameRaw + ", " + AuthorFirstNameRaw + @"</author>
+			<author>" + AuthorLastName + ", " + AuthorFirstName + @"</author>
 			<bookFolder>" + bookNameNoSpaces + @"</bookFolder>
 			<numChapters>" + numChapters.ToString() + @"</numChapters>
 			<ra>n</ra>
@@ -96,7 +96,7 @@ namespace TblAdmin.Core.Production.Services
            return titlesXMLAsString;
        }
 
-       public void TitleCaseTheChapterHeadings()
+       private void TitleCaseTheChapterHeadings()
        {
            FileString = Regex.Replace(
                FileString,
@@ -111,7 +111,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void RemovePageHeadersAndFooters()
+       private void RemovePageHeadersAndFooters()
        {
            string NumericPageNum = @"\d{1,}";
         
@@ -131,7 +131,7 @@ namespace TblAdmin.Core.Production.Services
            );
 
            // Remove author alone on its own line (usually means its part of page header or footer)
-           string authorFullName = AuthorFirstNameRaw + " " + AuthorLastNameRaw;
+           string authorFullName = AuthorFirstName + " " + AuthorLastName;
            FileString = Regex.Replace(
                FileString,
                @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
@@ -140,7 +140,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void RemoveBlankLinesWithinSentences()
+       private void RemoveBlankLinesWithinSentences()
        {
            // Assume it is within a sentence, if there is no ending punctuation before the blank line,
            // and the first letter in the word after the blank line is not capitalized.
@@ -159,7 +159,7 @@ namespace TblAdmin.Core.Production.Services
                }
            );
        }
-       public void AddMarkersBetweenParagraphs()
+       private void AddMarkersBetweenParagraphs()
        {
            // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
            FileString = Regex.Replace(
@@ -169,7 +169,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void RemoveSpecialCharacters()
+       private void RemoveSpecialCharacters()
        {
            // Replace all remaining whitespace with a space to remove any special chars and line breaks
            FileString = Regex.Replace(
@@ -179,7 +179,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void AddEndOfParagraphPunctuation()
+       private void AddEndOfParagraphPunctuation()
        {
            // Prefix paragraph marker by period to make all paragraphs end in period.
            FileString = Regex.Replace(
@@ -208,7 +208,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void AllowPunctuationInsideQuotesToEndAParagraph()
+       private void AllowPunctuationInsideQuotesToEndAParagraph()
        {
            string encodedRdquo = @"\u201D";
            string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
@@ -278,7 +278,7 @@ namespace TblAdmin.Core.Production.Services
                @"..." + decodedRdquo + "######"
            );
        }
-       public void RestoreBlankLineBetweenParagraphs()
+       private void RestoreBlankLineBetweenParagraphs()
        {
            // Replace temporary paragraph markers ###### with blank line
            FileString = Regex.Replace(
@@ -287,7 +287,7 @@ namespace TblAdmin.Core.Production.Services
                 BlankLine
             );
        }
-       public void CreateTitlesXMLFile(int numChapters)
+       private void GenerateTitlesXMLFile(int numChapters)
        {
            string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
            string titlesXMLPath = BookFolderPath + BookIdFromAdmin + ".xml";
@@ -295,7 +295,7 @@ namespace TblAdmin.Core.Production.Services
            File.WriteAllText(titlesXMLPath, titlesXMLAsString);
        }
 
-       public int SplitIntoChapterFiles()
+       private int SplitIntoChapterFiles()
        {
            // Split into files based on the Chapter headings
            int chapterNum = 0;
@@ -314,13 +314,13 @@ namespace TblAdmin.Core.Production.Services
            return chapterNum-1;  // return number of chapters.
        }
 
-       public void GenerateChapterTextFile(string s_trimmed, int chapterNum)
+       private void GenerateChapterTextFile(string s_trimmed, int chapterNum)
        {
            string chapterPathTxt = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
            File.WriteAllText(chapterPathTxt, s_trimmed);
        }
 
-       public void GenerateChapterHtmlFile(string s_trimmed, int chapterNum)
+       private void GenerateChapterHtmlFile(string s_trimmed, int chapterNum)
        {
            s_trimmed = HttpUtility.HtmlEncode(s_trimmed);
 
