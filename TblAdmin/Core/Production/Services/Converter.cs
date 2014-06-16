@@ -27,18 +27,18 @@ namespace TblAdmin.Core.Production.Services
             string encodedRdquo = @"\u201D";
             string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
             
-            if (!getFileAsString(filePath))
+            if (!GetFileAsString(filePath))
             {
                 return false;
             }
             
             FileString.Trim();
-            titleCaseTheChapterHeadings(chapterHeadingPattern);
-            removePageHeadersAndFooters(bookNameRaw, authorFullName);
-            removeBlankLinesWithinSentences();
-            addMarkersBetweenParagraphs();
-            removeSpecialCharacters();
-            addEndOfParagraphPunctuation();
+            TitleCaseTheChapterHeadings(chapterHeadingPattern);
+            RemovePageHeadersAndFooters(bookNameRaw, authorFullName);
+            RemoveBlankLinesWithinSentences();
+            AddMarkersBetweenParagraphs();
+            RemoveSpecialCharacters();
+            AddEndOfParagraphPunctuation();
 
             
             
@@ -175,7 +175,7 @@ namespace TblAdmin.Core.Production.Services
             }
 
             int numChapters = chapterNum - 1;
-            string titlesXMLAsString = generateTitlesXMLAsString(
+            string titlesXMLAsString = GenerateTitlesXMLAsString(
                bookNameRaw,
                authorLastNameRaw,
                authorFirstNameRaw,
@@ -186,7 +186,7 @@ namespace TblAdmin.Core.Production.Services
             return true;
         }
             
-       public bool getFileAsString (string filePath)
+       public bool GetFileAsString (string filePath)
        {
             bool fileExists = System.IO.File.Exists(filePath);
             if (fileExists)
@@ -197,7 +197,7 @@ namespace TblAdmin.Core.Production.Services
             return fileExists;
        }
 
-       public string generateTitlesXMLAsString(
+       public string GenerateTitlesXMLAsString(
            string bookNameRaw,
            string authorLastNameRaw,
            string authorFirstNameRaw,
@@ -224,7 +224,7 @@ namespace TblAdmin.Core.Production.Services
            return titlesXMLAsString;
        }
 
-       public void titleCaseTheChapterHeadings(string chapterHeadingPattern)
+       public void TitleCaseTheChapterHeadings(string chapterHeadingPattern)
        {
            FileString = Regex.Replace(
                FileString,
@@ -239,7 +239,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void removePageHeadersAndFooters(string bookNameRaw, string authorFullName)
+       public void RemovePageHeadersAndFooters(string bookNameRaw, string authorFullName)
        {
            // Remove page numbers alone on its own line (usually means its part of page header or footer)
            FileString = Regex.Replace(
@@ -265,7 +265,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void removeBlankLinesWithinSentences()
+       public void RemoveBlankLinesWithinSentences()
        {
            // Assume it is within a sentence, if there is no ending punctuation before the blank line,
            // and the first letter in the word after the blank line is not capitalized.
@@ -284,7 +284,7 @@ namespace TblAdmin.Core.Production.Services
                }
            );
        }
-       public void addMarkersBetweenParagraphs()
+       public void AddMarkersBetweenParagraphs()
        {
            // Replace blank lines (and whitespace) between paragraphs with ######'s temporarily as paragraph markers.
            FileString = Regex.Replace(
@@ -294,7 +294,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void removeSpecialCharacters()
+       public void RemoveSpecialCharacters()
        {
            // Replace all remaining whitespace with a space to remove any special chars and line breaks
            FileString = Regex.Replace(
@@ -304,7 +304,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void addEndOfParagraphPunctuation()
+       public void AddEndOfParagraphPunctuation()
        {
            // Prefix paragraph marker by period to make all paragraphs end in period.
            FileString = Regex.Replace(
