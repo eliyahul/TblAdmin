@@ -11,6 +11,8 @@ namespace TblAdmin.Core.Production.Services
         string BlankLine = Environment.NewLine + Environment.NewLine;
         string NumericPageNum = @"\d{1,}";
         string FileString;
+        string AuthorFullName;
+        string ChapterHeadingPattern;
             
         public bool Convert(
             string bookNameRaw,
@@ -22,102 +24,24 @@ namespace TblAdmin.Core.Production.Services
             string chapterHeadingPattern
            )
         {
-            string authorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
-        
-            string encodedRdquo = @"\u201D";
-            string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
-            
+            AuthorFullName = authorFirstNameRaw + " " + authorLastNameRaw;
+            ChapterHeadingPattern = chapterHeadingPattern;
+
             if (!GetFileAsString(filePath))
             {
                 return false;
             }
             
             FileString.Trim();
-            TitleCaseTheChapterHeadings(chapterHeadingPattern);
-            RemovePageHeadersAndFooters(bookNameRaw, authorFullName);
+            TitleCaseTheChapterHeadings();
+            RemovePageHeadersAndFooters(bookNameRaw);
             RemoveBlankLinesWithinSentences();
             AddMarkersBetweenParagraphs();
             RemoveSpecialCharacters();
             AddEndOfParagraphPunctuation();
-
+            AllowPunctuationInsideQuotesToEndAParagraph();
             
             
-
-            // ---------------------------
-            // Working with regular quotes
-            // ---------------------------
-            
-            // Replace ".""." at end of paragraph (just before the paragraph marker) with just "."""
-            FileString = Regex.Replace(
-                FileString,
-                @"\.""\.######",
-                @".""######"
-            );
-
-            // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
-            FileString = Regex.Replace(
-                FileString,
-                @"\?""\.######",
-                @"?""######"
-            );
-
-            // Replace "!""." at end of paragraph (just before the paragraph marker) with just "."""
-            FileString = Regex.Replace(
-                FileString,
-                @"\!""\.######",
-                @"!""######"
-            );
-
-            // Replace "-""." at end of paragraph (just before the paragraph marker) with just "..."""
-            FileString = Regex.Replace(
-                FileString,
-                @"\-""\.######",
-                @"...""######"
-            );
-            
-
-            // -------------------
-            // Working with &rdquo
-            // -------------------
-
-            // Replace ".&rdquo;." at end of paragraph (just before the paragraph marker) with just ".&rdquo;"
-            FileString = Regex.Replace(
-                FileString,
-                @"\." + encodedRdquo + @"\.######",
-                @"." + decodedRdquo + "######"
-            );
-
-            // Replace "?&rdquo;." at end of paragraph (just before the paragraph marker) with just "?&rdquo;"
-            FileString = Regex.Replace(
-                FileString,
-                @"\?" + encodedRdquo + @"\.######",
-                @"?" + decodedRdquo + @"######"
-            );
-
-            // Replace "!&rdquo;." at end of paragraph (just before the paragraph marker) with just "!&rdquo;"
-            FileString = Regex.Replace(
-                FileString,
-                @"\!" + encodedRdquo + @"\.######",
-                @"!" + decodedRdquo + @"######"
-            );
-
-            // Replace "-&rdquo;." at end of paragraph (just before the paragraph marker) with just "...&rdquo;"
-            FileString = Regex.Replace(
-                FileString,
-                @"\-" + encodedRdquo + @"\.######",
-                @"..." + decodedRdquo + "######"
-            );
-            
-            /*
-            // Replace all "&rdquo;" with itself as a test
-            FileString = Regex.Replace(
-                FileString,
-                encodedRdquo,
-                //decodedRdquo
-                "$$$$$"
-            );
-             * */
-
             // Replace paragraph markers ###### with blank line
             FileString = Regex.Replace(
                  FileString,
@@ -127,7 +51,7 @@ namespace TblAdmin.Core.Production.Services
 
             // Split into files based on the Chapter headings
             int chapterNum = 0;
-            string chapterHeadingLookahead = @"(?=" + chapterHeadingPattern + @")";// positive lookahead to include the chapter headings
+            string chapterHeadingLookahead = @"(?=" + ChapterHeadingPattern + @")";// positive lookahead to include the chapter headings
             
             foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
             {
@@ -224,11 +148,11 @@ namespace TblAdmin.Core.Production.Services
            return titlesXMLAsString;
        }
 
-       public void TitleCaseTheChapterHeadings(string chapterHeadingPattern)
+       public void TitleCaseTheChapterHeadings()
        {
            FileString = Regex.Replace(
                FileString,
-               chapterHeadingPattern,
+               ChapterHeadingPattern,
                delegate(Match match)
                {
                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -239,7 +163,7 @@ namespace TblAdmin.Core.Production.Services
            );
        }
 
-       public void RemovePageHeadersAndFooters(string bookNameRaw, string authorFullName)
+       public void RemovePageHeadersAndFooters(string bookNameRaw)
        {
            // Remove page numbers alone on its own line (usually means its part of page header or footer)
            FileString = Regex.Replace(
@@ -259,7 +183,7 @@ namespace TblAdmin.Core.Production.Services
            // Remove author alone on its own line (usually means its part of page header or footer)
            FileString = Regex.Replace(
                FileString,
-               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + authorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + AuthorFullName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
                BlankLine,
                RegexOptions.IgnoreCase
            );
@@ -331,6 +255,87 @@ namespace TblAdmin.Core.Production.Services
                @"\!\.######",
                "!######"
            );
+       }
+
+       public void AllowPunctuationInsideQuotesToEndAParagraph()
+       {
+           string encodedRdquo = @"\u201D";
+           string decodedRdquo = HttpUtility.HtmlDecode("&rdquo;");
+             
+           // ---------------------------
+           // Working with regular quotes
+           // ---------------------------
+
+           // Replace ".""." at end of paragraph (just before the paragraph marker) with just "."""
+           FileString = Regex.Replace(
+               FileString,
+               @"\.""\.######",
+               @".""######"
+           );
+
+           // Replace "?""." at end of paragraph (just before the paragraph marker) with just "."""
+           FileString = Regex.Replace(
+               FileString,
+               @"\?""\.######",
+               @"?""######"
+           );
+
+           // Replace "!""." at end of paragraph (just before the paragraph marker) with just "."""
+           FileString = Regex.Replace(
+               FileString,
+               @"\!""\.######",
+               @"!""######"
+           );
+
+           // Replace "-""." at end of paragraph (just before the paragraph marker) with just "..."""
+           FileString = Regex.Replace(
+               FileString,
+               @"\-""\.######",
+               @"...""######"
+           );
+
+
+           // -------------------
+           // Working with &rdquo
+           // -------------------
+
+           // Replace ".&rdquo;." at end of paragraph (just before the paragraph marker) with just ".&rdquo;"
+           FileString = Regex.Replace(
+               FileString,
+               @"\." + encodedRdquo + @"\.######",
+               @"." + decodedRdquo + "######"
+           );
+
+           // Replace "?&rdquo;." at end of paragraph (just before the paragraph marker) with just "?&rdquo;"
+           FileString = Regex.Replace(
+               FileString,
+               @"\?" + encodedRdquo + @"\.######",
+               @"?" + decodedRdquo + @"######"
+           );
+
+           // Replace "!&rdquo;." at end of paragraph (just before the paragraph marker) with just "!&rdquo;"
+           FileString = Regex.Replace(
+               FileString,
+               @"\!" + encodedRdquo + @"\.######",
+               @"!" + decodedRdquo + @"######"
+           );
+
+           // Replace "-&rdquo;." at end of paragraph (just before the paragraph marker) with just "...&rdquo;"
+           FileString = Regex.Replace(
+               FileString,
+               @"\-" + encodedRdquo + @"\.######",
+               @"..." + decodedRdquo + "######"
+           );
+
+           /*
+           // Replace all "&rdquo;" with itself as a test
+           FileString = Regex.Replace(
+               FileString,
+               encodedRdquo,
+               //decodedRdquo
+               "$$$$$"
+           );
+            * */
        }
  
     }
