@@ -45,57 +45,7 @@ namespace TblAdmin.Core.Production.Services
             AllowPunctuationInsideQuotesToEndAParagraph();
             RestoreBlankLineBetweenParagraphs();
             
-            
-            // Split into files based on the Chapter headings
-            int chapterNum = 0;
-            string chapterHeadingLookahead = @"(?=" + ChapterHeadingPattern + @")";// positive lookahead to include the chapter headings
-            
-            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
-            {
-                string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
-                string chapterPathHtml = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
-
-                if (chapterNum > 0)
-                {
-                    string s_html = s.Trim();
-                    
-                    System.IO.File.WriteAllText(chapterPathTxt, s_html);
-
-                    s_html = HttpUtility.HtmlEncode(s_html);
-
-                    // Add html p tags to paragraph separations
-                    s_html = Regex.Replace(
-                        s_html,
-                        BlankLine,
-                        @"</p>" + Environment.NewLine + @"<p>"
-                    );
-
-                    // Add opening and closing p tags for the chapter.
-                    s_html = @"<p>" + s_html + @"</p>";
-
-                    //Add html file header.
-                    s_html = 
-@"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
-<html xmlns=""http://www.w3.org/1999/xhtml"">
-<head>
-<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
-<title></title>
-</head>
-<body>
-"                   + s_html;
-
-                    //Add html file footer
-                    s_html = s_html + 
-@"
-</body>
-</html>";
-                    System.IO.File.WriteAllText(chapterPathHtml, s_html);
-                }
-                chapterNum = chapterNum + 1;
-                
-            }
-
-            int numChapters = chapterNum - 1;
+            int numChapters = SplitIntoChapterFiles(bookFolderPath);
             CreateTitlesXMLFile(numChapters, bookFolderPath, bookIdFromAdmin);
             
             return true;
@@ -331,6 +281,59 @@ namespace TblAdmin.Core.Production.Services
            string titlesXMLPath = bookFolderPath + bookIdFromAdmin + ".xml";
 
            System.IO.File.WriteAllText(titlesXMLPath, titlesXMLAsString);
+       }
+
+       public int SplitIntoChapterFiles(string bookFolderPath)
+       {
+           // Split into files based on the Chapter headings
+           int chapterNum = 0;
+           string chapterHeadingLookahead = @"(?=" + ChapterHeadingPattern + @")";// positive lookahead to include the chapter headings
+
+           foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
+           {
+               string chapterPathTxt = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".txt";
+               string chapterPathHtml = bookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
+
+               if (chapterNum > 0)
+               {
+                   string s_html = s.Trim();
+
+                   System.IO.File.WriteAllText(chapterPathTxt, s_html);
+
+                   s_html = HttpUtility.HtmlEncode(s_html);
+
+                   // Add html p tags to paragraph separations
+                   s_html = Regex.Replace(
+                       s_html,
+                       BlankLine,
+                       @"</p>" + Environment.NewLine + @"<p>"
+                   );
+
+                   // Add opening and closing p tags for the chapter.
+                   s_html = @"<p>" + s_html + @"</p>";
+
+                   //Add html file header.
+                   s_html =
+@"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
+<html xmlns=""http://www.w3.org/1999/xhtml"">
+<head>
+<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
+<title></title>
+</head>
+<body>
+" + s_html;
+
+                   //Add html file footer
+                   s_html = s_html +
+@"
+</body>
+</html>";
+                   System.IO.File.WriteAllText(chapterPathHtml, s_html);
+               }
+               chapterNum = chapterNum + 1;
+
+           }
+           return chapterNum-1;  // return number of chapters.
        }
             
  
