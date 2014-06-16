@@ -3,7 +3,7 @@ TblAdmin
 
 A sample learning project to get my feet wet in asp.Net MVC with EF.
 
-A TDD approach is being used to build up a very simple prototype of an admin.
+A small text manipulation app is being built together with a very simple prototype of an admin (really two projects in one, but I usd a single repository to keep things simple).
 
 Built with .Net 4.5, asp.Net MVC 5.1, EF 6
 
