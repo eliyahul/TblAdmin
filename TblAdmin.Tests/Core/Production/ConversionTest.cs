@@ -210,5 +210,40 @@ namespace TblAdmin.Tests.Core.Production.Services
             }
             return true;
         }
+
+        [Test]
+        public void Converts_driver()
+        {
+            // Arrange
+            string bookNameRaw = "When The War Is Over";
+            string authorFirstNameRaw = "Martha";
+            string authorLastNameRaw = "Attema";
+            string publisherName = "Orca Currents";
+            
+            string bookIdFromAdmin = "0000";
+            
+            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
+            string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
+            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
+            string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
+            string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
+
+            //string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+
+            converter = new Converter(
+                 bookNameRaw,
+                 authorFirstNameRaw,
+                 authorLastNameRaw,
+                 bookFolderPath,
+                 filePath,
+                 bookIdFromAdmin,
+                 chapterHeadingPattern
+                 );
+            Boolean result = converter.Convert();
+
+            Assert.IsTrue(result);
+
+        }
     }
 }

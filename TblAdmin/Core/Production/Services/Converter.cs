@@ -138,6 +138,14 @@ namespace TblAdmin.Core.Production.Services
                BlankLine,
                RegexOptions.IgnoreCase
            );
+
+           // Remove author last name alone on its own line (usually means its part of page header or footer)
+           FileString = Regex.Replace(
+               FileString,
+               @"\s{0,}" + Environment.NewLine + @"\s{0,}" + AuthorLastName + @"\s{0,}" + Environment.NewLine + @"\s{0,}",
+               BlankLine,
+               RegexOptions.IgnoreCase
+           );
        }
 
        private void RemoveBlankLinesWithinSentences()
