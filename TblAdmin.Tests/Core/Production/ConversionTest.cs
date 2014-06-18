@@ -40,7 +40,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string authorLastNameRaw = "Chekhov";
             string publisherName = "Gutenberg";
             string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
-            string bookIdFromAdmin = "0000";
+            int bookIdFromAdmin = 0;
             string chapterHeadingPattern = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
@@ -52,7 +52,8 @@ namespace TblAdmin.Tests.Core.Production.Services
 
 
             // Act
-            converter = new Converter(bookNameRaw,
+            converter = new Converter(
+                bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
                 bookFolderPath,
@@ -73,7 +74,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Uncle Vanya";
             string authorFirstNameRaw = "Anton";
             string authorLastNameRaw = "Chekhov";
-            string bookIdFromAdmin = "0000";
+            int bookIdFromAdmin = 0;
             
             string publisherName = "Gutenberg";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
@@ -112,7 +113,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Manga Touch";
             string authorFirstNameRaw = "Jacqueline";
             string authorLastNameRaw = "Pearce";
-            string bookIdFromAdmin = "4421";
+            int bookIdFromAdmin = 4421;
 
             string publisherName = "Orca Currents";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY_MODIFIED_FOR_TESTING_PARAG_ENDING_PUNCTUATION.txt";
@@ -154,7 +155,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Anna Karenina";
             string authorFirstNameRaw = "Leo";
             string authorLastNameRaw = "Tolstoy";
-            string bookIdFromAdmin = "4425";
+            int bookIdFromAdmin = 4425;
 
             string publisherName = "Gutenberg";
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY-ABBREVIATED_FOR_TESTING.txt";
@@ -215,12 +216,12 @@ namespace TblAdmin.Tests.Core.Production.Services
         public void Converts_driver()
         {
             // Arrange
-            string bookNameRaw = "When The War Is Over";
-            string authorFirstNameRaw = "Martha";
-            string authorLastNameRaw = "Attema";
+            string bookNameRaw = "A Kind Of Courage";
+            string authorFirstNameRaw = "Colleen";
+            string authorLastNameRaw = "Heffernan";
             string publisherName = "Orca Currents";
             
-            string bookIdFromAdmin = "0000";
+            int bookIdFromAdmin = 0;
             
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
             string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
@@ -228,8 +229,9 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
             string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
 
-            //string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            //string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
+            string chapterHeadingPattern = "Chapter [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{1,}";
+            //string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
 
             converter = new Converter(
                  bookNameRaw,

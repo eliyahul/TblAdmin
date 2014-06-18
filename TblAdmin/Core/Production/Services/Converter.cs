@@ -20,7 +20,7 @@ namespace TblAdmin.Core.Production.Services
         string FilePath { get; set; }
         string ChapterHeadingPattern { get; set; }
 
-        string BookIdFromAdmin { get; set; }
+        int BookIdFromAdmin { get; set; }
 
         public Converter(
             string bookNameRaw,
@@ -28,7 +28,7 @@ namespace TblAdmin.Core.Production.Services
             string authorLastNameRaw,
             string bookFolderPath,
             string filePath,
-            string bookIdFromAdmin,
+            int bookIdFromAdmin,
             string chapterHeadingPattern
         )
         {
@@ -298,7 +298,7 @@ namespace TblAdmin.Core.Production.Services
        private void GenerateTitlesXMLFile(int numChapters)
        {
            string titlesXMLAsString = GenerateTitlesXMLAsString(numChapters);
-           string titlesXMLPath = BookFolderPath + BookIdFromAdmin + ".xml";
+           string titlesXMLPath = BookFolderPath + BookIdFromAdmin.ToString("D4") + ".xml";
 
            File.WriteAllText(titlesXMLPath, titlesXMLAsString);
        }

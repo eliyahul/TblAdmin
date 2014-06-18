@@ -4,18 +4,19 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
+using System.Collections.Generic;
 using TblAdmin.Core.Production.Services;
+using TblAdmin.Areas.Production.ViewModels.Conversion;
+using TblAdmin.Areas.Base.Controllers;
 
 /*
- * WARNING - QUICK AND DIRTY CODE TO MASSAGE SOME OF OUR PROJECT SPECIFIC TEXT FILES.
- * 
  * THIS CLASS IS UNRELATED TO THE GENERAL ADMIN PROJECT DEVELOPMENT IN THE REST OF THIS REPOSITORY.
  * I JUST NEEDED A QUICK PLACE TO TRY STUFF OUT.
  */
 
 namespace TblAdmin.Areas.Production.Controllers
 {
-    public class ConversionController : Controller
+    public class ConversionController : BaseController
     {
         /*
         static string bookNameRaw = "Manga Touch";
@@ -84,12 +85,39 @@ namespace TblAdmin.Areas.Production.Controllers
         static string authorLastNameRaw = "Chekhov";
         static string publisherName = "Gutenberg";
         static string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
-        static string bookIdFromAdmin = "0000";
+        static int bookIdFromAdmin = 0;
         static string chapterHeadingPattern = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
         
         string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
-        
-        
+
+
+        // GET: Production/Conversion/Convert
+        public ActionResult Convert()
+        {
+            ConvertViewModel cvm;
+
+            cvm = new ConvertViewModel();
+            return View(cvm);
+        }
+
+        // POST: Production/Conversion/Convert
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Convert(ConvertInputModel cim)
+        {
+            ConvertViewModel cvm;
+
+            if (ModelState.IsValid)
+            {
+                // here is where we would do mapping.
+
+                return RedirectToActionFor<ConversionController>(c => c.Convert(null));
+            }
+            cvm = new ConvertViewModel();
+            return View(cvm);
+        }
 
         // GET: Production/Conversion
         public ActionResult Process()
