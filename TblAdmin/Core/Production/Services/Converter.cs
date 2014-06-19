@@ -54,6 +54,7 @@ namespace TblAdmin.Core.Production.Services
             RemoveBlankLinesWithinSentences();
             AddMarkersBetweenParagraphs();
             RemoveSpecialCharacters();
+            ReplaceMistakenCapitalLettersInsideWords();
             AddEndOfParagraphPunctuation();
             AllowPunctuationInsideQuotesToEndAParagraph();
             RestoreBlankLineBetweenParagraphs();
@@ -108,6 +109,20 @@ namespace TblAdmin.Core.Production.Services
                    return textInfo.ToTitleCase(chapterHeading);
                },
                RegexOptions.IgnoreCase | RegexOptions.Multiline
+           );
+       }
+
+       private void ReplaceMistakenCapitalLettersInsideWords()
+       {
+           FileString = Regex.Replace(
+               FileString,
+               @"\s[a-z]\w{1,}",
+               delegate(Match match)
+               {
+                   string word = match.ToString();
+                   TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                   return textInfo.ToLower(word);
+               }
            );
        }
 
