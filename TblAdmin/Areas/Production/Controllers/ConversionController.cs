@@ -111,10 +111,11 @@ namespace TblAdmin.Areas.Production.Controllers
 
             if (ModelState.IsValid)
             {
-                // here is where we would do mapping.
-
+                // Call the converter.
+                // If convert was successful, redirect to success view and supply the zip with all the files
                 return RedirectToActionFor<ConversionController>(c => c.Convert(null));
             }
+            // put back the values into the view model for redisplay with the error messages.
             cvm = new ConvertViewModel();
             return View(cvm);
         }

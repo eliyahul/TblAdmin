@@ -1,50 +1,32 @@
 ﻿using TblAdmin.Areas.Base.ViewModels;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace TblAdmin.Areas.Production.ViewModels.Conversion
 {
     public class ConvertInputModel
     {
+        [Required]
         public string BookNameRaw { get; set; }
-        public string AuthorFirstNameRaw { get; set; }
-        public string AuthorLastNameRaw { get; set; }
-        public string BookFolderPath { get; set; }
-        public string FilePath { get; set; }
-        public int BookIdFromAdmin { get; set; }
-        public string ChapterHeadingPattern { get; set; }
-        //public IEnumerable<SelectListItem> ChapterHeadingTypes;
         
-        public ConvertInputModel()
-        {
-            BookNameRaw = "";
-            AuthorFirstNameRaw = "";
-            AuthorLastNameRaw = "";
-            BookFolderPath = "";
-            FilePath = "";
-            BookIdFromAdmin = 0;
-            ChapterHeadingPattern = "";
-            //ChapterHeadingTypes = null;
-        }
+        [Required]
+        public string AuthorFirstNameRaw { get; set; }
 
-        public ConvertInputModel(
-            string bookNameRaw,
-            string authorFirstNameRaw,
-            string authorLastNameRaw,
-            string bookFolderPath,
-            string filePath,
-            int bookIdFromAdmin,
-            string chapterHeadingPattern
-            )
-        {
-            BookNameRaw = bookNameRaw;
-            AuthorFirstNameRaw = authorFirstNameRaw;
-            AuthorLastNameRaw = authorLastNameRaw;
-            BookFolderPath = bookFolderPath;
-            FilePath = filePath;
-            BookIdFromAdmin = bookIdFromAdmin;
-            ChapterHeadingPattern = chapterHeadingPattern;
-            //ChapterHeadingTypes = null;
-        }
+        [Required]
+        public string AuthorLastNameRaw { get; set; }
+
+        [Required]
+        public string BookFolderPath { get; set; }
+
+        [Required]
+        public string FilePath { get; set; }
+
+        [Required]
+        public int BookIdFromAdmin { get; set; }
+
+        [Required]
+        public string ChapterHeadingTypeID { get; set; }
+        
     }
 }

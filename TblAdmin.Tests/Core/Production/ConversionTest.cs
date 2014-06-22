@@ -216,9 +216,9 @@ namespace TblAdmin.Tests.Core.Production.Services
         public void Converts_driver()
         {
             // Arrange
-            string bookNameRaw = "A Kind Of Courage";
-            string authorFirstNameRaw = "Colleen";
-            string authorLastNameRaw = "Heffernan";
+            string bookNameRaw = "RedWing";
+            string authorFirstNameRaw = "Holley";
+            string authorLastNameRaw = "Bennet";
             string publisherName = "Orca Currents";
             
             int bookIdFromAdmin = 0;
@@ -230,8 +230,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
 
             //string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
-            string chapterHeadingPattern = "Chapter [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{1,}";
-            //string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
+            //string chapterHeadingPattern = "Chapter [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{1,}";
+            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
 
             converter = new Converter(
                  bookNameRaw,
