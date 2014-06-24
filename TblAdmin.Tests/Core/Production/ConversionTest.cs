@@ -216,9 +216,9 @@ namespace TblAdmin.Tests.Core.Production.Services
         public void Converts_driver()
         {
             // Arrange
-            string bookNameRaw = "RedWing";
-            string authorFirstNameRaw = "Holley";
-            string authorLastNameRaw = "Bennet";
+            string bookNameRaw = "Oracle";
+            string authorFirstNameRaw = "Alex";
+            string authorLastNameRaw = "Van Tol";
             string publisherName = "Orca Currents";
             
             int bookIdFromAdmin = 0;

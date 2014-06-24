@@ -1,4 +1,4 @@
-﻿@model TblAdmin.Areas.Production.ViewModels.Conversion.ConvertViewModel
+﻿@model TblAdmin.Areas.Production.ViewModels.Conversion.ConvertInputModel
 @{
     ViewBag.Title = "Convert";
 }
@@ -15,10 +15,10 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
-            @Html.LabelFor(model => model.BookNameRaw, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.BookNameRaw, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BookNameRaw, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BookNameRaw, "", new { @class = "text-danger" })
+                @Html.EditorFor(m => m.BookNameRaw, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.BookNameRaw, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
@@ -29,38 +29,38 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.AuthorLastNameRaw, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.AuthorLastNameRaw, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.AuthorLastNameRaw, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AuthorLastNameRaw, "", new { @class = "text-danger" })
+                @Html.EditorFor(m => m.AuthorLastNameRaw, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.AuthorLastNameRaw, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.BookFolderPath, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.BookFolderPath, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BookFolderPath, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BookFolderPath, "", new { @class = "text-danger" })
+                @Html.EditorFor(m => m.BookFolderPath, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.BookFolderPath, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.FilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.FilePath, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FilePath, "", new { @class = "text-danger" })
+                @Html.EditorFor(m => m.FilePath, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.FilePath, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.BookIdFromAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.BookIdFromAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.BookIdFromAdmin, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BookIdFromAdmin, "", new { @class = "text-danger" })
+                @Html.EditorFor(m => m.BookIdFromAdmin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.BookIdFromAdmin, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.ChapterHeadingTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(m => m.ChapterHeadingTypeID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ChapterHeadingTypeID, Model.ChapterHeadingTypes, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ChapterHeadingTypeID, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(m => m.ChapterHeadingTypeID, Model.ChapterHeadingTypes, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ChapterHeadingTypeID, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">

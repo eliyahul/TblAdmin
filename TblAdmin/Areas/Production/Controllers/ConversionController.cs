@@ -91,33 +91,43 @@ namespace TblAdmin.Areas.Production.Controllers
         string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
 
-        // GET: Production/Conversion/Convert
         public ActionResult Convert()
         {
-            ConvertViewModel cvm;
-
-            cvm = new ConvertViewModel();
-            return View(cvm);
+            ConvertInputModel cim = new ConvertInputModel();
+            return View(cim);
         }
 
-        // POST: Production/Conversion/Convert
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Convert(ConvertInputModel cim)
         {
-            ConvertViewModel cvm;
 
             if (ModelState.IsValid)
             {
-                // Call the converter.
-                // If convert was successful, redirect to success view and supply the zip with all the files
+                string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
+                Converter myConverter = new Converter(
+                    cim.BookNameRaw,
+                    cim.AuthorFirstNameRaw,
+                    cim.AuthorLastNameRaw,
+                    cim.BookFolderPath,
+                    cim.FilePath,
+                    cim.BookIdFromAdmin,
+                    chapterHeadingPattern
+                );
+                Boolean result = myConverter.Convert();
+
+                if (result)
+                {
+                    // redirect to success view and supply the zip mwith all the files
+                    ViewBag.Results = "Success";
+                }
+                else
+                {
+                    ViewBag.Results = "Could not find file with pathname: " + cim.FilePath;
+                }
                 return RedirectToActionFor<ConversionController>(c => c.Convert(null));
             }
-            // put back the values into the view model for redisplay with the error messages.
-            cvm = new ConvertViewModel();
-            return View(cvm);
+            return View(cim);
         }
 
         // GET: Production/Conversion

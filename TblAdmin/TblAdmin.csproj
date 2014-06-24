@@ -245,7 +245,6 @@
     <Compile Include="Areas\Production\Controllers\ConversionController.cs" />
     <Compile Include="Areas\Production\ProductionAreaRegistration.cs" />
     <Compile Include="Areas\Production\ViewModels\Conversion\ConvertInputModel.cs" />
-    <Compile Include="Areas\Production\ViewModels\Conversion\ConvertViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\TblAdminInitializer.cs" />

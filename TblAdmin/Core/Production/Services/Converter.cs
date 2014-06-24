@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
 using System.IO;
+using System.Collections.Generic;
 
 namespace TblAdmin.Core.Production.Services
 {
@@ -21,6 +22,38 @@ namespace TblAdmin.Core.Production.Services
         string ChapterHeadingPattern { get; set; }
 
         int BookIdFromAdmin { get; set; }
+
+        public class ChapterHeading
+        {
+            public string Name { get; set; }
+            public string Pattern { get; set; }
+        }
+        public const int CHAPTER_AND_NUMBER = 1;
+        public const int CHAPTER_NUMBER_AND_NAME = 2;
+        public const int PART_CHAPTER_AND_NUMBER = 3;
+        public static Dictionary<int, ChapterHeading> ChapterHeadings = new Dictionary<int, ChapterHeading>()
+        {
+            {CHAPTER_AND_NUMBER, new ChapterHeading
+                {
+                Name = "Chapter One / Chapter 1",
+                Pattern = "Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}"
+                }
+            },
+            {CHAPTER_NUMBER_AND_NAME,  new ChapterHeading
+                {
+                Name = "Chapter 1: The First Day",
+                Pattern = "Chapter [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{1,}"
+                }
+            },
+            {PART_CHAPTER_AND_NUMBER,  new ChapterHeading
+                {
+                Name = "Part 1: Chapter 1",
+                Pattern = "Part [a-zA-Z0-9]{1,}: Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}"
+                }
+            }
+        };
+         
+         
 
         public Converter(
             string bookNameRaw,
