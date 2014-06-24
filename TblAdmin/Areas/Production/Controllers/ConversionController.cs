@@ -118,22 +118,22 @@ namespace TblAdmin.Areas.Production.Controllers
 
                 if (result)
                 {
-                    // redirect to success view and supply the zip mwith all the files
+                    // redirect to success view and supply the zip with all the files
                     ViewBag.Results = "Success";
                 }
                 else
                 {
                     ViewBag.Results = "Could not find file with pathname: " + cim.FilePath;
                 }
-                return RedirectToActionFor<ConversionController>(c => c.Convert(null));
             }
             return View(cim);
         }
 
+        /*
         // GET: Production/Conversion
         public ActionResult Process()
         {
-
+            
             // Remove spaces in the raw book name, eg."MangaTouch";
             string bookName = Regex.Replace(
                     bookNameRaw,
@@ -166,6 +166,6 @@ namespace TblAdmin.Areas.Production.Controllers
             return View();
 
         }        
-        
+        */
     }
 }
