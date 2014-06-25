@@ -41,7 +41,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string publisherName = "Gutenberg";
             string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
             int bookIdFromAdmin = 0;
-            string chapterHeadingPattern = "^chapter [a-zA-Z0-9:!\'?\", ]{1,}";
+            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
             string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
 
             string bookNameNoSpaces = Regex.Replace(bookNameRaw,  @"\s{0,}", "");
@@ -84,8 +84,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-
+            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
+            
 
             // Act
             converter = new Converter(
@@ -124,8 +124,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-            
+            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
+                
 
             // Act
             
@@ -166,8 +166,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\", ]{1,}";
-
+            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.PART_CHAPTER_AND_NUMBER].Pattern;
+            
             converter = new Converter(
                  bookNameRaw,
                  authorFirstNameRaw,
@@ -229,10 +229,8 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
             string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
 
-            //string chapterHeadingPattern = "part [a-zA-Z0-9]{1,}: chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
-            //string chapterHeadingPattern = "Chapter [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{1,}";
-            string chapterHeadingPattern = "chapter [a-zA-Z0-9:!\'?\"-, ]{1,}";
-
+            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
+            
             converter = new Converter(
                  bookNameRaw,
                  authorFirstNameRaw,

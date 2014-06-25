@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Text;
 using System.IO;
+using System.IO.Compression;
 using System.Collections.Generic;
 
 namespace TblAdmin.Core.Production.Services
@@ -36,7 +37,7 @@ namespace TblAdmin.Core.Production.Services
             {CHAPTER_AND_NUMBER, new ChapterHeading
                 {
                 Name = "Chapter One / Chapter 1",
-                Pattern = "Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}"
+                Pattern = "Chapter [a-zA-Z0-9- ]{1,}"
                 }
             },
             {CHAPTER_NUMBER_AND_NAME,  new ChapterHeading
@@ -94,6 +95,8 @@ namespace TblAdmin.Core.Production.Services
             
             int numChapters = SplitIntoChapterFiles();
             GenerateTitlesXMLFile(numChapters);
+
+            GenerateZipOfAllFiles();
             
             return true;
         }
@@ -409,5 +412,11 @@ namespace TblAdmin.Core.Production.Services
            string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
            File.WriteAllText(chapterPathHtml, s_trimmed);
        }
+       public void GenerateZipOfAllFiles()
+       {
+           //ZipFile.CreateFromDirectory
+       }
     }
+
+    
 }
