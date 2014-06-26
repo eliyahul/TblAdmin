@@ -414,7 +414,9 @@ namespace TblAdmin.Core.Production.Services
        }
        public void GenerateZipOfAllFiles()
        {
-           //ZipFile.CreateFromDirectory
+           string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s", "");
+           string destPath = BookFolderPath + @"..\" + bookNameNoSpaces + "Files.zip";
+           ZipFile.CreateFromDirectory(BookFolderPath, destPath);
        }
     }
 

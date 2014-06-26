@@ -104,6 +104,9 @@ namespace TblAdmin.Tests.Core.Production.Services
 
             compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
 
+            string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
+            verify_zip_file_was_created(zipFilePath);
+
         }
 
         [Test]
@@ -146,6 +149,8 @@ namespace TblAdmin.Tests.Core.Production.Services
 
             compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
 
+            string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
+            verify_zip_file_was_created(zipFilePath);
         }
 
         [Test]
@@ -165,7 +170,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
-
+            
             string chapterHeadingPattern = Converter.ChapterHeadings[Converter.PART_CHAPTER_AND_NUMBER].Pattern;
             
             converter = new Converter(
@@ -184,9 +189,21 @@ namespace TblAdmin.Tests.Core.Production.Services
 
            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
 
+           string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
+           verify_zip_file_was_created(zipFilePath);
         }
 
-        public bool compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath)
+        private void verify_zip_file_was_created(string zipFilePath)
+        {
+            Assert.IsTrue(File.Exists(zipFilePath));
+
+            FileInfo fi = new FileInfo(zipFilePath);
+            Assert.IsTrue(fi.Length > 0);
+
+            File.Delete(zipFilePath);
+        }
+
+        private void compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath)
         {
             IEnumerable<String> expectedFilePaths = Directory.EnumerateFiles(expectedResultsPath);
             Assert.AreNotEqual(expectedFilePaths.Count(), 0, "There were no files in the ExpectedResultsDirectory");
@@ -209,7 +226,6 @@ namespace TblAdmin.Tests.Core.Production.Services
             {
                 File.Delete(path);
             }
-            return true;
         }
 
         [Test]
