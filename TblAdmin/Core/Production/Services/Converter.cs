@@ -412,11 +412,25 @@ namespace TblAdmin.Core.Production.Services
            string chapterPathHtml = BookFolderPath + "chapter-" + chapterNum.ToString("D3") + ".html";
            File.WriteAllText(chapterPathHtml, s_trimmed);
        }
+
        public void GenerateZipOfAllFiles()
        {
            string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s", "");
-           string destPath = BookFolderPath + @"..\" + bookNameNoSpaces + "Files.zip";
-           ZipFile.CreateFromDirectory(BookFolderPath, destPath);
+           
+           string destPath = BookFolderPath + bookNameNoSpaces + "Files.zip";
+           if (File.Exists(destPath))
+           {
+               File.Delete(destPath);
+           }
+           
+           string tempPath = BookFolderPath + @"..\" + bookNameNoSpaces + "Files.zip";
+           if (File.Exists(tempPath))
+           {
+               File.Delete(tempPath);
+           } 
+           ZipFile.CreateFromDirectory(BookFolderPath, tempPath);
+           
+           File.Move(tempPath, destPath);
        }
     }
 

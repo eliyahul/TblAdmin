@@ -51,13 +51,19 @@ namespace TblAdmin.Areas.Production.Controllers
                 if (result)
                 {
                     // redirect to success view and supply the zip with all the files
-                    ViewBag.Results = "Success";
+                    ViewBag.Results = "Success ! Your files are being sent to you now. ";
                 }
                 else
                 {
                     ViewBag.Results = "Could not find file with pathname: " + cim.FilePath;
                 }
             }
+            
+            string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
+            string zipFilePath = cim.BookFolderPath + bookNameNoSpaces + "Files.zip";
+            HttpContext.Response.ContentType = "application/zip";
+            HttpContext.Response.WriteFile(zipFilePath);
+            HttpContext.Response.AddHeader("content-disposition", "fileName=" + bookNameNoSpaces + "-Files.zip");
             return View(cim);
         }
     }

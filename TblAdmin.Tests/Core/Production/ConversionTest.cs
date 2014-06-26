@@ -102,11 +102,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
-            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
-
-            string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
-            verify_zip_file_was_created(zipFilePath);
-
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
         }
 
         [Test]
@@ -147,10 +143,7 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
-            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
-
-            string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
-            verify_zip_file_was_created(zipFilePath);
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
         }
 
         [Test]
@@ -187,23 +180,12 @@ namespace TblAdmin.Tests.Core.Production.Services
             // Assert
             Assert.IsTrue(result);
 
-           compare_actual_and_expected_files(expectedResultsPath, actualResultsPath);
-
-           string zipFilePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + "Files.zip";
-           verify_zip_file_was_created(zipFilePath);
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
         }
 
-        private void verify_zip_file_was_created(string zipFilePath)
-        {
-            Assert.IsTrue(File.Exists(zipFilePath));
+        
 
-            FileInfo fi = new FileInfo(zipFilePath);
-            Assert.IsTrue(fi.Length > 0);
-
-            File.Delete(zipFilePath);
-        }
-
-        private void compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath)
+        private void compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath, string bookNameNoSpaces)
         {
             IEnumerable<String> expectedFilePaths = Directory.EnumerateFiles(expectedResultsPath);
             Assert.AreNotEqual(expectedFilePaths.Count(), 0, "There were no files in the ExpectedResultsDirectory");
@@ -219,6 +201,13 @@ namespace TblAdmin.Tests.Core.Production.Services
 
                 Assert.AreEqual(expectedFileString, actualFileString, " *** " + expectedFileName + " *** ");
             }
+
+            // Verify zip file was created.
+            string zipFilePath = actualResultsPath + bookNameNoSpaces + "Files.zip";
+            Assert.IsTrue(File.Exists(zipFilePath));
+
+            FileInfo fi = new FileInfo(zipFilePath);
+            Assert.IsTrue(fi.Length > 0);
 
             // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
             IEnumerable<String> actualFilePaths = Directory.EnumerateFiles(actualResultsPath);
@@ -259,7 +248,6 @@ namespace TblAdmin.Tests.Core.Production.Services
             Boolean result = converter.Convert();
 
             Assert.IsTrue(result);
-
         }
     }
 }
