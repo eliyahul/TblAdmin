@@ -50,6 +50,14 @@ namespace TblAdmin.Areas.Base.Controllers
 
             return RedirectToAction(actionName, controllerName, routeValues);
         }
+
+        // Media
+        protected void serveZipFile(string zipFilePath, string fileNameWithType)
+        {
+            Response.ContentType = "application/zip";
+            Response.WriteFile(zipFilePath);
+            Response.AddHeader("content-disposition", "fileName=" + fileNameWithType);
+        }
         
     }
 }

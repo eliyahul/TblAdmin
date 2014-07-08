@@ -50,9 +50,8 @@ namespace TblAdmin.Areas.Production.Controllers
                     ViewBag.Results = "Success ! Your files are being sent to you now. ";
                     string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
                     string zipFilePath = cim.BookFolderPath + bookNameNoSpaces + "Files.zip";
-                    Response.ContentType = "application/zip";
-                    Response.WriteFile(zipFilePath);
-                    Response.AddHeader("content-disposition", "fileName=" + bookNameNoSpaces + "-Files.zip");
+                    string servedFileName = bookNameNoSpaces + "-Files.zip";
+                    serveZipFile(zipFilePath, servedFileName);
                 }
                 else
                 {
