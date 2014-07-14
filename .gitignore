@@ -36,6 +36,7 @@ TestResults/
 csx/
 rcf/
 Uploads/
+Temp/
 
 # Windows Azure publish settings
 .publishsettings
