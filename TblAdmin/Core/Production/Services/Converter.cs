@@ -32,6 +32,8 @@ namespace TblAdmin.Core.Production.Services
         public const int CHAPTER_AND_NUMBER = 1;
         public const int CHAPTER_NUMBER_AND_NAME = 2;
         public const int PART_CHAPTER_AND_NUMBER = 3;
+        public const int BOOK_CHAPTER_AND_NUMBER = 4;
+        public const int VOLUME_BOOK_CHAPTER_AND_NUMBER = 5;
         public static Dictionary<int, ChapterHeading> ChapterHeadings = new Dictionary<int, ChapterHeading>()
         {
             {CHAPTER_AND_NUMBER, new ChapterHeading
@@ -51,7 +53,19 @@ namespace TblAdmin.Core.Production.Services
                 Name = "Part 1: Chapter 1",
                 Pattern = "Part [a-zA-Z0-9]{1,}: Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}"
                 }
-            }
+            },
+            {BOOK_CHAPTER_AND_NUMBER,  new ChapterHeading
+                {
+                Name = "Book IV: Old And Young - Chapter 1",
+                Pattern = "Book [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{0,} - Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}"
+                }
+            },
+            {VOLUME_BOOK_CHAPTER_AND_NUMBER,  new ChapterHeading
+                {
+                Name = "Volume II: Cossette, Book IV: Old And Young, Chapter 1: M. Myriel",
+                Pattern = "Volume [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{0,}, Book [a-zA-Z0-9]{1,}: [a-zA-Z0-9:!\'?\"-, ]{0,}, Chapter [a-zA-Z0-9:!\'?\"-, ]{1,}: [a-zA-Z0-9:!\'?\"-, ]{0,}"
+                }
+            },
         };
          
          

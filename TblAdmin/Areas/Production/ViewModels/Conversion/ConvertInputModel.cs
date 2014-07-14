@@ -55,6 +55,16 @@ namespace TblAdmin.Areas.Production.ViewModels.Conversion
             { 
                 Text = Converter.ChapterHeadings[Converter.PART_CHAPTER_AND_NUMBER].Name, 
                 Value = Converter.PART_CHAPTER_AND_NUMBER.ToString() 
+            },
+            new SelectListItem 
+            { 
+                Text = Converter.ChapterHeadings[Converter.BOOK_CHAPTER_AND_NUMBER].Name, 
+                Value = Converter.BOOK_CHAPTER_AND_NUMBER.ToString() 
+            },
+            new SelectListItem 
+            { 
+                Text = Converter.ChapterHeadings[Converter.VOLUME_BOOK_CHAPTER_AND_NUMBER].Name, 
+                Value = Converter.VOLUME_BOOK_CHAPTER_AND_NUMBER.ToString() 
             }
         };
         
