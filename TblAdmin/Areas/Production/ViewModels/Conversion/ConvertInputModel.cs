@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using TblAdmin.Areas.Base.ViewModels;
 using TblAdmin.Core.Production.Services;
+using System.Web;
 
 namespace TblAdmin.Areas.Production.ViewModels.Conversion
 {
@@ -31,10 +32,15 @@ namespace TblAdmin.Areas.Production.ViewModels.Conversion
         [Display(Name = "ID from Admin")]
         [Required]
         public int BookIdFromAdmin { get; set; }
-        
+
         [Display(Name = "Chapter Heading Format")]
         [Required]
         public int ChapterHeadingTypeID { get; set; }
+        
+        [Display(Name = "Book File")]
+        [Required]
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase BookFile { get; set; }
         
         
 

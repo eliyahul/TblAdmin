@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using TblAdmin.Core.Production.Services;
 using TblAdmin.Areas.Production.ViewModels.Conversion;
 using TblAdmin.Areas.Base.Controllers;
+using System.IO;
 
 /*
  * THIS CLASS IS UNRELATED TO THE GENERAL ADMIN PROJECT DEVELOPMENT IN THE REST OF THIS REPOSITORY.
@@ -30,16 +31,23 @@ namespace TblAdmin.Areas.Production.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Convert(ConvertInputModel cim)
         {
+            string uploadedFilePath = "";
 
             if (ModelState.IsValid)
             {
+                if (cim.BookFile.ContentLength > 0) {
+                    var fileName = Path.GetFileName(cim.BookFile.FileName);
+                    uploadedFilePath = Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                    cim.BookFile.SaveAs(uploadedFilePath);
+                }
+
                 string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
                     cim.AuthorLastNameRaw,
                     cim.BookFolderPath,
-                    cim.FilePath,
+                    uploadedFilePath,
                     cim.BookIdFromAdmin,
                     chapterHeadingPattern
                 );

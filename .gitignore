@@ -35,6 +35,7 @@ obj/
 TestResults/
 csx/
 rcf/
+Uploads/
 
 # Windows Azure publish settings
 .publishsettings

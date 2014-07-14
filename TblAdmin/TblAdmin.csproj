@@ -344,6 +344,7 @@
     <Folder Include="Areas\Base\Models\" />
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Books\Views\Shared\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
