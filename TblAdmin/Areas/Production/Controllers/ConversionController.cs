@@ -32,21 +32,25 @@ namespace TblAdmin.Areas.Production.Controllers
         public ActionResult Convert(ConvertInputModel cim)
         {
             string uploadedFilePath = "";
+            string tempBookFolderPath = "";
+            string fileName = "";
 
             if (ModelState.IsValid)
             {
                 if (cim.BookFile.ContentLength > 0) {
-                    var fileName = Path.GetFileName(cim.BookFile.FileName);
+                    fileName = Path.GetFileName(cim.BookFile.FileName);
                     uploadedFilePath = Path.Combine(Server.MapPath("~/Uploads"), fileName);
                     cim.BookFile.SaveAs(uploadedFilePath);
                 }
 
+                tempBookFolderPath = Server.MapPath("~/Temp");
                 string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
                     cim.AuthorLastNameRaw,
-                    cim.BookFolderPath,
+                    //cim.BookFolderPath,
+                    tempBookFolderPath,
                     uploadedFilePath,
                     cim.BookIdFromAdmin,
                     chapterHeadingPattern
@@ -58,7 +62,7 @@ namespace TblAdmin.Areas.Production.Controllers
                     ViewBag.Results = "Success ! Your files are being sent to you now. ";
 
                     string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
-                    string zipFilePath = cim.BookFolderPath + bookNameNoSpaces + "Files.zip";
+                    string zipFilePath = tempBookFolderPath + @"\" + bookNameNoSpaces + "-Files.zip";
                     string servedFileName = bookNameNoSpaces + "-Files.zip";
                     serveZipFile(zipFilePath, servedFileName);
                 }
@@ -67,6 +71,7 @@ namespace TblAdmin.Areas.Production.Controllers
                     ViewBag.Results = "Could not find file with pathname: " + cim.FilePath;
                 }
             }
+            // remove the uploaded file the temporary generated book files and the zip file.
             return View(cim);
         }
     }
