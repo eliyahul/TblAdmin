@@ -19,14 +19,13 @@ namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : BaseController
     {
-        private string saveUploadedFile(HttpPostedFileBase uploadedFile)
+        private string saveUploadedFile(HttpPostedFileBase uploadedFile, string uploadDir)
         {
-            const string UPLOAD_DIR = "~/Uploads";
                 
             if (uploadedFile.ContentLength > 0)
             {
                 string fileName = Path.GetFileName(uploadedFile.FileName);
-                string uploadedFilePath = Path.Combine(Server.MapPath(UPLOAD_DIR), fileName);
+                string uploadedFilePath = Path.Combine(uploadDir, fileName);
                 uploadedFile.SaveAs(uploadedFilePath);
 
                 return uploadedFilePath;
@@ -46,11 +45,18 @@ namespace TblAdmin.Areas.Production.Controllers
         public ActionResult Convert(ConvertInputModel cim)
         {
             const string TEMP_DIR = "~/Temp";
-            string tempBookFolderPath = Server.MapPath(TEMP_DIR);
-
+            
             if (ModelState.IsValid)
             {
-                string uploadedFilePath = saveUploadedFile(cim.BookFile);
+                // Create book folder in ~/Temp
+                string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
+                string tempDirPhysicalPath = Server.MapPath(TEMP_DIR);
+                string tempBookFolderPath = Path.Combine(tempDirPhysicalPath, bookNameNoSpaces);// "~/Temp/TomSawyer"
+                Directory.CreateDirectory(tempBookFolderPath);
+                Directory.CreateDirectory(Path.Combine(tempBookFolderPath, "bookfiles"));
+                
+                // Upload to the book folder
+                string uploadedFilePath = saveUploadedFile(cim.BookFile, Path.Combine(tempDirPhysicalPath, bookNameNoSpaces));
                 if (uploadedFilePath == "")
                 {
                     ViewBag.Results = "Uploaded file was empty.";
@@ -58,18 +64,18 @@ namespace TblAdmin.Areas.Production.Controllers
                 }
 
                 
+                
                 //Remove zip file - put it here, because if we put it after we call serveZipFile, since the serving
                 // of the zip file is delayed until after view is rendered, it will not have a zip file to
                 // serve because it will already have been deleted.
-                string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
                 string zipFileName = bookNameNoSpaces + "-Files.zip";
                 string zipFilePath = Path.Combine(tempBookFolderPath, zipFileName);
-                
+                /*
                 if (System.IO.File.Exists(zipFilePath))
                 {
                     System.IO.File.Delete(zipFilePath);
                 }
-                
+                */
 
                 string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
                 Converter myConverter = new Converter(
