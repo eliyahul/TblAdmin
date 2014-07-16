@@ -64,7 +64,6 @@ namespace TblAdmin.Areas.Production.Controllers
                 }
 
                 //Convert
-                string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
@@ -72,7 +71,7 @@ namespace TblAdmin.Areas.Production.Controllers
                     tempBookFolderPath,
                     uploadedFilePath,
                     cim.BookIdFromAdmin,
-                    chapterHeadingPattern
+                    cim.ChapterHeadingTypeID
                 );
 
                 Boolean result = myConverter.Convert();

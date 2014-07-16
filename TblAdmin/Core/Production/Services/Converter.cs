@@ -80,7 +80,7 @@ namespace TblAdmin.Core.Production.Services
             string bookFolderPath,
             string filePath,
             int bookIdFromAdmin,
-            string chapterHeadingPattern
+            int chapterHeadingTypeID
         )
         {
             BookNameRaw = bookNameRaw;
@@ -89,7 +89,8 @@ namespace TblAdmin.Core.Production.Services
             BookFolderPath = bookFolderPath;
             FilePath = filePath;
             BookIdFromAdmin = bookIdFromAdmin;
-            ChapterHeadingPattern = chapterHeadingPattern;
+            ChapterHeadingPattern = ChapterHeadings[chapterHeadingTypeID].Pattern;
+                
         }
             
         public bool Convert()
