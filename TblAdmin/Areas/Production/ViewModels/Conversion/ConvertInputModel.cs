@@ -21,14 +21,6 @@ namespace TblAdmin.Areas.Production.ViewModels.Conversion
         [Required]
         public string AuthorLastNameRaw { get; set; }
         
-        [Display(Name = "Path to book's folder")]
-        [Required]
-        public string BookFolderPath { get; set; }
-        
-        [Display(Name = "Path to file")]
-        [Required]
-        public string FilePath { get; set; }
-        
         [Display(Name = "ID from Admin")]
         [Required]
         public int BookIdFromAdmin { get; set; }

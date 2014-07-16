@@ -19,59 +19,94 @@ namespace TblAdmin.Areas.Production.Controllers
 {
     public class ConversionController : BaseController
     {
-        
+        private string saveUploadedFile(HttpPostedFileBase uploadedFile)
+        {
+            const string UPLOAD_DIR = "~/Uploads";
+                
+            if (uploadedFile.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(uploadedFile.FileName);
+                string uploadedFilePath = Path.Combine(Server.MapPath(UPLOAD_DIR), fileName);
+                uploadedFile.SaveAs(uploadedFilePath);
+
+                return uploadedFilePath;
+            }
+            return "";
+        }
+
         public ActionResult Convert()
         {
-            // upload the file
             ConvertInputModel cim = new ConvertInputModel();
             return View(cim);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Convert(ConvertInputModel cim)
         {
-            string uploadedFilePath = "";
-            string tempBookFolderPath = "";
-            string fileName = "";
+            const string TEMP_DIR = "~/Temp";
+            string tempBookFolderPath = Server.MapPath(TEMP_DIR);
 
             if (ModelState.IsValid)
             {
-                if (cim.BookFile.ContentLength > 0) {
-                    fileName = Path.GetFileName(cim.BookFile.FileName);
-                    uploadedFilePath = Path.Combine(Server.MapPath("~/Uploads"), fileName);
-                    cim.BookFile.SaveAs(uploadedFilePath);
+                string uploadedFilePath = saveUploadedFile(cim.BookFile);
+                if (uploadedFilePath == "")
+                {
+                    ViewBag.Results = "Uploaded file was empty.";
+                    return View(cim);
                 }
 
-                tempBookFolderPath = Server.MapPath("~/Temp");
+                
+                //Remove zip file - put it here, because if we put it after we call serveZipFile, since the serving
+                // of the zip file is delayed until after view is rendered, it will not have a zip file to
+                // serve because it will already have been deleted.
+                string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
+                string zipFileName = bookNameNoSpaces + "-Files.zip";
+                string zipFilePath = Path.Combine(tempBookFolderPath, zipFileName);
+                
+                if (System.IO.File.Exists(zipFilePath))
+                {
+                    System.IO.File.Delete(zipFilePath);
+                }
+                
+
                 string chapterHeadingPattern = Converter.ChapterHeadings[cim.ChapterHeadingTypeID].Pattern;
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
                     cim.AuthorLastNameRaw,
-                    //cim.BookFolderPath,
                     tempBookFolderPath,
                     uploadedFilePath,
                     cim.BookIdFromAdmin,
                     chapterHeadingPattern
                 );
+
                 Boolean result = myConverter.Convert();
-
-                if (result)
+                if (!result)
                 {
-                    ViewBag.Results = "Success ! Your files are being sent to you now. ";
+                    ViewBag.Results = "Could not find uploaded file";
+                    return View(cim);
+                }
 
-                    string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
-                    string zipFilePath = tempBookFolderPath + @"\" + bookNameNoSpaces + "-Files.zip";
-                    string servedFileName = bookNameNoSpaces + "-Files.zip";
-                    serveZipFile(zipFilePath, servedFileName);
-                }
-                else
+                serveZipFile(zipFilePath, zipFileName);
+                
+                //Remove uploaded file
+                if (System.IO.File.Exists(uploadedFilePath))
                 {
-                    ViewBag.Results = "Could not find file with pathname: " + cim.FilePath;
+                    System.IO.File.Delete(uploadedFilePath);
                 }
+
+                //Remove all temporary generated chapter and title xml files
+                string bookFilesSubFolderPath = Path.Combine(tempBookFolderPath, "bookfiles");
+                string[] filePaths = Directory.GetFiles(bookFilesSubFolderPath);
+                foreach (string filePath in filePaths)
+                    System.IO.File.Delete(filePath);
+
             }
+
             // remove the uploaded file the temporary generated book files and the zip file.
+            ViewBag.Results = "Success ! Your files are being sent to you now. ";
             return View(cim);
         }
     }
