@@ -114,6 +114,7 @@ namespace TblAdmin.Core.Production.Services
             GenerateTitlesXMLFile(numChapters);
 
             GenerateZipOfAllFiles();
+            CleanupTempFiles();
             
             return true;
         }
@@ -378,26 +379,30 @@ namespace TblAdmin.Core.Production.Services
            int chapterNum = 0;
            string chapterHeadingLookahead = @"(?=" + ChapterHeadingPattern + @")";// positive lookahead to include the chapter headings
 
+           string bookFilesFolderPath = Path.Combine(BookFolderPath, bookFilesFolder);
+           Directory.CreateDirectory(bookFilesFolderPath);
+
            foreach (string s in Regex.Split(FileString, chapterHeadingLookahead, RegexOptions.Multiline | RegexOptions.IgnoreCase))
            {
                if (chapterNum > 0)
                {
                    string s_trimmed = s.Trim();
-                   GenerateChapterTextFile(s_trimmed, chapterNum);
-                   GenerateChapterHtmlFile(s_trimmed, chapterNum);
+                   GenerateChapterTextFile(s_trimmed, chapterNum, bookFilesFolderPath);
+                   GenerateChapterHtmlFile(s_trimmed, chapterNum, bookFilesFolderPath);
                }
                chapterNum = chapterNum + 1;
            }
            return chapterNum-1;  // return number of chapters.
        }
 
-       private void GenerateChapterTextFile(string s_trimmed, int chapterNum)
+       private void GenerateChapterTextFile(string s_trimmed, int chapterNum, string bookFilesFolderPath)
        {
-           string chapterPathTxt = BookFolderPath + "/" + bookFilesFolder + "/chapter-" + chapterNum.ToString("D3") + ".txt";
+           string chapterTextFileName = "chapter-" + chapterNum.ToString("D3") + ".txt";
+           string chapterPathTxt = Path.Combine(bookFilesFolderPath, chapterTextFileName);
            File.WriteAllText(chapterPathTxt, s_trimmed);
        }
 
-       private void GenerateChapterHtmlFile(string s_trimmed, int chapterNum)
+       private void GenerateChapterHtmlFile(string s_trimmed, int chapterNum, string bookFilesFolderPath)
        {
            s_trimmed = HttpUtility.HtmlEncode(s_trimmed);
 
@@ -427,7 +432,9 @@ namespace TblAdmin.Core.Production.Services
 @"
 </body>
 </html>";
-           string chapterPathHtml = BookFolderPath + @"/" + bookFilesFolder + @"/chapter-" + chapterNum.ToString("D3") + ".html";
+          
+           string chapterHtmlFileName = "chapter-" + chapterNum.ToString("D3") + ".html";
+           string chapterPathHtml = Path.Combine(bookFilesFolderPath, chapterHtmlFileName);
            File.WriteAllText(chapterPathHtml, s_trimmed);
        }
 
@@ -444,6 +451,21 @@ namespace TblAdmin.Core.Production.Services
            string bookFilesPath = BookFolderPath + @"\"+ bookFilesFolder;
 
            ZipFile.CreateFromDirectory(bookFilesPath, zipFilePath);
+       }
+
+       public void CleanupTempFiles()
+       {
+           //Remove uploaded file
+           if (System.IO.File.Exists(FilePath))
+           {
+               System.IO.File.Delete(FilePath);
+           }
+
+           //Remove all temporary generated chapter and title xml files
+           string bookFilesSubFolderPath = Path.Combine(BookFolderPath, bookFilesFolder);
+           string[] filePaths = Directory.GetFiles(bookFilesSubFolderPath);
+           foreach (string filePath in filePaths)
+               System.IO.File.Delete(filePath);
        }
     }
 
