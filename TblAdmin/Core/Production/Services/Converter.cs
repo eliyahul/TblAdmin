@@ -82,7 +82,7 @@ namespace TblAdmin.Core.Production.Services
             string bookNameRaw,
             string authorFirstNameRaw,
             string authorLastNameRaw,
-            string bookFolderPath,
+            string tempDirPhysicalPath,
             string filePath,
             int bookIdFromAdmin,
             int chapterHeadingTypeID
@@ -91,14 +91,17 @@ namespace TblAdmin.Core.Production.Services
             BookNameRaw = bookNameRaw;
             AuthorFirstName = authorFirstNameRaw;
             AuthorLastName = authorLastNameRaw;
-            BookFolderPath = bookFolderPath;
             FilePath = filePath;
             BookIdFromAdmin = bookIdFromAdmin;
             ChapterHeadingPattern = ChapterHeadings[chapterHeadingTypeID].Pattern;
 
             BookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s", "");
+            
+            BookFolderPath = Path.Combine(tempDirPhysicalPath, BookNameNoSpaces);// "~/Temp/TomSawyer"
+            Directory.CreateDirectory(BookFolderPath);
             ZipFileName = BookNameNoSpaces + "-Files.zip";
-            ZipFilePath = BookFolderPath + @"\" + ZipFileName;
+            ZipFilePath = Path.Combine(BookFolderPath, ZipFileName);
+            
         
         }
             

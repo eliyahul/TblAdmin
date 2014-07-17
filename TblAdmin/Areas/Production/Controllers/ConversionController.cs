@@ -48,15 +48,10 @@ namespace TblAdmin.Areas.Production.Controllers
             
             if (ModelState.IsValid)
             {
-                // Create book folder in ~/Temp
-                string bookNameNoSpaces = Regex.Replace(cim.BookNameRaw, @"\s", "");
                 string tempDirPhysicalPath = Server.MapPath(TEMP_DIR);
-                string tempBookFolderPath = Path.Combine(tempDirPhysicalPath, bookNameNoSpaces);// "~/Temp/TomSawyer"
-                Directory.CreateDirectory(tempBookFolderPath);
-                
-                
+
                 // Upload to the book folder
-                string uploadedFilePath = saveUploadedFile(cim.BookFile, Path.Combine(tempDirPhysicalPath, bookNameNoSpaces));
+                string uploadedFilePath = saveUploadedFile(cim.BookFile, tempDirPhysicalPath);
                 if (uploadedFilePath == "")
                 {
                     ViewBag.Results = "Uploaded file was empty.";
@@ -68,7 +63,7 @@ namespace TblAdmin.Areas.Production.Controllers
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
                     cim.AuthorLastNameRaw,
-                    tempBookFolderPath,
+                    tempDirPhysicalPath,
                     uploadedFilePath,
                     cim.BookIdFromAdmin,
                     cim.ChapterHeadingTypeID
