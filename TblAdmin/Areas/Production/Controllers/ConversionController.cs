@@ -21,7 +21,6 @@ namespace TblAdmin.Areas.Production.Controllers
     {
         private string saveUploadedFile(HttpPostedFileBase uploadedFile, string uploadDir)
         {
-                
             if (uploadedFile.ContentLength > 0)
             {
                 string fileName = Path.GetFileName(uploadedFile.FileName);
@@ -30,7 +29,8 @@ namespace TblAdmin.Areas.Production.Controllers
 
                 return uploadedFilePath;
             }
-            return "";
+            throw new ArgumentException("Uploaded book file - it was empty.");
+            // replace this with custom file validation attribute, check for file size (>0), type (.txt).
         }
 
         public ActionResult Convert()
@@ -50,15 +50,8 @@ namespace TblAdmin.Areas.Production.Controllers
             {
                 string tempDirPhysicalPath = Server.MapPath(TEMP_DIR);
 
-                // Upload to the book folder
                 string uploadedFilePath = saveUploadedFile(cim.BookFile, tempDirPhysicalPath);
-                if (uploadedFilePath == "")
-                {
-                    ViewBag.Results = "Uploaded file was empty.";
-                    return View(cim);
-                }
-
-                //Convert
+                    
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
@@ -68,19 +61,14 @@ namespace TblAdmin.Areas.Production.Controllers
                     cim.BookIdFromAdmin,
                     cim.ChapterHeadingTypeID
                 );
-
                 Boolean result = myConverter.Convert();
-                if (!result)
-                {
-                    ViewBag.Results = "Could not find uploaded file";
-                    return View(cim);
-                }
 
                 serveZipFile(myConverter.ZipFilePath, myConverter.ZipFileName);
-                
             }
-
-            ViewBag.Results = "Success ! Your files are being sent to you now. ";
+            else
+            {
+                ViewBag.Results = "There were some validation errors. Please check you inputs and resubmit. Thanks.";
+            }
             return View(cim);
         }
     }

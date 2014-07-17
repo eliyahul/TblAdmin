@@ -109,7 +109,7 @@ namespace TblAdmin.Core.Production.Services
         {
             if (!GetBookFileAsString())
             {
-                return false;
+                throw new FileNotFoundException("Converter could not find the uploaded book file.");
             }
             
             FileString.Trim();
