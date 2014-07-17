@@ -21,6 +21,11 @@ namespace TblAdmin.Core.Production.Services
         string BookFolderPath { get; set; } // main book folder
         string bookFilesFolder = "bookfiles"; // subfolder where system puts the generated book files
         string FilePath { get; set; } // path to the manually prepared book file before it gets processed by system
+
+        string BookNameNoSpaces { get; set; }
+        public string ZipFilePath { get; set; }
+        public string ZipFileName { get; set; }
+           
         
         string ChapterHeadingPattern { get; set; }
 
@@ -90,7 +95,11 @@ namespace TblAdmin.Core.Production.Services
             FilePath = filePath;
             BookIdFromAdmin = bookIdFromAdmin;
             ChapterHeadingPattern = ChapterHeadings[chapterHeadingTypeID].Pattern;
-                
+
+            BookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s", "");
+            ZipFileName = BookNameNoSpaces + "-Files.zip";
+            ZipFilePath = BookFolderPath + @"\" + ZipFileName;
+        
         }
             
         public bool Convert()
@@ -133,7 +142,6 @@ namespace TblAdmin.Core.Production.Services
 
        private string GenerateTitlesXMLAsString(int numChapters)
        {
-           string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s{0,}", "");
 
            string titlesXMLAsString =
 @"<?xml version=""1.0"" encoding=""iso-8859-1""?>
@@ -142,7 +150,7 @@ namespace TblAdmin.Core.Production.Services
 		<book> 
 			<title>" + BookNameRaw + @"</title>
 			<author>" + AuthorLastName + ", " + AuthorFirstName + @"</author>
-			<bookFolder>" + bookNameNoSpaces + @"</bookFolder>
+			<bookFolder>" + BookNameNoSpaces + @"</bookFolder>
 		    <numChapters>" + numChapters.ToString() + @"</numChapters>
             <chapterNames>standard</chapterNames>
 			<ra>n</ra>
@@ -441,17 +449,14 @@ namespace TblAdmin.Core.Production.Services
 
        public void GenerateZipOfAllFiles()
        {
-           string bookNameNoSpaces = Regex.Replace(BookNameRaw, @"\s", "");
-           
-           string zipFilePath = BookFolderPath + @"\" + bookNameNoSpaces + "-Files.zip";
-           if (File.Exists(zipFilePath))
+           if (File.Exists(ZipFilePath))
            {
-               File.Delete(zipFilePath);
+               File.Delete(ZipFilePath);
            }
            
            string bookFilesPath = BookFolderPath + @"\"+ bookFilesFolder;
 
-           ZipFile.CreateFromDirectory(bookFilesPath, zipFilePath);
+           ZipFile.CreateFromDirectory(bookFilesPath, ZipFilePath);
        }
 
        public void CleanupTempFiles()
@@ -468,6 +473,7 @@ namespace TblAdmin.Core.Production.Services
            foreach (string filePath in filePaths)
                System.IO.File.Delete(filePath);
        }
+
     }
 
     

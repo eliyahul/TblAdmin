@@ -81,10 +81,7 @@ namespace TblAdmin.Areas.Production.Controllers
                     return View(cim);
                 }
 
-                // Serve zip file
-                string zipFileName = bookNameNoSpaces + "-Files.zip";
-                string zipFilePath = Path.Combine(tempBookFolderPath, zipFileName);
-                serveZipFile(zipFilePath, zipFileName);
+                serveZipFile(myConverter.ZipFilePath, myConverter.ZipFileName);
                 
             }
 
