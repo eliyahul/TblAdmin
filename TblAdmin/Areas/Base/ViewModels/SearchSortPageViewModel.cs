@@ -44,7 +44,7 @@
             
             if ((page <= 0) || (page > 1000000))
             {
-                Page = 1;
+                Page = DEFAULT_PAGE_NUMBER;
             }
             else
             {
@@ -53,7 +53,7 @@
 
             if ((pageSize <= 0) || (pageSize > 1000000))
             {
-                PageSize = 3;
+                PageSize = DEFAULT_PAGE_SIZE;
             }
             else
             {
