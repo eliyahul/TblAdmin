@@ -21,11 +21,11 @@
         }
 
         public SearchSortPageViewModel(
-                string searchString, 
-                string sortCol, 
-                string sortOrder,
-                int page,
-                int pageSize
+            string searchString, 
+            string sortCol, 
+            string sortOrder,
+            int page,
+            int pageSize
             )
         {
             SearchString =  searchString;
