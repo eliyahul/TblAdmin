@@ -83,7 +83,7 @@ namespace TblAdmin.Core.Production.Services
             string authorFirstNameRaw,
             string authorLastNameRaw,
             string tempDirPhysicalPath,
-            string filePath,
+            string fileName,
             int bookIdFromAdmin,
             int chapterHeadingTypeID
         )
@@ -91,7 +91,7 @@ namespace TblAdmin.Core.Production.Services
             BookNameRaw = bookNameRaw;
             AuthorFirstName = authorFirstNameRaw;
             AuthorLastName = authorLastNameRaw;
-            FilePath = filePath;
+            FilePath = Path.Combine(tempDirPhysicalPath, fileName);
             BookIdFromAdmin = bookIdFromAdmin;
             ChapterHeadingPattern = ChapterHeadings[chapterHeadingTypeID].Pattern;
 
@@ -102,14 +102,13 @@ namespace TblAdmin.Core.Production.Services
             ZipFileName = BookNameNoSpaces + "-Files.zip";
             ZipFilePath = Path.Combine(BookFolderPath, ZipFileName);
             
-        
         }
-            
+
         public bool Convert()
         {
             if (!GetBookFileAsString())
             {
-                throw new FileNotFoundException("Converter could not find the uploaded book file.");
+                throw new FileNotFoundException("Converter could not find the uploaded book file: " + FilePath);
             }
             
             FileString.Trim();
@@ -127,7 +126,6 @@ namespace TblAdmin.Core.Production.Services
             GenerateTitlesXMLFile(numChapters);
 
             GenerateZipOfAllFiles();
-            CleanupTempFiles();
             
             return true;
         }
@@ -475,6 +473,12 @@ namespace TblAdmin.Core.Production.Services
            string[] filePaths = Directory.GetFiles(bookFilesSubFolderPath);
            foreach (string filePath in filePaths)
                System.IO.File.Delete(filePath);
+
+           //Remove the generated zip file
+           if (System.IO.File.Exists(ZipFilePath))
+           {
+               System.IO.File.Delete(ZipFilePath);
+           }
        }
 
     }

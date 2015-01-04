@@ -27,7 +27,7 @@ namespace TblAdmin.Areas.Production.Controllers
                 string uploadedFilePath = Path.Combine(uploadDir, fileName);
                 uploadedFile.SaveAs(uploadedFilePath);
 
-                return uploadedFilePath;
+                return fileName;
             }
             throw new ArgumentException("Uploaded book file - it was empty.");
             // replace this with custom file validation attribute, check for file size (>0), type (.txt).
@@ -44,26 +44,27 @@ namespace TblAdmin.Areas.Production.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Convert(ConvertInputModel cim)
         {
-            const string TEMP_DIR = "~/Temp";
             
             if (ModelState.IsValid)
             {
+                const string TEMP_DIR = "~/Temp";
                 string tempDirPhysicalPath = Server.MapPath(TEMP_DIR);
 
-                string uploadedFilePath = saveUploadedFile(cim.BookFile, tempDirPhysicalPath);
+                string fileName = saveUploadedFile(cim.BookFile, tempDirPhysicalPath);
                     
                 Converter myConverter = new Converter(
                     cim.BookNameRaw,
                     cim.AuthorFirstNameRaw,
                     cim.AuthorLastNameRaw,
                     tempDirPhysicalPath,
-                    uploadedFilePath,
+                    fileName,
                     cim.BookIdFromAdmin,
                     cim.ChapterHeadingTypeID
                 );
                 Boolean result = myConverter.Convert();
 
                 serveZipFile(myConverter.ZipFilePath, myConverter.ZipFileName);
+                myConverter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
             }
             else
             {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<library>
+	<items>
+		<book> 
+			<title>Anna Karenina</title>
+			<author>Tolstoy, Leo</author>
+			<bookFolder>AnnaKarenina</bookFolder>
+			<numChapters>9</numChapters>
+			<ra>n</ra>
+		</book>
+	</items>
+</library>

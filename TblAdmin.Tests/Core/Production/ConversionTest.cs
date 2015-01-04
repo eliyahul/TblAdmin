@@ -19,7 +19,9 @@ namespace TblAdmin.Tests.Core.Production.Services
     public class ConversionTest
     {
         private Converter converter;
-
+        string tempDirPhysicalPath = "c:\\users\\user\\documents\\visual studio 2013\\Projects\\TblAdmin\\TblAdmin\\Temp";
+        string fixturesPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
+                
         [SetUp]
         public void init()
         {
@@ -31,40 +33,37 @@ namespace TblAdmin.Tests.Core.Production.Services
         {
         }
 
+        void ConvertNonExistantFile()
+        {
+            converter.Convert();
+        }
+            
+
         [Test]
-        public void Gives_message_for_nonexistant_file()
+        public void Throws_Exception_for_nonexistant_file()
         {
             // Arrange
             string bookNameRaw = "Uncle Vanya";
             string authorFirstNameRaw = "Anton";
             string authorLastNameRaw = "Chekhov";
-            string publisherName = "Gutenberg";
-            string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
             int bookIdFromAdmin = 0;
-            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
-
-            string bookNameNoSpaces = Regex.Replace(bookNameRaw,  @"\s{0,}", "");
-            string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
-            string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
-            filePath = prefixPath + "my-non-existant-file";
-            string expectedResult = "Could not find file with pathname: " + filePath;
-
+            string fileName = "my-non-existant-file";
 
             // Act
             converter = new Converter(
                 bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
-                bookFolderPath,
-                filePath,
+                tempDirPhysicalPath,
+                fileName,
                 bookIdFromAdmin,
-                chapterHeadingPattern
+                Converter.CHAPTER_AND_NUMBER
                 );
-            Boolean result = converter.Convert();
 
-            // Assert
-            Assert.IsFalse(result);
+            Assert.Throws(
+                typeof(FileNotFoundException), 
+                new TestDelegate(ConvertNonExistantFile)
+            );
         }
 
         [Test]
@@ -74,35 +73,39 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Uncle Vanya";
             string authorFirstNameRaw = "Anton";
             string authorLastNameRaw = "Chekhov";
+            string fileName = "UncleVanya_FullBook_EDITED-MANUALLY.txt";
             int bookIdFromAdmin = 0;
             
-            string publisherName = "Gutenberg";
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
-            string prefixPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
-            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
-            string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
-            string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
-            string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
-
-            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
+            string actualResultsPath = tempDirPhysicalPath + @"\UncleVanya\bookfiles\";
+            string expectedResultsPath = fixturesPath + @"Gutenberg\UncleVanya\ExpectedResults\";
             
-
+            // copy fileName from fixturesPath to tempDirPhysicalPath where converter is expecting it
+            if (!System.IO.File.Exists(tempDirPhysicalPath + @"\UncleVanya_FullBook_EDITED-MANUALLY.txt"))
+            {
+                File.Copy(
+                    fixturesPath + @"Gutenberg\UncleVanya\UncleVanya_FullBook_EDITED-MANUALLY.txt", 
+                    tempDirPhysicalPath + @"\UncleVanya_FullBook_EDITED-MANUALLY.txt"
+                );
+            }
             // Act
             converter = new Converter(
                 bookNameRaw,
                 authorFirstNameRaw,
                 authorLastNameRaw,
-                actualResultsPath,
-                filePath,
+                tempDirPhysicalPath,
+                fileName,
                 bookIdFromAdmin,
-                chapterHeadingPattern
+                Converter.CHAPTER_AND_NUMBER
                 );
             Boolean result = converter.Convert();
             
             // Assert
             Assert.IsTrue(result);
 
-            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
+            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, "UncleVanya");
+
+            converter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
+           
         }
 
         [Test]
@@ -123,9 +126,6 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
 
-            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
-                
-
             // Act
             
             converter = new Converter(
@@ -135,7 +135,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                 actualResultsPath,
                 filePath,
                 bookIdFromAdmin,
-                chapterHeadingPattern
+                Converter.CHAPTER_AND_NUMBER
                 );
             Boolean result = converter.Convert();
             
@@ -164,8 +164,6 @@ namespace TblAdmin.Tests.Core.Production.Services
             string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
             string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
             
-            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.PART_CHAPTER_AND_NUMBER].Pattern;
-            
             converter = new Converter(
                  bookNameRaw,
                  authorFirstNameRaw,
@@ -173,7 +171,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                  actualResultsPath,
                  filePath,
                  bookIdFromAdmin,
-                 chapterHeadingPattern
+                 Converter.PART_CHAPTER_AND_NUMBER
                  );
             Boolean result = converter.Convert();
 
@@ -203,18 +201,11 @@ namespace TblAdmin.Tests.Core.Production.Services
             }
 
             // Verify zip file was created.
-            string zipFilePath = actualResultsPath + bookNameNoSpaces + "Files.zip";
+            string zipFilePath = actualResultsPath + @"../" + bookNameNoSpaces + "-Files.zip";
             Assert.IsTrue(File.Exists(zipFilePath));
 
             FileInfo fi = new FileInfo(zipFilePath);
             Assert.IsTrue(fi.Length > 0);
-
-            // Tear Down (only runs if all Asserts pass, so if there is a failure, I can examine the file)
-            IEnumerable<String> actualFilePaths = Directory.EnumerateFiles(actualResultsPath);
-            foreach (string path in actualFilePaths)
-            {
-                File.Delete(path);
-            }
         }
 
         [Test]
@@ -234,8 +225,6 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
             string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
 
-            string chapterHeadingPattern = Converter.ChapterHeadings[Converter.CHAPTER_AND_NUMBER].Pattern;
-            
             converter = new Converter(
                  bookNameRaw,
                  authorFirstNameRaw,
@@ -243,7 +232,7 @@ namespace TblAdmin.Tests.Core.Production.Services
                  bookFolderPath,
                  filePath,
                  bookIdFromAdmin,
-                 chapterHeadingPattern
+                 Converter.CHAPTER_AND_NUMBER
                  );
             Boolean result = converter.Convert();
 
