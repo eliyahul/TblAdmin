@@ -137,7 +137,7 @@ namespace TblAdmin.Tests.Core.Production.Services
 
             compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
 
-            //converter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
+            converter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
         }
 
         private void compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath, string bookNameNoSpaces)
