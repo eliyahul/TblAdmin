@@ -5,7 +5,8 @@
 			<title>Manga Touch</title>
 			<author>Pearce, Jacqueline</author>
 			<bookFolder>MangaTouch</bookFolder>
-			<numChapters>14</numChapters>
+		    <numChapters>14</numChapters>
+            <chapterNames>standard</chapterNames>
 			<ra>n</ra>
 		</book>
 	</items>

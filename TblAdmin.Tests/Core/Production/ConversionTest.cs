@@ -43,9 +43,9 @@ namespace TblAdmin.Tests.Core.Production.Services
         public void Throws_Exception_for_nonexistant_file()
         {
             // Arrange
-            string bookNameRaw = "Uncle Vanya";
-            string authorFirstNameRaw = "Anton";
-            string authorLastNameRaw = "Chekhov";
+            string bookNameRaw = "";
+            string authorFirstNameRaw = "";
+            string authorLastNameRaw = "";
             int bookIdFromAdmin = 0;
             string fileName = "my-non-existant-file";
 
@@ -73,18 +73,51 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Uncle Vanya";
             string authorFirstNameRaw = "Anton";
             string authorLastNameRaw = "Chekhov";
-            string fileName = "UncleVanya_FullBook_EDITED-MANUALLY.txt";
             int bookIdFromAdmin = 0;
+
+            run_converter(bookNameRaw, authorFirstNameRaw, authorLastNameRaw, bookIdFromAdmin);
+        }
+
+        [Test]
+        public void Converts_a_novel_format_modified_with_special_cases()
+        {
+            // Arrange
+            string bookNameRaw = "Manga Touch";
+            string authorFirstNameRaw = "Jacqueline";
+            string authorLastNameRaw = "Pearce";
+            int bookIdFromAdmin = 4421;
+
+            run_converter(bookNameRaw, authorFirstNameRaw, authorLastNameRaw, bookIdFromAdmin);
+        }
+
+        [Test]
+        public void Converts_a_novel_format_with_parts_and_chapters()
+        {
+            // Arrange
+            string bookNameRaw = "Anna Karenina";
+            string authorFirstNameRaw = "Leo";
+            string authorLastNameRaw = "Tolstoy";
+            int bookIdFromAdmin = 4425;
+
+            run_converter(bookNameRaw, authorFirstNameRaw, authorLastNameRaw, bookIdFromAdmin);
+        }
+
+        private void run_converter(string bookNameRaw, string authorFirstNameRaw, string authorLastNameRaw, int bookIdFromAdmin)
+        {
+            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
+
+            string editedFileSuffix = "_FullBook_EDITED-MANUALLY.txt";
+            string fileName = bookNameNoSpaces + editedFileSuffix;
             
-            string actualResultsPath = tempDirPhysicalPath + @"\UncleVanya\bookfiles\";
-            string expectedResultsPath = fixturesPath + @"Gutenberg\UncleVanya\ExpectedResults\";
-            
+            string actualResultsPath = tempDirPhysicalPath + @"\" + bookNameNoSpaces + @"\bookfiles\";
+            string expectedResultsPath = fixturesPath + bookNameNoSpaces + @"\ExpectedResults\";
+
             // copy fileName from fixturesPath to tempDirPhysicalPath where converter is expecting it
-            if (!System.IO.File.Exists(tempDirPhysicalPath + @"\UncleVanya_FullBook_EDITED-MANUALLY.txt"))
+            if (!System.IO.File.Exists(tempDirPhysicalPath + @"\" + fileName))
             {
                 File.Copy(
-                    fixturesPath + @"Gutenberg\UncleVanya\UncleVanya_FullBook_EDITED-MANUALLY.txt", 
-                    tempDirPhysicalPath + @"\UncleVanya_FullBook_EDITED-MANUALLY.txt"
+                    fixturesPath + bookNameNoSpaces + @"\" + fileName,
+                    tempDirPhysicalPath + @"\" + fileName
                 );
             }
             // Act
@@ -98,90 +131,14 @@ namespace TblAdmin.Tests.Core.Production.Services
                 Converter.CHAPTER_AND_NUMBER
                 );
             Boolean result = converter.Convert();
-            
-            // Assert
-            Assert.IsTrue(result);
-
-            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, "UncleVanya");
-
-            converter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
-           
-        }
-
-        [Test]
-        public void Converts_a_novel_format_modified_with_special_cases()
-        {
-            // Arrange
-            string bookNameRaw = "Manga Touch";
-            string authorFirstNameRaw = "Jacqueline";
-            string authorLastNameRaw = "Pearce";
-            int bookIdFromAdmin = 4421;
-
-            string publisherName = "Orca Currents";
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY_MODIFIED_FOR_TESTING_PARAG_ENDING_PUNCTUATION.txt";
-            //string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
-            string prefixPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
-            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
-            string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
-            string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
-            string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
-
-            // Act
-            
-            converter = new Converter(
-                bookNameRaw,
-                authorFirstNameRaw,
-                authorLastNameRaw,
-                actualResultsPath,
-                filePath,
-                bookIdFromAdmin,
-                Converter.CHAPTER_AND_NUMBER
-                );
-            Boolean result = converter.Convert();
-            
 
             // Assert
             Assert.IsTrue(result);
 
             compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
+
+            //converter.CleanupTempFiles();// controller and tests have to clean up the converters temp files
         }
-
-        [Test]
-        public void Converts_a_novel_format_with_parts_and_chapters()
-        {
-            // Arrange
-            string bookNameRaw = "Anna Karenina";
-            string authorFirstNameRaw = "Leo";
-            string authorLastNameRaw = "Tolstoy";
-            int bookIdFromAdmin = 4425;
-
-            string publisherName = "Gutenberg";
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY-ABBREVIATED_FOR_TESTING.txt";
-            
-            string prefixPath = @"C:\Users\User\Documents\Visual Studio 2013\Projects\TblAdmin\TblAdmin.Tests\Core\Production\Fixtures\";
-            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
-            string actualResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ActualResults" + @"\";
-            string expectedResultsPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + "ExpectedResults" + @"\";
-            string filePath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\" + bookNameNoSpaces + fileNameSuffix;
-            
-            converter = new Converter(
-                 bookNameRaw,
-                 authorFirstNameRaw,
-                 authorLastNameRaw,
-                 actualResultsPath,
-                 filePath,
-                 bookIdFromAdmin,
-                 Converter.PART_CHAPTER_AND_NUMBER
-                 );
-            Boolean result = converter.Convert();
-
-            // Assert
-            Assert.IsTrue(result);
-
-            compare_actual_and_expected_files(expectedResultsPath, actualResultsPath, bookNameNoSpaces);
-        }
-
-        
 
         private void compare_actual_and_expected_files(string expectedResultsPath, string actualResultsPath, string bookNameNoSpaces)
         {
@@ -215,28 +172,9 @@ namespace TblAdmin.Tests.Core.Production.Services
             string bookNameRaw = "Oracle";
             string authorFirstNameRaw = "Alex";
             string authorLastNameRaw = "Van Tol";
-            string publisherName = "Orca Currents";
-            
-            int bookIdFromAdmin = 0;
-            
-            string fileNameSuffix = "_FullBook_EDITED-MANUALLY.txt";
-            string prefixPath = @"C:\Users\User\Documents\clients\Ronnie\Production\Books\";
-            string bookNameNoSpaces = Regex.Replace(bookNameRaw, @"\s{0,}", "");
-            string bookFolderPath = prefixPath + publisherName + @"\" + bookNameNoSpaces + @"\";
-            string filePath = bookFolderPath + bookNameNoSpaces + fileNameSuffix;
+            int bookIdFromAdmin = 4441;
 
-            converter = new Converter(
-                 bookNameRaw,
-                 authorFirstNameRaw,
-                 authorLastNameRaw,
-                 bookFolderPath,
-                 filePath,
-                 bookIdFromAdmin,
-                 Converter.CHAPTER_AND_NUMBER
-                 );
-            Boolean result = converter.Convert();
-
-            Assert.IsTrue(result);
+            run_converter(bookNameRaw, authorFirstNameRaw, authorLastNameRaw, bookIdFromAdmin);
         }
     }
 }

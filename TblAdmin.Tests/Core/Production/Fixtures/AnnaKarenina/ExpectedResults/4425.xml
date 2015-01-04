@@ -5,7 +5,8 @@
 			<title>Anna Karenina</title>
 			<author>Tolstoy, Leo</author>
 			<bookFolder>AnnaKarenina</bookFolder>
-			<numChapters>9</numChapters>
+		    <numChapters>241</numChapters>
+            <chapterNames>standard</chapterNames>
 			<ra>n</ra>
 		</book>
 	</items>

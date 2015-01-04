@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<library>
+	<items>
+		<book> 
+			<title>Oracle</title>
+			<author>Van Tol, Alex</author>
+			<bookFolder>Oracle</bookFolder>
+		    <numChapters>13</numChapters>
+            <chapterNames>standard</chapterNames>
+			<ra>n</ra>
+		</book>
+	</items>
+</library>
