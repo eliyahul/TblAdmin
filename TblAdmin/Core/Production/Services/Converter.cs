@@ -1,4 +1,27 @@
-﻿using System;
+﻿/*
+ 
+FOLDER STRUCTURE
+
+Temp/ (tempDirPhysicalPath) - passed in by controller and tests
+.....Cheat_FullBook_EDITED-MANUALLY.txt (filepath) - copied here by controller and tests
+.....Cheat/ (BookFolderPath) - created by Converter
+..........bookfiles/ (bookfilesPath) - created by converter
+..........Cheat-Files.zip (ZipFilePath) - created by converter
+
+Controller and tests copy the edited file to the Temp directory, tell the converter where the temp directory
+is and the name of the file. The converter creates BookFolder path within the Temp directory to house all
+the files it generates for that book. The bookfiles folder will contain all the chapter and xml files.
+The zip file is placed in the BookFolderPath.
+
+The controller asks for the ZipfilePath from the Converter, then it serves it to the user. The tests
+just verify the existence of the zip file. 
+ 
+When the controller is done with the zip file and the tests are done comparing all the generated files to
+the expected results in the fixtures folder, they delete all the generated files.
+
+*/
+
+using System;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Globalization;
