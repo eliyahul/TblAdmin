@@ -9,7 +9,6 @@ namespace TblAdmin.Areas.Books.ViewModels.Books
     {
         public SearchSortPageViewModel SearchSortPageParams { get; set; }
         public Book Book { get; set; }
-        public IEnumerable<SelectListItem> Publishers { get; set; }
 
         public EditInputModel() 
         {
@@ -17,11 +16,10 @@ namespace TblAdmin.Areas.Books.ViewModels.Books
             Book = null;
         }
 
-        public EditInputModel(SearchSortPageViewModel searchSortPageParams, Book book, IEnumerable<SelectListItem> publishers)
+        public EditInputModel(SearchSortPageViewModel searchSortPageParams, Book book)
         {
             SearchSortPageParams = searchSortPageParams;
             Book = book;
-            Publishers = publishers;
         }
     }
 }
