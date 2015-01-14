@@ -28,11 +28,6 @@ namespace TblAdmin.Areas.Books.Controllers
         public ActionResult Index(SearchSortPageViewModel vm)
         {
 
-            if (vm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            } 
-            
             IQueryable<Book> books = from b in db.Books select b; //db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             if (!String.IsNullOrEmpty(vm.SearchString))
             {
@@ -98,11 +93,6 @@ namespace TblAdmin.Areas.Books.Controllers
             Book book;
             DetailsViewModel dvm;
 
-            if (recordVm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             //book = db.Books.Find(recordVm.Id); // Testing issue: don't use find, as it does not work when mocking EF 6
             book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
@@ -146,10 +136,6 @@ namespace TblAdmin.Areas.Books.Controllers
             IEnumerable<SelectListItem> publishers; 
             EditViewModel evm;
 
-            if (recordVm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {
@@ -190,10 +176,6 @@ namespace TblAdmin.Areas.Books.Controllers
             Book book;
             DeleteInputModel dim;
 
-            if (recordVm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {
@@ -212,10 +194,6 @@ namespace TblAdmin.Areas.Books.Controllers
         {
             Book book;
 
-            if (recordVm == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
             {

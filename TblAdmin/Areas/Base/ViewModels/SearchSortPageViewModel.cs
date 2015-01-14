@@ -41,23 +41,17 @@
             {
                 SortColOrder = sortOrder;
             }
-            
+
+            Page = page;
             if ((page <= 0) || (page > 1000000))
             {
                 Page = DEFAULT_PAGE_NUMBER;
             }
-            else
-            {
-                Page = page;
-            }
 
+            PageSize = pageSize; 
             if ((pageSize <= 0) || (pageSize > 1000000))
             {
                 PageSize = DEFAULT_PAGE_SIZE;
-            }
-            else
-            {
-                PageSize = pageSize;
             }
             
         }
