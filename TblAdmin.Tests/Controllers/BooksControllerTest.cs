@@ -388,7 +388,7 @@ namespace TblAdmin.Tests.Controllers
 
             // Act
             ViewResult result = controller.Delete(rVM) as ViewResult;
-            DeleteInputModel deleteVM = (DeleteInputModel)result.ViewData.Model;
+            DeleteViewModel deleteVM = (DeleteViewModel)result.ViewData.Model;
 
             // Assert
             Assert.IsNotNull(result);
@@ -453,10 +453,10 @@ namespace TblAdmin.Tests.Controllers
 
             // Act
             ViewResult result = controller.Delete(rVM) as ViewResult;
-            DeleteInputModel deleteVM = (DeleteInputModel)result.ViewData.Model;
+            DeleteViewModel deleteVM = (DeleteViewModel)result.ViewData.Model;
 
             // Assert
-            Assert.IsInstanceOf<DeleteInputModel>(deleteVM);
+            Assert.IsInstanceOf<DeleteViewModel>(deleteVM);
         }
 
 

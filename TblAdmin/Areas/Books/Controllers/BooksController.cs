@@ -174,7 +174,7 @@ namespace TblAdmin.Areas.Books.Controllers
         public ActionResult Delete(RecordViewModel recordVm)
         {
             Book book;
-            DeleteInputModel dim;
+            DeleteViewModel dim;
 
             book = db.Books.FirstOrDefault(i => i.ID == recordVm.Id);
             if (book == null)
@@ -182,7 +182,7 @@ namespace TblAdmin.Areas.Books.Controllers
                 return HttpNotFound();
             }
 
-            dim = new DeleteInputModel(recordVm.SearchSortPageParams, book);
+            dim = new DeleteViewModel(recordVm.SearchSortPageParams, book);
             
             return View(dim);
         }

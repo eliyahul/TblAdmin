@@ -5,18 +5,18 @@ using System.Web.Mvc;
 
 namespace TblAdmin.Areas.Books.ViewModels.Books
 {
-    public class DeleteInputModel
+    public class DeleteViewModel
     {
         public SearchSortPageViewModel SearchSortPageParams { get; set; }
         public Book Book { get; set; }
         
-        public DeleteInputModel() 
+        public DeleteViewModel() 
         {
             SearchSortPageParams = new SearchSortPageViewModel();
             Book = null;
         }
 
-        public DeleteInputModel(SearchSortPageViewModel searchSortPageParams, Book book)
+        public DeleteViewModel(SearchSortPageViewModel searchSortPageParams, Book book)
         {
             SearchSortPageParams = searchSortPageParams;
             Book = book;

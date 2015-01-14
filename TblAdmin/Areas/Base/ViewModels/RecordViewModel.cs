@@ -2,6 +2,9 @@
 
 namespace TblAdmin.Areas.Base.ViewModels
 {
+    // This class is needed in every admin controller to pass around the SearchSortPage params in the url 
+    // from page to page.
+
     public class RecordViewModel
     {
         public SearchSortPageViewModel SearchSortPageParams { get; set; }
