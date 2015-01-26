@@ -91,11 +91,12 @@ namespace TblAdmin.Tests.Controllers
         {
             // Arrange
             string searchString = "";
-            string sortCol = "name"; 
-            string sortColOrder = "asc";
+            string sortCol = "name";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_DESC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 3;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             
                 
             // Act
@@ -115,10 +116,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 2;
             int pageSize = 3;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -138,10 +140,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 4;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -160,10 +163,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "desc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_DESC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -181,10 +185,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 2;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -204,10 +209,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = -1;
             int pageSize = -1;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -227,10 +233,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 999999999;
             int pageSize = 999999999;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -250,10 +257,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "JJ";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -272,10 +280,11 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
 
 
             // Act
@@ -310,11 +319,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = 1;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
 
@@ -331,7 +341,7 @@ namespace TblAdmin.Tests.Controllers
             Assert.IsNotNull(detailsVM.SearchSortPageParams);
             Assert.AreEqual(searchString, detailsVM.SearchSortPageParams.SearchString);
             Assert.AreEqual(sortCol, detailsVM.SearchSortPageParams.SortCol);
-            Assert.AreEqual(sortColOrder, detailsVM.SearchSortPageParams.SortColOrder);
+            Assert.AreEqual(nextOrder, detailsVM.SearchSortPageParams.NextOrder);
             Assert.AreEqual(page, detailsVM.SearchSortPageParams.Page);
             Assert.AreEqual(pageSize, detailsVM.SearchSortPageParams.PageSize);
         }
@@ -356,11 +366,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = -1;  // a record id which doesn't exist
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
             // Act
@@ -378,11 +389,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = 1;
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
 
@@ -399,7 +411,7 @@ namespace TblAdmin.Tests.Controllers
             Assert.IsNotNull(deleteVM.SearchSortPageParams);
             Assert.AreEqual(searchString, deleteVM.SearchSortPageParams.SearchString);
             Assert.AreEqual(sortCol, deleteVM.SearchSortPageParams.SortCol);
-            Assert.AreEqual(sortColOrder, deleteVM.SearchSortPageParams.SortColOrder);
+            Assert.AreEqual(nextOrder, deleteVM.SearchSortPageParams.NextOrder);
             Assert.AreEqual(page, deleteVM.SearchSortPageParams.Page);
             Assert.AreEqual(pageSize, deleteVM.SearchSortPageParams.PageSize);
         }
@@ -424,11 +436,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = -1;  // a record id which doesn't exist
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
             // Act
@@ -444,11 +457,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = 1;  // a record id which exists
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
             // Act
@@ -482,11 +496,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = -1;  // a record id which doesn't exist
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
             // Act
@@ -502,11 +517,12 @@ namespace TblAdmin.Tests.Controllers
             // Arrange
             string searchString = "H3J";
             string sortCol = "name";
-            string sortColOrder = "asc";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
             int page = 1;
             int pageSize = 5;
             int id = 1;  // a record id which exists
-            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, sortColOrder, page, pageSize);
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             RecordViewModel rVM = new RecordViewModel(sspVM, id);
 
             // Act
@@ -523,7 +539,7 @@ namespace TblAdmin.Tests.Controllers
 
             Assert.AreEqual(result.RouteValues["searchString"], searchString);
             Assert.AreEqual(result.RouteValues["sortCol"], sortCol);
-            Assert.AreEqual(result.RouteValues["sortColOrder"], sortColOrder);
+            Assert.AreEqual(result.RouteValues["nextOrder"], nextOrder);
             Assert.AreEqual(result.RouteValues["page"], page);
             Assert.AreEqual(result.RouteValues["pageSize"], pageSize);
             
@@ -540,10 +556,17 @@ namespace TblAdmin.Tests.Controllers
         public void Create_with_no_args_returns_selectlist_of_books()
         {
             // Arrange
+            string searchString = "H3J";
+            string sortCol = "name";
+            string nextOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            string currentOrder = SearchSortPageViewModel.SORT_ORDER_ASC;
+            int page = 1;
+            int pageSize = 5;
+            SearchSortPageViewModel sspVM = new SearchSortPageViewModel(searchString, sortCol, currentOrder, nextOrder, page, pageSize);
             
             // Act
             //var result = controller.Create();
-            ViewResult result = controller.Create() as ViewResult;
+            ViewResult result = controller.Create(sspVM) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Routing;
 using System.Web.Mvc;
 using TblAdmin.Areas.Books.Models;
 using TblAdmin.Areas.Books.ViewModels.Books;
@@ -27,6 +28,27 @@ namespace TblAdmin.Areas.Books.Controllers
         // GET: Books/Books
         public ActionResult Index(SearchSortPageViewModel vm)
         {
+            if (vm.ToggleOrder)
+            {
+                vm.CurrentOrder = vm.NextOrder;
+                vm.NextOrder = (vm.NextOrder == SearchSortPageViewModel.SORT_ORDER_ASC) ? SearchSortPageViewModel.SORT_ORDER_DESC : SearchSortPageViewModel.SORT_ORDER_ASC;
+            }
+            
+            SearchSortPageViewModel publisherRouteParams, nameRouteParams, createdDateRouteParams, modifiedDateRouteParams;
+            SearchSortPageViewModel createLinkRouteParams;
+
+            publisherRouteParams = new SearchSortPageViewModel();
+            publisherRouteParams.SearchString = vm.SearchString;
+            publisherRouteParams.SortCol = "publisher";
+            nameRouteParams = new SearchSortPageViewModel();
+            nameRouteParams.SearchString = vm.SearchString;
+            nameRouteParams.SortCol = "name";
+            createdDateRouteParams = new SearchSortPageViewModel();
+            createdDateRouteParams.SearchString = vm.SearchString;
+            createdDateRouteParams.SortCol = "createdDate";
+            modifiedDateRouteParams = new SearchSortPageViewModel();
+            modifiedDateRouteParams.SearchString = vm.SearchString;
+            modifiedDateRouteParams.SortCol = "modifiedDate";
 
             IQueryable<Book> books = from b in db.Books select b; //db.Books.Include(b => b.Publisher); // the "Include" messes up mocking DbSet with mock.
             if (!String.IsNullOrEmpty(vm.SearchString))
@@ -37,7 +59,7 @@ namespace TblAdmin.Areas.Books.Controllers
             switch (vm.SortCol)
             {
                 case "name":
-                    if (vm.SortColOrder == "desc")
+                    if (vm.CurrentOrder == SearchSortPageViewModel.SORT_ORDER_DESC)
                     {
                         books = books.OrderByDescending(b => b.Name);
                     }
@@ -45,9 +67,12 @@ namespace TblAdmin.Areas.Books.Controllers
                     {
                         books = books.OrderBy(b => b.Name);
                     }
+
+                    nameRouteParams = (SearchSortPageViewModel) vm.ShallowCopy();
+                    nameRouteParams.ToggleOrder = true;
                     break;
                 case "createdDate":
-                    if (vm.SortColOrder == "desc")
+                    if (vm.CurrentOrder == SearchSortPageViewModel.SORT_ORDER_DESC)
                     {
                         books = books.OrderByDescending(b => b.CreatedDate);
                     }
@@ -55,9 +80,11 @@ namespace TblAdmin.Areas.Books.Controllers
                     {
                         books = books.OrderBy(b => b.CreatedDate);
                     }
+                    createdDateRouteParams = (SearchSortPageViewModel) vm.ShallowCopy();
+                    createdDateRouteParams.ToggleOrder = true;
                     break;
                 case "modifiedDate":
-                    if (vm.SortColOrder == "desc")
+                    if (vm.CurrentOrder == SearchSortPageViewModel.SORT_ORDER_DESC)
                     {
                         books = books.OrderByDescending(b => b.ModifiedDate);
                     }
@@ -65,9 +92,11 @@ namespace TblAdmin.Areas.Books.Controllers
                     {
                         books = books.OrderBy(b => b.ModifiedDate);
                     }
+                    modifiedDateRouteParams = (SearchSortPageViewModel) vm.ShallowCopy();
+                    modifiedDateRouteParams.ToggleOrder = true;
                     break;
                 case "publisher":
-                    if (vm.SortColOrder == "desc")
+                    if (vm.CurrentOrder == SearchSortPageViewModel.SORT_ORDER_DESC)
                     {
                         books = books.OrderByDescending(b => b.Publisher.Name);
                     }
@@ -75,15 +104,26 @@ namespace TblAdmin.Areas.Books.Controllers
                     {
                         books = books.OrderBy(b => b.Publisher.Name);
                     }
+                    publisherRouteParams = (SearchSortPageViewModel) vm.ShallowCopy();
+                    publisherRouteParams.ToggleOrder = true;
                     break;
                 default:
                     books = books.OrderBy(b => b.Name);
                     break;
             }
 
-            vm.SortColOrder = (vm.SortColOrder == "asc") ? "desc" : "asc";
-            IndexViewModel Ivm = new IndexViewModel(vm, books.ToPagedList(vm.Page, vm.PageSize));
+            createLinkRouteParams = (SearchSortPageViewModel)vm.ShallowCopy();
+            createLinkRouteParams.ToggleOrder = false;
 
+            IndexViewModel Ivm = new IndexViewModel(
+                vm, 
+                books.ToPagedList(vm.Page, vm.PageSize),
+                publisherRouteParams,
+                nameRouteParams,
+                createdDateRouteParams,
+                modifiedDateRouteParams,
+                createLinkRouteParams
+            );
             return View(Ivm);
         }
         
@@ -105,10 +145,14 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Create
-        public ActionResult Create()
+        public ActionResult Create(SearchSortPageViewModel searchSortPageParams)
         {
-            ViewBag.PublisherID = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name");
-            return View();
+            IEnumerable<SelectListItem> publishers;
+            CreateViewModel cvm;
+
+            publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name");
+            cvm = new CreateViewModel(searchSortPageParams, null, publishers);
+            return View(cvm);
         }
 
         // POST: Books/Books/Create
@@ -116,17 +160,21 @@ namespace TblAdmin.Areas.Books.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,CreatedDate,ModifiedDate,PublisherID")] Book book)
+        public ActionResult Create(CreateInputModel cim)
         {
+            IEnumerable<SelectListItem> publishers;
+            CreateViewModel cvm;
+
             if (ModelState.IsValid)
             {
-                db.Books.Add(book);
+                db.Books.Add(cim.Book);
                 db.SaveChanges();
-                return RedirectToActionFor<BooksController>(c => c.Index(null));
+                return RedirectToActionFor<BooksController>(c => c.Index(null), cim.SearchSortPageParams);
             }
 
-            ViewBag.PublisherID = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", book.PublisherID);
-            return View(book);
+            publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", cim.Book.PublisherID);
+            cvm = new CreateViewModel(cim.SearchSortPageParams, cim.Book, publishers);
+            return View(cvm);
         }
 
         // GET: Books/Books/Edit/5

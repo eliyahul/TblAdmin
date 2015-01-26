@@ -1,6 +1,7 @@
 ﻿@using PagedList.Mvc;
 @using TblAdmin.Areas.Books.Controllers;
 @using TblAdmin.Areas.Books.ViewModels.Books;
+@using TblAdmin.Areas.Base.ViewModels;
 
 
 @model TblAdmin.Areas.Books.ViewModels.Books.IndexViewModel
@@ -26,13 +27,14 @@
     </div>
 }
 <p></p>
+
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", Model.CreateLinkRouteParams)
 </p>
 
 @helper SortGlyphicon(string sortOrder)
-{ 
-    if (sortOrder == "asc")
+{
+    if (sortOrder == SearchSortPageViewModel.SORT_ORDER_DESC)
     {
         <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
     }
@@ -43,101 +45,79 @@
 }
 
 
-<table class="table">
-    <tr>
-        <th>
-            @if (Model.SearchSortPageParams.SortCol == "publisher")
-            {
-                @Html.ActionLink("Publisher", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder)
-            }
-            else
-            {
-                @Html.ActionLink("Publisher", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "publisher"}) 
-            }
-        </th>
-        <th>
-            @if (Model.SearchSortPageParams.SortCol == "name")
-            {
-                @Html.ActionLink("Name", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
-            }
-            else
-            {
-                 @Html.ActionLink("Name", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "name"})
-            }
-        </th>
-        <th>
-            @if (Model.SearchSortPageParams.SortCol == "createdDate")
-            {
-                @Html.ActionLink("Created", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
-            }
-            else
-            {
-                @Html.ActionLink("Created", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "createdDate" })
-            
-            }
-        </th>
-        <th>
-            @if (ViewBag.SortCol == "modifiedDate")
-            {
-                @Html.ActionLink("Modified", "Index", Model.SearchSortPageParams)
-                @SortGlyphicon(Model.SearchSortPageParams.SortColOrder);
-            }
-            else
-            {
-                @Html.ActionLink("Modified", "Index", new { Model.SearchSortPageParams.SearchString, SortCol = "modifiedDate" })
-                
-            }
-        </th>
-        <th></th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Publisher", "Index", Model.PublisherRouteParams)
+                @if (Model.SearchSortPageParams.SortCol == "publisher")
+                {
+                    @SortGlyphicon(Model.SearchSortPageParams.CurrentOrder)
 
-    @*KLUDGE - Paging and Edit/Delete/Details need the current sort order, not the next sort order which the controller provides for the colums, so toggle it back.*@
-    @if (Model.SearchSortPageParams.SortColOrder == "asc")
-    {
-        Model.SearchSortPageParams.SortColOrder = "desc";
-    }
-    else
-    {
-        Model.SearchSortPageParams.SortColOrder = "asc";
-    }
+                }
+            </th>
+            <th>
+                @Html.ActionLink("Name", "Index", Model.NameRouteParams)
+                @if (Model.SearchSortPageParams.SortCol == "name")
+                {
+                    @SortGlyphicon(Model.SearchSortPageParams.CurrentOrder)
 
-@foreach (var item in Model.Books) {
-    
+                }
+            </th>
+            <th>
+                @Html.ActionLink("CreatedDate", "Index", Model.CreatedDateRouteParams)
+                @if (Model.SearchSortPageParams.SortCol == "createdDate")
+                {
+                    @SortGlyphicon(Model.SearchSortPageParams.CurrentOrder)
+
+                }
+            </th>
+            <th>
+                @Html.ActionLink("ModifiedDate", "Index", Model.ModifiedDateRouteParams)
+                @if (Model.SearchSortPageParams.SortCol == "modifiedDate")
+                {
+                    @SortGlyphicon(Model.SearchSortPageParams.CurrentOrder)
+
+                }
+            </th>
+            <th></th>
+        </tr>
+
+
+
+        @foreach (var item in Model.Books) {
+
     RouteValueDictionary rvd = new RouteValueDictionary {
                     {"SearchSortPageParams.SearchString", Model.SearchSortPageParams.SearchString },
                     {"SearchSortPageParams.SortCol", Model.SearchSortPageParams.SortCol },
-                    {"SearchSortPageParams.SortColOrder", Model.SearchSortPageParams.SortColOrder },
+                    {"SearchSortPageParams.SortColOrder", Model.SearchSortPageParams.NextOrder },
                     {"SearchSortPageParams.Page", Model.SearchSortPageParams.Page },
                     {"SearchSortPageParams.PageSize", Model.SearchSortPageParams.PageSize },
                     {"Id", item.ID },
                 };
-    
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Publisher.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", rvd) |
-            @Html.ActionLink("Details", "Details", rvd) |
-            @Html.ActionLink("Delete", "Delete", rvd)
 
-        </td>
-    </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publisher.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", rvd) |
+                    @Html.ActionLink("Details", "Details", rvd) |
+                    @Html.ActionLink("Delete", "Delete", rvd)
+
+                </td>
+            </tr>
 }
 
-</table>
+    </table>
 <p>
     
     Page @( (Model.Books.PageNumber > Model.Books.PageCount) ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
@@ -146,10 +126,11 @@
         Model.Books,
         page => Url.Action(
             "Index",
-            new { Model.SearchSortPageParams.SearchString, 
-                Model.SearchSortPageParams.SortCol, 
-                Model.SearchSortPageParams.SortColOrder, 
-                page }
+            new { Model.SearchSortPageParams.SearchString,
+                  Model.SearchSortPageParams.SortCol,
+                  Model.SearchSortPageParams.CurrentOrder,
+                  Model.SearchSortPageParams.NextOrder,
+                  page }
     ))
 </p>
 
