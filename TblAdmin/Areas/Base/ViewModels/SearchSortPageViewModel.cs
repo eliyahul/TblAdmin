@@ -20,8 +20,8 @@
         { 
             SearchString = "";
             SortCol = "name";
-            NextOrder = SORT_ORDER_ASC;
-            CurrentOrder = SORT_ORDER_DESC;
+            NextOrder = SORT_ORDER_DESC;
+            CurrentOrder = SORT_ORDER_ASC;
             ToggleOrder = false;
             Page = DEFAULT_PAGE_NUMBER;
             PageSize = DEFAULT_PAGE_SIZE;
@@ -45,13 +45,13 @@
                 SortCol = sortCol;
             }
 
-            CurrentOrder = SORT_ORDER_DESC;
+            CurrentOrder = SORT_ORDER_ASC;
             if (!string.IsNullOrEmpty(nextOrder))
             {
                 CurrentOrder = currentOrder;
             }
 
-            NextOrder = SORT_ORDER_ASC;
+            NextOrder = SORT_ORDER_DESC;
             if (!string.IsNullOrEmpty(nextOrder))
             {
                 NextOrder = nextOrder;
