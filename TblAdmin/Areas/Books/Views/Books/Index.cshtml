@@ -86,10 +86,11 @@
 
         @foreach (var item in Model.Books) {
 
-    RouteValueDictionary rvd = new RouteValueDictionary {
+            RouteValueDictionary rvd = new RouteValueDictionary {
                     {"SearchSortPageParams.SearchString", Model.SearchSortPageParams.SearchString },
                     {"SearchSortPageParams.SortCol", Model.SearchSortPageParams.SortCol },
-                    {"SearchSortPageParams.SortColOrder", Model.SearchSortPageParams.NextOrder },
+                    {"SearchSortPageParams.CurrentOrder", Model.SearchSortPageParams.CurrentOrder },
+                    {"SearchSortPageParams.NextOrder", Model.SearchSortPageParams.NextOrder },
                     {"SearchSortPageParams.Page", Model.SearchSortPageParams.Page },
                     {"SearchSortPageParams.PageSize", Model.SearchSortPageParams.PageSize },
                     {"Id", item.ID },
@@ -112,7 +113,6 @@
                     @Html.ActionLink("Edit", "Edit", rvd) |
                     @Html.ActionLink("Details", "Details", rvd) |
                     @Html.ActionLink("Delete", "Delete", rvd)
-
                 </td>
             </tr>
 }
