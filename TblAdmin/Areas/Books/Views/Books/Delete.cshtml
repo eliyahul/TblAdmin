@@ -1,4 +1,4 @@
-﻿@using TblAdmin.Areas.Books.ViewModels.Books.DeleteViewModel
+﻿@using TblAdmin.Areas.Books.ViewModels.Books
 
 @model TblAdmin.Areas.Books.ViewModels.Books.DeleteViewModel
 
@@ -52,6 +52,7 @@
         
         @Html.HiddenFor(model => model.SearchSortPageParams.SearchString)
         @Html.HiddenFor(model => model.SearchSortPageParams.SortCol)
+        @Html.HiddenFor(model => model.SearchSortPageParams.CurrentOrder)
         @Html.HiddenFor(model => model.SearchSortPageParams.NextOrder)
         @Html.HiddenFor(model => model.SearchSortPageParams.Page)
         @Html.HiddenFor(model => model.SearchSortPageParams.PageSize)

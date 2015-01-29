@@ -177,6 +177,7 @@ namespace TblAdmin.Areas.Books.Controllers
         }
 
         // GET: Books/Books/Edit/5
+        
         public ActionResult Edit(RecordViewModel recordVm)
         {
             Book book;
@@ -193,7 +194,28 @@ namespace TblAdmin.Areas.Books.Controllers
             evm = new EditViewModel(recordVm.SearchSortPageParams, book, publishers);
             return View(evm);
         }
+        
+        /*
+        // trying out having two parameters
+        public ActionResult Edit(SearchSortPageViewModel ssp, int Id)
+        {
+            Book book;
+            IEnumerable<SelectListItem> publishers;
+            EditViewModel evm;
+            RecordViewModel recordVm = new RecordViewModel();
 
+            book = db.Books.FirstOrDefault(i => i.ID == Id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+
+            publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", book.PublisherID);
+            evm = new EditViewModel(ssp, book, publishers);
+            return View(evm);
+        }
+        // end - testing
+        */
         // POST: Books/Books/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
