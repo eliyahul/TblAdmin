@@ -171,7 +171,6 @@ namespace TblAdmin.Areas.Books.Controllers
                 db.SaveChanges();
                 return RedirectToActionFor<BooksController>(c => c.Index(null), cim.SearchSortPageParams);
             }
-
             publishers = new SelectList(db.Publishers.OrderBy(s => s.Name), "ID", "Name", cim.Book.PublisherID);
             cvm = new CreateViewModel(cim.SearchSortPageParams, cim.Book, publishers);
             return View(cvm);

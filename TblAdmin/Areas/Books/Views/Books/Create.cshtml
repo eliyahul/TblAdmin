@@ -15,7 +15,6 @@
         <h4>Book</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Book.ID)
 
         @Html.HiddenFor(model => model.SearchSortPageParams.SearchString)
         @Html.HiddenFor(model => model.SearchSortPageParams.SortCol)
